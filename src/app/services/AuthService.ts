@@ -11,7 +11,7 @@ class AuthService {
                 throw new Error('Authentication failed');
             }
 
-            const passwordMatch = await (user as User).comparePassword(password);  // Explicit cast
+            const passwordMatch = await (user as User).comparePassword(password);
 
             if (!passwordMatch) {
                 throw new Error('Authentication failed');
