@@ -7,7 +7,10 @@ const authController = {
 
         try {
             const token = await authService.loginUser(email, password);
-            res.json({ token });
+
+            res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+
+            return res.json({ message: 'Authentication successful' });
         } catch (error) {
             console.error('Login error:', error);
             res.status(401).json({ message: 'Authentication failed' });
