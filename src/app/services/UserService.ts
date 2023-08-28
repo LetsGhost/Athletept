@@ -1,5 +1,5 @@
 // src/services/userService.ts
-import UserModel from '../models/UserModel.ts';
+import UserModel from '../models/UserModel';
 
 interface RegistrationData {
     email: string;
