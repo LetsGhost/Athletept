@@ -8,8 +8,8 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution":"node",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,   // <-- Add this line
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
     "resolveJsonModule": true,
     "paths": {
       "*": ["*"]
