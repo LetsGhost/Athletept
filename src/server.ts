@@ -6,6 +6,7 @@ dotenv.config();
 
 import { connectToDatabase, } from "./config/db";
 import userRoutes from "./app/routes/UserRoutes";
+import adminRoutes from "./app/routes/AdminRoutes";
 import authRoutes from "./app/routes/AuthRoute";
 
 const server = express();
@@ -16,6 +17,7 @@ server.use(cookieParser());
 connectToDatabase()
 
 server.use('/user', userRoutes);
+server.use('/admin', adminRoutes);
 server.use('/auth', authRoutes);
 
 server.get('/', (req, res) => {

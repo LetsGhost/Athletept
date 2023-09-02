@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import cookieParser from 'cookie-parser';
 
 // Middleware to check JWT token from cookie
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +10,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     }
 
     try {
-        const decodedToken = jwt.verify(token, 'your-secret-key');
+        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!);
 
         next();
     } catch (error) {
