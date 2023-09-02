@@ -1,9 +1,7 @@
 import mongoose, { Schema, model, Document } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 
 export interface User extends Document {
-    uuid: string;
     email: string;
     password: string;
     role: 'admin' | 'user';
@@ -17,11 +15,10 @@ export interface User extends Document {
 }
 
 const userSchema = new Schema<User>({
-    uuid: { type: String, default: uuidv4, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    userInfo: {},
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
+    userInfo: {},
     exercisePlan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ExercisePlan'
