@@ -95,3 +95,24 @@ export const createExercisePlanFromExcel = async (userId: string, filePath: stri
         console.error('Error processing the Excel file:', error);
     }
 };
+
+export const getExercisePlan = async (userId: string) => {
+    try {
+        const user = await UserModel.findById(userId).populate('exercisePlan');
+        if(!user){
+            console.log("User not found!")
+            throw new Error("User not found!")
+        }
+
+        if (user) {
+            return user.exercisePlan;
+        }
+        else {
+            throw new Error("User does not have an exercise plan")
+        }
+
+    } catch (error) {
+        console.error('Error getting the exercise plan:', error);
+        throw new Error("Error getting the exercise plan")
+    }
+}
