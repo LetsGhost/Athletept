@@ -1,5 +1,6 @@
 import express from 'express';
-import { registerUserController, getExercisePlanController } from "../controllers/AdminController";
+import { registerUserController } from "../controllers/AdminController";
+import { getExercisePlanController } from "../controllers/ExercisePlanController";
 import { authenticateToken } from '../middleware/AuthenticateToken';
 import { upload } from '../../config/multerConfig';
 import { authenticateRole } from '../middleware/AuthenticateRole';
