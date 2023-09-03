@@ -7,6 +7,7 @@ export interface User extends Document {
     role: 'admin' | 'user';
     userInfo: {}
     exercisePlan: mongoose.Schema.Types.ObjectId;
+    protocolExercisePlan: mongoose.Schema.Types.ObjectId;
     warmup: mongoose.Schema.Types.ObjectId;
     messages: mongoose.Schema.Types.ObjectId[];
     checkIn: mongoose.Schema.Types.ObjectId;
@@ -22,6 +23,10 @@ const userSchema = new Schema<User>({
     exercisePlan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ExercisePlan'
+    },
+    protocolExercisePlan: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProtocolExercisePlan'
     },
     warmup: {
         type: mongoose.Schema.Types.ObjectId,
