@@ -5,6 +5,7 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
+    "dev": "nodemon dist/server.js",
     "build:watch": "tsc -w",
     "start": "node --experimental-modules --es-module-specifier-resolution=node dist/server.js"
   },
