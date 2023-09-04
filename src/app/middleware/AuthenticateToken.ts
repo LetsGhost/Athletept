@@ -10,7 +10,10 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     }
 
     try {
-        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!);
+        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as { userId: string, userRole: string };
+
+        req.params.userId = decodedToken.userId;
+        req.params.userRole = decodedToken.userRole;
 
         next();
     } catch (error) {

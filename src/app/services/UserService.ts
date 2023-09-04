@@ -5,7 +5,7 @@ interface RegistrationData {
     password: string;
 }
 
-const registerUser = async (registrationData: RegistrationData) => {
+export const registerUser = async (registrationData: RegistrationData) => {
     const { email, password } = registrationData;
 
     // Check if the email is already registered
@@ -24,4 +24,12 @@ const registerUser = async (registrationData: RegistrationData) => {
     return newUser;
 };
 
-export { registerUser };
+export const getUserById = async (userId: string) => {
+    const user = await UserModel.findById(userId);
+
+    if(!user){
+        throw new Error("User not found!")
+    }
+
+    return user;
+}
