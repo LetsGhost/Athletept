@@ -17,3 +17,16 @@ export const createMessageController = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const getAllMessagesFromUserController = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
+
+        const messages = await messageService.getAllMessagesFromUser(userId);
+
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error('Error getting messages:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}

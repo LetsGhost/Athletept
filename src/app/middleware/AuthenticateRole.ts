@@ -7,7 +7,7 @@ interface CustomJwtPayload extends JwtPayload{
 }
 
 export const authenticateRole = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token; // Assuming you set the token as 'token' cookie
+    const token = req.cookies.token;
 
     if (!token) {
         console.log('Token not provided');

@@ -38,7 +38,7 @@ export const createExercisePlanFromExcel = async (userId: string, filePath: stri
         let previousType: string | null = null; // Store the previous type
 
         worksheet.eachRow((row, rowNumber) => {
-            if (row.getCell(1).value === 'Name') return; // Skip the first row (header
+            if (row.getCell(1).value === 'Numer') return; // Skip the first row (header
 
             const currentType = row.getCell(1).value as string;
 
@@ -47,13 +47,13 @@ export const createExercisePlanFromExcel = async (userId: string, filePath: stri
                 const exercises: Exercise[] = [];
 
                 exercises.push({
-                    Exercises: row.getCell(3).value as string,
-                    Weight: row.getCell(4).value as number,
-                    Sets: row.getCell(5).value as number,
-                    WarmUpSets: row.getCell(6).value as number,
-                    Repetitions: row.getCell(7).value as string,
-                    Rest: row.getCell(8).value as string,
-                    Execution: row.getCell(9).value as string,
+                    Exercises: row.getCell(4).value as string,
+                    Weight: row.getCell(5).value as number,
+                    Sets: row.getCell(6).value as number,
+                    WarmUpSets: row.getCell(7).value as number,
+                    Repetitions: row.getCell(8).value as string,
+                    Rest: row.getCell(9).value as string,
+                    Execution: row.getCell(10).value as string,
                 });
 
                 currentDay = {
@@ -68,13 +68,13 @@ export const createExercisePlanFromExcel = async (userId: string, filePath: stri
             } else {
                 // Append exercises to the current day
                 currentDay?.exercises.push({
-                    Exercises: row.getCell(3).value as string,
-                    Weight: row.getCell(4).value as number,
-                    Sets: row.getCell(5).value as number,
-                    WarmUpSets: row.getCell(6).value as number,
-                    Repetitions: row.getCell(7).value as string,
-                    Rest: row.getCell(8).value as string,
-                    Execution: row.getCell(9).value as string,
+                    Exercises: row.getCell(4).value as string,
+                    Weight: row.getCell(5).value as number,
+                    Sets: row.getCell(6).value as number,
+                    WarmUpSets: row.getCell(7).value as number,
+                    Repetitions: row.getCell(8).value as string,
+                    Rest: row.getCell(9).value as string,
+                    Execution: row.getCell(10).value as string,
                 });
             }
         });

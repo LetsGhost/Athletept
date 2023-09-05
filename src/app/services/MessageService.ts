@@ -26,3 +26,18 @@ export const createMessage = async ( message: string, sender: string, userId: st
         throw error;
     }
 };
+
+export const getAllMessagesFromUser = async (userId: string) => {
+    try {
+        const user = await UserModel.findById(userId).populate('messages');
+        if (!user) {
+            console.error('User not found');
+            throw new Error('User not found');
+        }
+
+        return user.messages;
+    } catch (error) {
+        console.error('Error getting messages:', error);
+        throw error;
+    }
+}
