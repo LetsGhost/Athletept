@@ -14,8 +14,11 @@ router.post('/register', upload.single('excelFile'), registerUserController);
 
 //Exercise plan
 router.get("/getExercisePlan/:userId", getExercisePlanController )
+
+//User
 router.get("/getUser/:userId", getUserByIdController)
 
-router.post("/createMessage/:userId", authenticateToken, createMessageController)
+//Message
+router.post("/createMessage/:userId", createMessageController)
 
 export default router;
