@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import path from "path";
-import {registerUser} from "../services/UserService";
+import {registerUser, deleteUserById} from "../services/UserService";
 import {createExercisePlanFromExcel} from "../services/ExercisePlanService";
 
 export const registerUserController = async (req: Request, res: Response) => {
@@ -25,3 +25,16 @@ export const registerUserController = async (req: Request, res: Response) => {
         res.status(400).json({ message: 'Registration failed', error: error });
     }
 };
+
+export const deleteUserController = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+
+        await deleteUserById(userId);
+
+        res.status(201).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ message: 'Delete failed', error: error });
+    }
+}

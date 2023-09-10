@@ -33,3 +33,14 @@ export const getUserById = async (userId: string) => {
 
     return user;
 }
+
+export const deleteUserById = async (userId: string) => {
+    const user = await UserModel.findByIdAndRemove(userId);
+
+    if(!user){
+        throw new Error("User not found!")
+    }
+
+    return user;
+}
+
