@@ -2,17 +2,20 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 
 interface ProtocolExercise {
     Exercises: string;
-    Weight: number;
-    Sets: number;
-    WarmUpSets: number;
+    Weight: string;
     Repetitions: string;
-    Rest: string;
-    Execution: string;
+}
+
+interface Comment{
+    Scale: number;
+    Changes: string;
+    Problems: string;
 }
 
 interface ProtocolExerciseDay {
     dayNumber: number;
     type: string;
+    comment: Comment;
     exercises: ProtocolExercise[];
 }
 
@@ -24,17 +27,20 @@ interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> 
 
 const protocolExerciseSchema = new Schema<ProtocolExercise>({
     Exercises: String,
-    Weight: Number,
-    Sets: Number,
-    WarmUpSets: Number,
-    Repetitions: String,
-    Rest: String,
-    Execution: String,
+    Weight: String,
+    Repetitions: String
+});
+
+const commentSchema = new Schema<Comment>({
+    Scale: Number,
+    Changes: String,
+    Problems: String
 });
 
 const protocolExerciseDaySchema = new Schema<ProtocolExerciseDay>({
     dayNumber: Number,
     type: String,
+    comment: commentSchema,
     exercises: [protocolExerciseSchema],
 });
 
