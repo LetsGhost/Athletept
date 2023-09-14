@@ -1,40 +1,10 @@
 import {Request, Response} from "express";
 import path from "path";
-import {registerUser, deleteUserById} from "../services/UserService";
-import {createExercisePlanFromExcel} from "../services/ExercisePlanService";
+import userService from "../services/UserService";
+import exercisePlanService from "../services/ExercisePlanService";
 
-export const registerUserController = async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body;
+class AdminController {
 
-        if (!req.file) {
-            return res.status(400).json({ message: 'No file provided' });
-        }
-
-        const uploadedFilePath = path.join('../public/uploads', req.file.filename);
-
-        // Register the user
-        const newUser = await registerUser({ email: email as string, password: password as string });
-
-        // Create exercise plan from Excel file
-        await createExercisePlanFromExcel(newUser._id, uploadedFilePath);
-
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({ message: 'Registration failed', error: error });
-    }
-};
-
-export const deleteUserController = async (req: Request, res: Response) => {
-    try {
-        const { userId } = req.params;
-
-        await deleteUserById(userId);
-
-        res.status(201).json({ message: 'User deleted successfully' });
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({ message: 'Delete failed', error: error });
-    }
 }
+
+export default new AdminController();

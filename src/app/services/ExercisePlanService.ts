@@ -25,94 +25,99 @@ interface ExercisePlanDocument extends Document {
 
 interface ExercisePlanModel extends Model<ExercisePlanDocument> {}
 
-export const createExercisePlanFromExcel = async (userId: string, filePath: string) => {
-    try {
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(filePath);
+class ExercisePlanService {
 
-        const exercisePlan: ExerciseDay[] = [];
+    async createExercisePlanFromExcel(userId: string, filePath: string) {
+        try {
+            const workbook = new ExcelJS.Workbook();
+            await workbook.xlsx.readFile(filePath);
 
-        const worksheet = workbook.getWorksheet(1);
+            const exercisePlan: ExerciseDay[] = [];
 
-        let currentDay: ExerciseDay | null = null;
-        let previousType: string | null = null; // Store the previous type
+            const worksheet = workbook.getWorksheet(1);
 
-        worksheet.eachRow((row, rowNumber) => {
-            if (row.getCell(1).value === 'Numer') return; // Skip the first row (header
+            let currentDay: ExerciseDay | null = null;
+            let previousType: string | null = null; // Store the previous type
 
-            const currentType = row.getCell(1).value as string;
+            worksheet.eachRow((row, rowNumber) => {
+                if (row.getCell(1).value === 'Numer') return; // Skip the first row (header
 
-            if (currentType !== previousType) {
-                // If the training type in the first cell has changed, it's a new day
-                const exercises: Exercise[] = [];
+                const currentType = row.getCell(1).value as string;
 
-                exercises.push({
-                    Exercises: row.getCell(4).value as string,
-                    Weight: row.getCell(5).value as number,
-                    Sets: row.getCell(6).value as number,
-                    WarmUpSets: row.getCell(7).value as number,
-                    Repetitions: row.getCell(8).value as string,
-                    Rest: row.getCell(9).value as string,
-                    Execution: row.getCell(10).value as string,
-                });
+                if (currentType !== previousType) {
+                    // If the training type in the first cell has changed, it's a new day
+                    const exercises: Exercise[] = [];
 
-                currentDay = {
-                    dayNumber: exercisePlan.length + 1,
-                    type: currentType,
-                    exercises: exercises,
-                };
-                exercisePlan.push(currentDay);
+                    exercises.push({
+                        Exercises: row.getCell(4).value as string,
+                        Weight: row.getCell(5).value as number,
+                        Sets: row.getCell(6).value as number,
+                        WarmUpSets: row.getCell(7).value as number,
+                        Repetitions: row.getCell(8).value as string,
+                        Rest: row.getCell(9).value as string,
+                        Execution: row.getCell(10).value as string,
+                    });
 
-                // Update the previous type
-                previousType = currentType;
-            } else {
-                // Append exercises to the current day
-                currentDay?.exercises.push({
-                    Exercises: row.getCell(4).value as string,
-                    Weight: row.getCell(5).value as number,
-                    Sets: row.getCell(6).value as number,
-                    WarmUpSets: row.getCell(7).value as number,
-                    Repetitions: row.getCell(8).value as string,
-                    Rest: row.getCell(9).value as string,
-                    Execution: row.getCell(10).value as string,
-                });
-            }
-        });
+                    currentDay = {
+                        dayNumber: exercisePlan.length + 1,
+                        type: currentType,
+                        exercises: exercises,
+                    };
+                    exercisePlan.push(currentDay);
 
-        // Find the user and update the exercise plan
-        const user = await UserModel.findById(userId);
-        if (user) {
-            const exercisePlanDocument = new ExercisePlan({
-                exerciseDays: exercisePlan,
+                    // Update the previous type
+                    previousType = currentType;
+                } else {
+                    // Append exercises to the current day
+                    currentDay?.exercises.push({
+                        Exercises: row.getCell(4).value as string,
+                        Weight: row.getCell(5).value as number,
+                        Sets: row.getCell(6).value as number,
+                        WarmUpSets: row.getCell(7).value as number,
+                        Repetitions: row.getCell(8).value as string,
+                        Rest: row.getCell(9).value as string,
+                        Execution: row.getCell(10).value as string,
+                    });
+                }
             });
 
-            // Create and save the exercise plan using the ExercisePlan model
-            const createdExercisePlan = await ExercisePlan.create(exercisePlanDocument);
-            user.exercisePlan = createdExercisePlan._id;
-            await user.save();
-        }
-    } catch (error) {
-        console.error('Error processing the Excel file:', error);
-    }
-};
+            // Find the user and update the exercise plan
+            const user = await UserModel.findById(userId);
+            if (user) {
+                const exercisePlanDocument = new ExercisePlan({
+                    exerciseDays: exercisePlan,
+                });
 
-export const getExercisePlan = async (userId: string) => {
-    try {
-        const user = await UserModel.findById(userId).populate('exercisePlan');
-        if(!user){
-            console.log("User not found!")
-            throw new Error("User not found!")
+                // Create and save the exercise plan using the ExercisePlan model
+                const createdExercisePlan = await ExercisePlan.create(exercisePlanDocument);
+                user.exercisePlan = createdExercisePlan._id;
+                await user.save();
+            }
+        } catch (error) {
+            console.error('Error processing the Excel file:', error);
         }
+    };
 
-        if (user) {
-            return user.exercisePlan;
-        }
-        else {
-            throw new Error("User does not have an exercise plan")
-        }
+    async getExercisePlan(userId: string) {
+        try {
+            const user = await UserModel.findById(userId).populate('exercisePlan');
+            if(!user){
+                console.log("User not found!")
+                throw new Error("User not found!")
+            }
 
-    } catch (error) {
-        console.error('Error getting the exercise plan:', error);
-        throw new Error("Error getting the exercise plan")
+            if (user) {
+                return user.exercisePlan;
+            }
+            else {
+                throw new Error("User does not have an exercise plan")
+            }
+
+        } catch (error) {
+            console.error('Error getting the exercise plan:', error);
+            throw new Error("Error getting the exercise plan")
+        }
     }
 }
+
+export default new ExercisePlanService();

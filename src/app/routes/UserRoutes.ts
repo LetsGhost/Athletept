@@ -1,19 +1,27 @@
-// src/routes/userRoutes.ts
 import express from 'express';
 
-import { authenticateToken } from '../middleware/AuthenticateToken';
-import {getExercisePlanController} from "../controllers/ExercisePlanController";
-import {getUserByIdController} from "../controllers/UserController";
-import {getAllMessagesFromUser} from "../services/MessageService";
-import {createProtocolController} from "../controllers/ProtocolController";
+// Import Middlewares
+import authenticateToken from "../middleware/AuthenticateToken";
 
+// Import Controllers
+import exercisePlanController from "../controllers/ExercisePlanController";
+import userController from "../controllers/UserController";
+import messageController from "../controllers/MessageController";
+import protocolController from "../controllers/ProtocolController";
+
+// Import routes
 const router = express.Router();
 
-router.get("/getExercisePlan/:userId", getExercisePlanController )
+// Exercise Plan
+router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan )
 
-router.get("/getUser/:userId", getUserByIdController)
+// User
+router.get("/getUser/:userId", userController.getUserById)
 
-router.get("/getAllMessages/:userId", getAllMessagesFromUser)
+// Message
+router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
 
-router.post("/createProtocol", createProtocolController)
+// Protocol
+router.post("/createProtocol", protocolController.createProtocol)
+
 export default router;
