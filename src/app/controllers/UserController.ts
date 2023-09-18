@@ -6,7 +6,7 @@ import exercisePlanService from "../services/ExercisePlanService";
 class UserController{
     async registerUser(req: Request, res: Response) {
         try {
-            const { email, password } = req.body;
+            const { email, password, userInfo } = req.body;
 
             if (!req.file) {
                 return res.status(400).json({ message: 'No file provided' });
@@ -15,7 +15,7 @@ class UserController{
             const uploadedFilePath = path.join('../public/uploads', req.file.filename);
 
             // Register the user
-            const newUser = await userService.registerUser({ email: email as string, password: password as string });
+            const newUser = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
 
             // Create exercise plan from Excel file
             await exercisePlanService.createExercisePlanFromExcel(newUser._id, uploadedFilePath);

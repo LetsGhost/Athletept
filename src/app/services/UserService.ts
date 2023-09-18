@@ -6,7 +6,7 @@ interface RegistrationData {
 }
 
 class UserService{
-    async registerUser(registrationData: RegistrationData) {
+    async registerUser(registrationData: RegistrationData, userInfo: object) {
         const { email, password } = registrationData;
 
         // Check if the email is already registered
@@ -19,6 +19,7 @@ class UserService{
         const newUser = new UserModel({
             email,
             password,
+            userInfo
         });
 
         await newUser.save();

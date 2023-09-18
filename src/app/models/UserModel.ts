@@ -5,7 +5,22 @@ export interface User extends Document {
     email: string;
     password: string;
     role: 'admin' | 'user';
-    userInfo: {}
+    userInfo: {
+        name: string;
+        goal: string;
+        focus: string;
+        targetWeight: number;
+        currentWeight: number;
+        DOB: Date;
+        gender: string;
+        sports: string;
+        location: string;
+        conditions: string;
+        times: string;
+        frequency: string;
+        cardio: string;
+        issues: string;
+    }
     exercisePlan: mongoose.Schema.Types.ObjectId;
     protocolExercisePlan: mongoose.Schema.Types.ObjectId;
     warmup: mongoose.Schema.Types.ObjectId;
@@ -19,7 +34,22 @@ const userSchema = new Schema<User>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
-    userInfo: {},
+    userInfo: {
+        name: { type: String, required: true },
+        goal: { type: String, required: true },
+        focus: { type: String, required: true },
+        targetWeight: { type: Number, required: true },
+        currentWeight: { type: Number, required: true },
+        DOB: { type: Date, required: true },
+        gender: { type: String, required: true },
+        sports: { type: String, required: true },
+        location: { type: String, required: true },
+        conditions: { type: String, required: true },
+        times: { type: String, required: true },
+        frequency: { type: String, required: true },
+        cardio: { type: String, required: true },
+        issues: { type: String, required: true }
+    },
     exercisePlan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ExercisePlan'
