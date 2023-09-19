@@ -12,7 +12,8 @@ class UserController{
                 return res.status(400).json({ message: 'No file provided' });
             }
 
-            const uploadedFilePath = path.join('../public/uploads', req.file.filename);
+            // I don´t why this has to be here, but it works
+            const uploadedFilePath = path.join();
 
             // Register the user
             const newUser = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
