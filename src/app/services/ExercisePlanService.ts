@@ -2,6 +2,7 @@ import ExcelJS from "exceljs";
 import UserModel from "../models/UserModel";
 import {ExercisePlan} from "../models/ExercisePlanModel";
 import {Document, Model} from "mongoose";
+import * as fs from "fs";
 
 interface Exercise {
     Exercises: string;
@@ -23,8 +24,6 @@ class ExercisePlanService {
 
     async createExercisePlanFromExcel(userId: string, filePath: string) {
         try {
-            console.log("filePath: ", filePath)
-
             const workbook = new ExcelJS.Workbook();
             await workbook.xlsx.readFile(filePath);
 
@@ -36,7 +35,7 @@ class ExercisePlanService {
             let previousType: string | null = null; // Store the previous type
 
             worksheet.eachRow((row, rowNumber) => {
-                if (row.getCell(1).value === 'Number') return; // Skip the first row
+                if (row.getCell(1).value === 'Numer') return; // Skip the first row
 
                 const currentType = row.getCell(1).value as string;
 
@@ -89,6 +88,7 @@ class ExercisePlanService {
                 user.exercisePlan = createdExercisePlan._id;
                 await user.save();
             }
+
         } catch (error) {
             console.error('Error processing the Excel file:', error);
         }

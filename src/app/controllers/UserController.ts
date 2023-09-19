@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import userService from "../services/UserService";
 import path from "path";
 import exercisePlanService from "../services/ExercisePlanService";
+import fs from "fs";
 
 class UserController{
     async registerUser(req: Request, res: Response) {
@@ -19,7 +20,14 @@ class UserController{
             const newUser = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
 
             // Create exercise plan from Excel file
-            await exercisePlanService.createExercisePlanFromExcel(newUser._id, uploadedFilePath);
+            await exercisePlanService.createExercisePlanFromExcel(newUser._id, req.file.path);
+
+            fs.unlink(req.file.path, (err) => {
+                if (err) {
+                    console.error(err)
+                    return
+                }
+            });
 
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {
