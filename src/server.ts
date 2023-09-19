@@ -2,8 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
 dotenv.config();
 
+// Routes
 import { connectToDatabase, } from "./config/db";
 import userRoutes from "./app/routes/UserRoutes";
 import adminRoutes from "./app/routes/AdminRoutes";
@@ -11,8 +14,13 @@ import authRoutes from "./app/routes/AuthRoute";
 
 const server = express();
 
+// Dkjsakdas
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 server.use(bodyParser.json());
 server.use(cookieParser());
+server.use('/public', express.static(path.join(__dirname, 'public')));
 
 connectToDatabase()
 
