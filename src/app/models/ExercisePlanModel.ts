@@ -35,6 +35,7 @@ const exerciseSchema = new Schema<Exercise>({
 const exerciseDaySchema = new Schema<ExerciseDay>({
     dayNumber: Number,
     type: String,
+    wamrup: []
     exercises: [exerciseSchema],
 });
 

@@ -13,7 +13,7 @@ class UserController{
                 return res.status(400).json({ message: 'No file provided' });
             }
 
-            // I don´t why this has to be here, but it works
+            // I don´t know why this has to be here, but it works
             const uploadedFilePath = path.join();
 
             // Register the user
