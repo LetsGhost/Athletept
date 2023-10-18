@@ -27,6 +27,7 @@ export interface User extends Document {
     messages: mongoose.Schema.Types.ObjectId[];
     checkIn: mongoose.Schema.Types.ObjectId;
     weekDisplay: mongoose.Schema.Types.ObjectId;
+    trainingduration: mongoose.Schema.Types.ObjectId;
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -70,7 +71,11 @@ const userSchema = new Schema<User>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CheckIn'
     },
-    weekDisplay: {}
+    weekDisplay: {},
+    trainingduration: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Trainingduration'
+    }
 });
 
 // Hash the password before saving
