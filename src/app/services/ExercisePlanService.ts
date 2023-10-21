@@ -1,8 +1,6 @@
 import ExcelJS from "exceljs";
 import UserModel from "../models/UserModel";
 import {ExercisePlan} from "../models/ExercisePlanModel";
-import {Document, Model} from "mongoose";
-import * as fs from "fs";
 
 interface Exercise {
     Exercises: string;
@@ -14,18 +12,31 @@ interface Exercise {
     Execution: string;
 }
 
+interface warmupExercise {
+    Exercises: string;
+}
+
+interface warmupMaterials {
+    Materials: string;
+}
+
+interface warmup {
+    warmupExercise: warmupExercise[];
+}
+
 interface ExerciseDay {
     dayNumber: number;
     type?: string;
     exercises: Exercise[];
+    warmup: warmup[];
 }
 
 class ExercisePlanService {
 
-    async createExercisePlanFromExcel(userId: string, filePath: string) {
+    async createExercisePlanFromExcel(userId: string, exerciseFile: any, warmupFile: any) {
         try {
             const workbook = new ExcelJS.Workbook();
-            await workbook.xlsx.readFile(filePath);
+            await workbook.xlsx.readFile(exerciseFile);
 
             const exercisePlan: ExerciseDay[] = [];
 
@@ -53,10 +64,14 @@ class ExercisePlanService {
                         Execution: row.getCell(10).value as string,
                     });
 
+                    // Create warmup
+
+
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
                         type: currentType,
                         exercises: exercises,
+                        warmup: [],
                     };
                     exercisePlan.push(currentDay);
 
@@ -113,6 +128,10 @@ class ExercisePlanService {
             console.error('Error getting the exercise plan:', error);
             throw new Error("Error getting the exercise plan")
         }
+    }
+
+    async createWarmupFromExcel(userId: string, filePath: string) {
+
     }
 }
 

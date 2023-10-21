@@ -3,11 +3,21 @@ import userService from "../services/UserService";
 import path from "path";
 import exercisePlanService from "../services/ExercisePlanService";
 import fs from "fs";
+//import { File } from "multer";
 
 class UserController{
     async registerUser(req: Request, res: Response) {
         try {
             const { email, password, userInfo } = req.body;
+
+            // Filter for the necessary files
+            const exerciseFile = "(req.files as Express.Multer.File[]).filter((file) => file.fieldname === 'exerciseFile')";
+            const warmupFile = "(req.files as Express.Multer.File[]).filter((file) => file.fieldname === 'warmupFile');"
+
+            // Figure out how to access diffrent properties of the file for example the path
+            const exerciseFile2 = (req.files as unknown as { [fieldname: string]: File; })['exerciseFile']
+
+            console.log(exerciseFile2)
 
             if (!req.file) {
                 return res.status(400).json({ message: 'No file provided' });
@@ -19,15 +29,29 @@ class UserController{
             // Register the user
             const newUser = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
 
-            // Create exercise plan from Excel file
-            await exercisePlanService.createExercisePlanFromExcel(newUser._id, req.file.path);
 
-            fs.unlink(req.file.path, (err) => {
-                if (err) {
-                    console.error(err)
-                    return
-                }
-            });
+
+            // Create exercise plan from Excel file
+            await exercisePlanService.createExercisePlanFromExcel(newUser._id, exerciseFile, warmupFile);
+
+            /*
+            if (exerciseFile) {
+                fs.unlink(exerciseFile.path, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+
+            if (warmupFile) {
+                fs.unlink(warmupFile.path, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+
+             */
 
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {

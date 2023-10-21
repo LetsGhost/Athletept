@@ -4,6 +4,7 @@ import express from 'express';
 import { upload } from '../../config/multerConfig';
 
 // Import Middlewares
+// Disable authentication for now
 import authenticateRole from "../middleware/AuthenticateRole";
 import authenticateToken from "../middleware/AuthenticateToken";
 
@@ -18,7 +19,7 @@ import exercisePlanController from "../controllers/ExercisePlanController";
 const router = express.Router();
 
 // User
-router.post('/register', upload.single('excelFile'), userController.registerUser);
+router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser);
 router.get("/getUser/:userId", userController.getUserById)
 router.delete("/deleteUser/:userId", userController.deleteUser)
 

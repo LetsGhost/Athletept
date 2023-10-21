@@ -10,10 +10,24 @@ interface Exercise {
     Execution: string;
 }
 
+interface warmupExercise {
+    Exercises: string;
+}
+
+interface warmupMaterials {
+    Materials: string;
+}
+
+interface warmup {
+    warmupExercise: warmupExercise[];
+    warmupMaterials: warmupMaterials[];
+}
+
 interface ExerciseDay {
     dayNumber: number;
     type: string;
     exercises: Exercise[];
+    warmup: warmup[];
 }
 
 interface ExercisePlanDocument extends Document {
@@ -32,10 +46,23 @@ const exerciseSchema = new Schema<Exercise>({
     Execution: String,
 });
 
+const warmupExerciseSchema = new Schema<warmupExercise>({
+    Exercises: String,
+});
+
+const warmupMaterialsSchema = new Schema<warmupMaterials>({
+    Materials: String,
+})
+
+const warmupSchema = new Schema<warmup>({
+    warmupExercise: [warmupExerciseSchema],
+})
+
 const exerciseDaySchema = new Schema<ExerciseDay>({
     dayNumber: Number,
     type: String,
     exercises: [exerciseSchema],
+    warmup: [warmupSchema],
 });
 
 const exercisePlanSchema = new Schema<ExercisePlanDocument>({
