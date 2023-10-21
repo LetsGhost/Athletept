@@ -261,7 +261,6 @@ fabric.properties
 public/uploads
 public/uploads/*
 public/uploads/**/*
-
 uploads/
 
 
