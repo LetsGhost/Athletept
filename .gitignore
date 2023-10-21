@@ -261,7 +261,8 @@ fabric.properties
 public/uploads
 public/uploads/*
 public/uploads/**/*
-public/
+
+uploads/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/node,webstorm,dotenv
