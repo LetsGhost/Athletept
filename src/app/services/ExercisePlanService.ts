@@ -22,6 +22,7 @@ interface warmupMaterials {
 
 interface warmup {
     warmupExercise: warmupExercise[];
+    warmupMaterials: warmupMaterials[];
 }
 
 interface ExerciseDay {
@@ -35,8 +36,11 @@ class ExercisePlanService {
 
     async createExercisePlanFromExcel(userId: string, exerciseFile: any, warmupFile: any) {
         try {
+            // ExerciseFile Workbook
             const workbook = new ExcelJS.Workbook();
             await workbook.xlsx.readFile(exerciseFile);
+
+
 
             const exercisePlan: ExerciseDay[] = [];
 
@@ -46,7 +50,7 @@ class ExercisePlanService {
             let previousType: string | null = null; // Store the previous type
 
             worksheet.eachRow((row, rowNumber) => {
-                if (row.getCell(1).value === 'Numer') return; // Skip the first row
+                if (row.getCell(1).value === 'Nummer') return; // Skip the first row
 
                 const currentType = row.getCell(1).value as string;
 
@@ -63,9 +67,6 @@ class ExercisePlanService {
                         Rest: row.getCell(9).value as string,
                         Execution: row.getCell(10).value as string,
                     });
-
-                    // Create warmup
-
 
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
@@ -90,6 +91,52 @@ class ExercisePlanService {
                     });
                 }
             });
+            console.log("First: " + exercisePlan);
+
+            // Create Warmup
+            const workbook2 = new ExcelJS.Workbook();
+            await workbook2.xlsx.readFile(warmupFile);
+            const worksheet2 = workbook.getWorksheet(1);
+            let currentDay2: ExerciseDay | null = null;
+            let previousType2: string | null = null; // Store the previous type
+
+            worksheet2.eachRow((row, rowNumber) => {
+                if (row.getCell(1).value === 'Nummer') return; // Skip the first row
+
+                const currentDay = row.getCell(1).value as string;
+
+                if(currentDay !== previousType2){
+                    const exercises: warmup[] = [];
+
+                    exercises.push({
+                        warmupExercise: [
+                            {
+                                Exercises: row.getCell(2).value as string,
+                            },
+                        ],
+                    });
+
+                    exercises.push({
+                        warmupMaterials: [
+                            {
+                                Materials: row.getCell(3).value as string,
+                            }
+                        ],
+                    })
+
+                    currentDay2 = {
+                        dayNumber: exercisePlan.length + 1,
+                        type: currentDay,
+                        exercises: [],
+                        warmup: exercises,
+                    };
+                    exercisePlan.push(currentDay2);
+
+                    // Update the previous type
+                    previousType2 = currentDay;
+                }
+            })
+            console.log("Second: " + exercisePlan);
 
             // Find the user and update the exercise plan
             const user = await UserModel.findById(userId);

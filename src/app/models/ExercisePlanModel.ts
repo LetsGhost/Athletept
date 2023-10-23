@@ -31,6 +31,7 @@ interface ExerciseDay {
 }
 
 interface ExercisePlanDocument extends Document {
+    createdAt: Date;
     exerciseDays: ExerciseDay[];
 }
 
@@ -66,6 +67,7 @@ const exerciseDaySchema = new Schema<ExerciseDay>({
 });
 
 const exercisePlanSchema = new Schema<ExercisePlanDocument>({
+    createdAt: { type: Date, required: true, default: Date.now },
     exerciseDays: [exerciseDaySchema],
 });
 

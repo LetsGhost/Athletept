@@ -10,48 +10,44 @@ class UserController{
         try {
             const { email, password, userInfo } = req.body;
 
-            // Filter for the necessary files
-            const exerciseFile = "(req.files as Express.Multer.File[]).filter((file) => file.fieldname === 'exerciseFile')";
-            const warmupFile = "(req.files as Express.Multer.File[]).filter((file) => file.fieldname === 'warmupFile');"
-
-            // Figure out how to access diffrent properties of the file for example the path
-            const exerciseFile2 = (req.files as unknown as { [fieldname: string]: File; })['exerciseFile']
-
-            console.log(exerciseFile2)
-
-            if (!req.file) {
+            if (!req.files) {
                 return res.status(400).json({ message: 'No file provided' });
             }
 
             // I don´t know why this has to be here, but it works
             const uploadedFilePath = path.join();
 
+            // Getting the files
+            const excelFiles = req.files as Express.Multer.File[]
+
+            // That`s very stupid I know but it works
+            const toString = JSON.stringify(excelFiles)
+            const toJSON = JSON.parse(toString)
+
+            const exerciseFilePath = toJSON["exerciseFile"][0].path
+            const warmupFilePath = toJSON["warmupFile"][0].path
+
             // Register the user
             const newUser = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
 
-
-
             // Create exercise plan from Excel file
-            await exercisePlanService.createExercisePlanFromExcel(newUser._id, exerciseFile, warmupFile);
+            await exercisePlanService.createExercisePlanFromExcel(newUser._id, exerciseFilePath, warmupFilePath);
 
-            /*
-            if (exerciseFile) {
-                fs.unlink(exerciseFile.path, (err) => {
+            if (exerciseFilePath) {
+                fs.unlink(exerciseFilePath, (err) => {
                     if (err) {
                         console.error(err);
                     }
                 });
             }
 
-            if (warmupFile) {
-                fs.unlink(warmupFile.path, (err) => {
+            if (warmupFilePath) {
+                fs.unlink(warmupFilePath, (err) => {
                     if (err) {
                         console.error(err);
                     }
                 });
             }
-
-             */
 
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {

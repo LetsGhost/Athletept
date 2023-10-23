@@ -2,7 +2,7 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'src/public/uploads'); // Uploads will be stored in the 'uploads' directory
+        cb(null, 'dist/public/uploads'); // Uploads will be stored in the 'uploads' directory
     },
     filename: (req, file, cb) => {
         const fileName = `${Date.now()}-${file.originalname}`;
