@@ -51,7 +51,6 @@ class UserController{
 
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {
-            console.log(error)
             res.status(400).json({ message: 'Registration failed', error: error });
         }
     };
@@ -62,7 +61,7 @@ class UserController{
 
             await userService.deleteUserById(userId);
 
-            res.status(201).json({ message: 'User deleted successfully' });
+            res.status(200).json({ message: 'User deleted successfully' });
         } catch (error) {
             console.log(error)
             res.status(400).json({ message: 'Delete failed', error: error });
@@ -74,7 +73,17 @@ class UserController{
             const { userId } = req.params;
 
             const user = await userService.getUserById(userId);
+
             res.status(200).json(user);
+        } catch (error) {
+            res.status(404).json({ message: "User not found", error: error });
+        }
+    }
+
+    async getAllUsers(req: Request,res: Response ) {
+        try {
+            const users = await userService.getAllUsers();
+            res.status(200).json(users);
         } catch (error) {
             res.status(404).json({ message: error });
         }

@@ -22,6 +22,7 @@ const router = express.Router();
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser);
 router.get("/getUser/:userId", userController.getUserById)
 router.delete("/deleteUser/:userId", userController.deleteUser)
+router.get("/getAllUsers", userController.getAllUsers)
 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan )

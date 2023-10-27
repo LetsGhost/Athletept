@@ -45,6 +45,16 @@ class UserService{
 
         return user;
     }
+
+    async getAllUsers() {
+        const users = await UserModel.find();
+
+        if(!users){
+            throw new Error("Users not found!")
+        }
+
+        return users;
+    }
 }
 
 export default new UserService();

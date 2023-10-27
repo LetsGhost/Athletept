@@ -2,6 +2,7 @@ import mongoose, { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 export interface User extends Document {
+    createdAt: Date;
     email: string;
     password: string;
     role: 'admin' | 'user';
@@ -32,6 +33,7 @@ export interface User extends Document {
 }
 
 const userSchema = new Schema<User>({
+    createdAt: { type: Date, required: true, default: Date.now },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
