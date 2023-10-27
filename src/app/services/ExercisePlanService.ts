@@ -40,8 +40,6 @@ class ExercisePlanService {
             const workbook = new ExcelJS.Workbook();
             await workbook.xlsx.readFile(exerciseFile);
 
-
-
             const exercisePlan: ExerciseDay[] = [];
 
             const worksheet = workbook.getWorksheet(1);
@@ -70,7 +68,7 @@ class ExercisePlanService {
 
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
-                        type: currentType,
+                        type: row.getCell(2).value as string,
                         exercises: exercises,
                         warmup: [],
                     };
@@ -91,53 +89,43 @@ class ExercisePlanService {
                     });
                 }
             });
-            console.log("First: " + exercisePlan);
 
             // Create Warmup
             const workbook2 = new ExcelJS.Workbook();
             await workbook2.xlsx.readFile(warmupFile);
+
             const worksheet2 = workbook.getWorksheet(1);
             let currentDay2: ExerciseDay | null = null;
             let previousType2: string | null = null; // Store the previous type
+            console.log(exercisePlan)
 
             worksheet2.eachRow((row, rowNumber) => {
-                if (row.getCell(1).value === 'Nummer') return; // Skip the first row
+                if(row.getCell(1).value === 'Nummer') return; // Skip the first row
 
                 const currentDay = row.getCell(1).value as string;
 
-                if(currentDay !== previousType2){
-                    const exercises: warmup[] = [];
+                const exerciseplanDay = exercisePlan.find((day) => day.type === currentDay);
 
-                    exercises.push({
-                        warmupExercise: [
-                            {
-                                Exercises: row.getCell(2).value as string,
-                            },
-                        ],
+                if(currentDay === exerciseplanDay?.dayNumber.toString()){
+                    const warmup: warmup[] = [];
+                    warmup.push({
+                        warmupExercise: [{
+                            Exercises: row.getCell(4).value as string,
+                        }],
+                        warmupMaterials: [{
+                            Materials: row.getCell(5).value as string,
+                        }],
                     });
-
-                    exercises.push({
-                        warmupMaterials: [
-                            {
-                                Materials: row.getCell(3).value as string,
-                            }
-                        ],
-                    })
-
                     currentDay2 = {
                         dayNumber: exercisePlan.length + 1,
                         type: currentDay,
                         exercises: [],
-                        warmup: exercises,
+                        warmup: warmup,
                     };
                     exercisePlan.push(currentDay2);
-
-                    // Update the previous type
-                    previousType2 = currentDay;
                 }
             })
-            console.log("Second: " + exercisePlan);
-
+            console.log(exercisePlan)
             // Find the user and update the exercise plan
             const user = await UserModel.findById(userId);
             if (user) {
@@ -160,7 +148,6 @@ class ExercisePlanService {
         try {
             const user = await UserModel.findById(userId).populate('exercisePlan');
             if(!user){
-                console.log("User not found!")
                 throw new Error("User not found!")
             }
 
@@ -172,13 +159,8 @@ class ExercisePlanService {
             }
 
         } catch (error) {
-            console.error('Error getting the exercise plan:', error);
             throw new Error("Error getting the exercise plan")
         }
-    }
-
-    async createWarmupFromExcel(userId: string, filePath: string) {
-
     }
 }
 

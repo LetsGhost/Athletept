@@ -57,6 +57,7 @@ const warmupMaterialsSchema = new Schema<warmupMaterials>({
 
 const warmupSchema = new Schema<warmup>({
     warmupExercise: [warmupExerciseSchema],
+    warmupMaterials: [warmupMaterialsSchema],
 })
 
 const exerciseDaySchema = new Schema<ExerciseDay>({
