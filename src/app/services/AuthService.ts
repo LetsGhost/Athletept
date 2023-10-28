@@ -21,9 +21,26 @@ class AuthService {
                 throw new Error('Authentication failed');
             }
 
-            return jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: '3h'});
+            const token = jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: '3h'});
+            const userId = user._id;
+
+            return {
+                token,
+                userId
+            }
         } catch (error) {
             console.error('Login error:', error);
+            throw error;
+        }
+    }
+
+    async getUserFromToken(token: string) {
+        try {
+            const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as {userId: string, userRole: string};
+            const user = await UserModel.findById(decodedToken.userId).exec();
+            return user?._id;
+        } catch (error) {
+            console.error('Get user from token error:', error);
             throw error;
         }
     }
