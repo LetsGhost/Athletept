@@ -26,6 +26,7 @@ interface warmup {
 interface ExerciseDay {
     dayNumber: number;
     type: string;
+    trainingDone: boolean;
     exercises: Exercise[];
     warmup: warmup[];
 }
@@ -63,6 +64,7 @@ const warmupSchema = new Schema<warmup>({
 const exerciseDaySchema = new Schema<ExerciseDay>({
     dayNumber: Number,
     type: String,
+    trainingDone: { type: Boolean, default: false, required: true },
     exercises: [exerciseSchema],
     warmup: [warmupSchema],
 });
