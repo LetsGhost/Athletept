@@ -1,4 +1,6 @@
 import UserModel from '../models/UserModel';
+import {ExercisePlan} from "../models/ExercisePlanModel";
+import {Message} from "../models/MessagModel";
 
 interface RegistrationData {
     email: string;
@@ -37,7 +39,19 @@ class UserService{
     }
 
     async deleteUserById(userId: string) {
-        const user = await UserModel.findByIdAndRemove(userId);
+
+        const user = await UserModel.findById(userId);
+
+        // Delete the previous exercise plan and messages everything related to the user
+        if(user?.exercisePlan) {
+            await ExercisePlan.findByIdAndDelete(user.exercisePlan);
+        }
+
+        /*
+        if(user?.messages) {
+            await Message.findByIdAndDelete(user.messages);
+        }
+        */
 
         if(!user){
             throw new Error("User not found!")

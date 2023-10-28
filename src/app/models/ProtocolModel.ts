@@ -21,6 +21,7 @@ interface ProtocolExerciseDay {
 
 interface ProtocolExercisePlanDocument extends Document {
     exerciseDays: ProtocolExerciseDay[];
+    createdAt: Date;
 }
 
 interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> {}
@@ -46,6 +47,10 @@ const protocolExerciseDaySchema = new Schema<ProtocolExerciseDay>({
 
 const protocolExercisePlanSchema = new Schema<ProtocolExercisePlanDocument>({
     exerciseDays: [protocolExerciseDaySchema],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const ProtocolExercisePlan: ProtocolExercisePlanModel = mongoose.model<ProtocolExercisePlanDocument, ProtocolExercisePlanModel>('ProtocolExercisePlan', protocolExercisePlanSchema);

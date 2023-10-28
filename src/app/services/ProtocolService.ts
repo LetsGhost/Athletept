@@ -32,6 +32,12 @@ interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> 
 class ProtocolService{
     async createProtocol (userId: string, protocol: Record<string, ProtocolExercise>, comment: Record<string, any>) {
         try {
+            const protocolFromUser = await ProtocolExercisePlan.findOne({userId})
+
+            if(protocolFromUser) {
+                console.log('Protocol already exists');
+            }
+
             const protocolExerciseDays: ProtocolExerciseDay[] = [];
 
             for (const key in protocol) {
@@ -73,6 +79,15 @@ class ProtocolService{
 
             // Find the user and update the exercise plan
             const user = await UserModel.findById(userId);
+
+            // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
+            const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
+            const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
+            if (exerciseDay) {
+                exerciseDay.trainingDone = true;
+                await exercisePlan?.save();
+            }
+
             if (user) {
                 const protocolExercisePlanDocument = new ProtocolExercisePlan({
                     exerciseDays: protocolExerciseDays
