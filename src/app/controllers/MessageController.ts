@@ -12,7 +12,7 @@ class MessageController {
 
             const newMessage = await messageService.createMessage( message, decoodedToken.userId, userId);
 
-            res.status(201).json(newMessage);
+            res.status(201).json({message: "Message got Created", newMessage});
         } catch (error) {
             console.error('Error creating message:', error);
             res.status(500).json({ message: 'Internal server error' });
