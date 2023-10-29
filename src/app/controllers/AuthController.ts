@@ -3,10 +3,16 @@ import authService from '../services/AuthService';
 
 class AuthController {
     async login(req: Request, res: Response) {
-        const { email, password } = req.body;
+        const { email, password, alwaysLogedIn } = req.body;
 
         try {
-            const { token, userId } = await authService.loginUser(email, password);
+            const { token, userId } = await authService.loginUser(email, password, alwaysLogedIn);
+
+            // If the user set alwaysLogedIn to true, the token will be valid for 30 days
+            if (alwaysLogedIn){
+                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000 });
+                return res.json({ message: 'Authentication successful', userid: userId });
+            }
 
             res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
 
