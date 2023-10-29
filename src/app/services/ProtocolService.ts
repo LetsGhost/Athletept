@@ -32,10 +32,67 @@ interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> 
 class ProtocolService{
     async createProtocol (userId: string, protocol: Record<string, ProtocolExercise>, comment: Record<string, any>) {
         try {
-            const protocolFromUser = await ProtocolExercisePlan.findOne({userId})
 
-            if(protocolFromUser) {
-                console.log('Protocol already exists');
+            const user = await UserModel.findById(userId);
+            // Check if the user already has an protocol
+            if (user?.protocolExercisePlan) {
+                console.log('User already has a protocol');
+                // Update the exisitng one with a new one
+                const protocolExerciseDays: ProtocolExerciseDay[] = [];
+
+                for (const key in protocol) {
+                    //console.log(key);
+                    if (protocol.hasOwnProperty(key)){
+                        const [day, type, exerciseName] = key.split('-');
+                        const dayInt = parseInt(day);
+
+                        const protocolExercise: ProtocolExercise = {
+                            Exercises: exerciseName,
+                            Weight: protocol[key].Weight,
+                            Repetitions: protocol[key].Repetitions,
+                        }
+
+                        // Check if there's already an exercise plan for the same day
+                        const existingDay = protocolExerciseDays.find((day) => day.dayNumber === dayInt);
+
+                        if (existingDay) {
+                            // If the day is the same, add the exercise to the existing day
+                            existingDay.exercises.push(protocolExercise);
+                        } else {
+                            // Otherwise, create a new exercise day
+                            const protocolExerciseDay: ProtocolExerciseDay = {
+                                dayNumber: dayInt,
+                                type: type,
+                                comment: {
+                                    Scale: comment.Scale,
+                                    Changes: comment.Changes,
+                                    Problems: comment.Problems,
+                                },
+                                exercises: [protocolExercise],
+                            }
+
+                            // Push the new exercise day to the list
+                            protocolExerciseDays.push(protocolExerciseDay);
+                        }
+                    }
+                }
+
+                // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
+                const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
+                const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
+                if (exerciseDay) {
+                    exerciseDay.trainingDone = true;
+                    await exercisePlan?.save();
+                }
+
+                // Append the new protocol to the existing one
+                const existingProtocol = await ProtocolExercisePlan.findById(user?.protocolExercisePlan);
+                if (existingProtocol) {
+                    existingProtocol.exerciseDays = existingProtocol.exerciseDays.concat(protocolExerciseDays);
+                    await existingProtocol.save();
+                }
+
+                return existingProtocol;
             }
 
             const protocolExerciseDays: ProtocolExerciseDay[] = [];
@@ -78,7 +135,7 @@ class ProtocolService{
             }
 
             // Find the user and update the exercise plan
-            const user = await UserModel.findById(userId);
+
 
             // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
             const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
