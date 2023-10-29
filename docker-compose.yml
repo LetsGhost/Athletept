@@ -1,0 +1,35 @@
+version: '3'
+services:
+  athletpt:
+    image: athletept-pre0.2:latest
+    ports:
+      - '8080:8080'
+    environment:
+      - MONGODB_URI=mongodb://athletpt:d95L2ob5ojqI@mongodb:27017
+      - PORT=8080
+      - TOKEN_SECRET=secret
+      - DB_NAME=athletept
+    networks:
+      - internal_network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=athletpt
+      - MONGO_INITDB_ROOT_PASSWORD=d95L2ob5ojqI
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - internal_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  internal_network:
+    external: false
