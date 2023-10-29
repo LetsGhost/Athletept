@@ -42,6 +42,10 @@ class MessageService{
             throw error;
         }
     }
+
+    async deleteMessageById(messageId: string) {
+
+    }
 }
 
 
