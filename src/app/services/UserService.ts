@@ -1,6 +1,8 @@
 import UserModel from '../models/UserModel';
 import {ExercisePlan} from "../models/ExercisePlanModel";
-import {Message} from "../models/MessagModel";
+import {Message, MessageModel} from "../models/MessagModel";
+import {ProtocolExercisePlan} from "../models/ProtocolModel";
+import {TrainingDuration} from "../models/TrainingdurationModel";
 
 interface RegistrationData {
     email: string;
@@ -42,16 +44,31 @@ class UserService{
 
         const user = await UserModel.findById(userId);
 
-        // Delete the previous exercise plan and messages everything related to the user
-        if(user?.exercisePlan) {
+        // Delete all data from this user
+        if(user?.exercisePlan){
             await ExercisePlan.findByIdAndDelete(user.exercisePlan);
         }
-
-        /*
-        if(user?.messages) {
-            await Message.findByIdAndDelete(user.messages);
+        if(user?.protocolExercisePlan){
+            await ProtocolExercisePlan.findByIdAndDelete(user.protocolExercisePlan);
         }
-        */
+        if(user?.messages){
+            // Delete all found messages message ids are stored in a array
+            for(const messageId of user.messages ){
+                await MessageModel.findByIdAndDelete(messageId);
+            }
+        }
+        if (user?.trainingduration){
+            await TrainingDuration.findByIdAndDelete(user.trainingduration);
+        }
+        // WeekDisplay doesnt exist jet
+        /* Checkin doesnt exist jet
+        if(user?.checkIn){
+            await CheckIn.findByIdAndDelete(user.checkIn);
+        }
+         */
+        if (user){
+            await UserModel.findByIdAndDelete(userId);
+        }
 
         if(!user){
             throw new Error("User not found!")
