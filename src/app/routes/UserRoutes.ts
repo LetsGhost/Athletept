@@ -13,15 +13,15 @@ import protocolController from "../controllers/ProtocolController";
 const router = express.Router();
 
 // Exercise Plan
-router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan )
+router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
 
 // User
-router.get("/getUser/:userId", userController.getUserById)
+router.get("/getUser/:userId", userController.getUserById) // Is Documented
 
 // Message
-router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
+router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) // Is Documented
 
 // Protocol
-router.post("/createProtocol", protocolController.createProtocol)
+router.post("/createProtocol", protocolController.createProtocol) // Is Documented
 
 export default router;

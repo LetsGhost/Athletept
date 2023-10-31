@@ -6,7 +6,7 @@ import auhtController from '../controllers/AuthController';
 // Import routes
 const router = express.Router();
 
-router.post('/login', auhtController.login);
-router.get('/getUserFromToken', auhtController.getUserFromToken);
+router.post('/login', auhtController.login); // Is Documented
+router.get('/getUserFromToken', auhtController.getUserFromToken); // Is Documented
 
 export default router;

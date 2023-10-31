@@ -19,18 +19,18 @@ import exercisePlanController from "../controllers/ExercisePlanController";
 const router = express.Router();
 
 // User
-router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser);
-router.get("/getUser/:userId", userController.getUserById)
-router.delete("/deleteUser/:userId", userController.deleteUser)
+router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented
+router.get("/getUser/:userId", userController.getUserById) // Is Documented
+router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers)
 
 // Exercise plan
-router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan )
+router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
 
 // Message
-router.post("/createMessage/:userId", messageController.createMessage)
+router.post("/createMessage/:userId", messageController.createMessage) // Is Documented
 
 // Protocol
-router.get("/getProtocol/:userId", protocolController.getProtocol)
+router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
 
 export default router;
