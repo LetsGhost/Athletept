@@ -3,7 +3,6 @@ import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {Document, Model} from "mongoose";
 import {ExercisePlan} from "../models/ExercisePlanModel";
 
-
 interface ProtocolExercise {
     Exercises: string;
     Weight: string;
