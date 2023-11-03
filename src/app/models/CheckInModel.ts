@@ -20,18 +20,19 @@ interface change{
 }
 
 interface checkIn {
-    createdAt: Date;
     currentGrowth: currentGrowth;
     problems: problems;
     regeneration: regeneration;
     change: change;
 }
 
-interface CheckInDocument extends Document {
+interface checkInDocument extends Document {
+    createdAt: Date;
+    checkInStatus: boolean
     checkIn: checkIn;
 }
 
-interface CheckInModel extends Model<CheckInDocument> {}
+interface CheckInModel extends Model<checkInDocument> {}
 
 const currentGrowthSchema = new Schema<currentGrowth>({
     answer: String,
@@ -54,16 +55,18 @@ const changeSchema = new Schema<change>({
 })
 
 const checkInSchema = new Schema<checkIn>({
-    createdAt: {type: Date, default: Date.now},
     currentGrowth: currentGrowthSchema,
     problems: problemsSchema,
     regeneration: regenerationSchema,
     change: changeSchema,
 })
 
-const checkInDocumentSchema = new Schema<checkIn>({
+const checkInDocumentSchema = new Schema<checkInDocument>({
+    createdAt: {type: Date, default: Date.now},
+    checkInStatus: {type: Boolean, default: false},
     checkIn: checkInSchema,
 })
-const CheckIn = mongoose.model<CheckInDocument, CheckInModel>('CheckIn', checkInDocumentSchema);
+
+const CheckIn = mongoose.model<checkInDocument>('CheckIn', checkInDocumentSchema);
 
 export {CheckIn}

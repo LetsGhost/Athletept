@@ -8,6 +8,7 @@ import exercisePlanController from "../controllers/ExercisePlanController";
 import userController from "../controllers/UserController";
 import messageController from "../controllers/MessageController";
 import protocolController from "../controllers/ProtocolController";
+import checkInController from "../controllers/CheckInController";
 
 // Import routes
 const router = express.Router();
@@ -23,5 +24,8 @@ router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) 
 
 // Protocol
 router.post("/createProtocol", protocolController.createProtocol) // Is Documented
+
+// Check-in
+router.post("/createCheckIn/:userId", checkInController.createCheckIn) 
 
 export default router;
