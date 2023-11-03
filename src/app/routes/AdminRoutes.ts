@@ -22,7 +22,7 @@ const router = express.Router();
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented
 router.get("/getUser/:userId", userController.getUserById) // Is Documented
 router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
-router.get("/getAllUsers", userController.getAllUsers)
+router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
