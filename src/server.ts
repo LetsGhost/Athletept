@@ -1,7 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';;
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 dotenv.config();
 
 // Routes
@@ -14,6 +15,7 @@ const server = express();
 
 server.use(bodyParser.json());
 server.use(cookieParser());
+server.use(cors());
 
 connectToDatabase()
 
