@@ -12,4 +12,4 @@ const trainingsWeekDisplaySchema = new Schema<TrainingWeekDisplayModel>({
 
 const WeekDisplay: Model<TrainingWeekDisplayModel> = mongoose.model<TrainingWeekDisplayModel>('WeekDisplay', trainingsWeekDisplaySchema);
 
-export default WeekDisplay;
+export {WeekDisplay}
