@@ -12,8 +12,10 @@ class WeekDisplayService {
 
             const user = await UserModel.findById(userId);
             if(!user){
-                throw new Error('User not found');
-                return false;
+                return {
+                    success: false,
+                    message: 'User not found'
+                };
             }
 
             if (user) {
@@ -22,7 +24,10 @@ class WeekDisplayService {
                 user.weekDisplay = createdWeekDisplay._id;
                 await user.save();
 
-                return trainingsWeekDisplay;
+                return {
+                    success: false,
+                    message: 'User not found'
+                };
             }
         } catch (error) {
             throw error;

@@ -6,13 +6,13 @@ class WeekDisplayController {
         try{
             const { userId, trainingsWeek } = req.body;
 
-            const trainingsWeekDisplay = await WeekDisplayService.createWeekDisplay(userId, trainingsWeek);
+            const result = await WeekDisplayService.createWeekDisplay(userId, trainingsWeek);
     
-            if(trainingsWeekDisplay == false){
+            if(!result){
                 res.status(404).json({Success: false, error: "User not found"});
             }
     
-            res.status(201).json({Success: true, trainingsWeekDisplay});
+            res.status(201).json({Success: true, result});
         } catch(error) {
             throw error;
         }
