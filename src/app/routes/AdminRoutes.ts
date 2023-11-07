@@ -14,6 +14,7 @@ import messageController from "../controllers/MessageController";
 import protocolController from "../controllers/ProtocolController";
 import adminController from "../controllers/AdminController";
 import exercisePlanController from "../controllers/ExercisePlanController";
+import weekDisplayController from '../controllers/WeekDisplayController';
 
 // Import routes
 const router = express.Router();
@@ -32,5 +33,8 @@ router.post("/createMessage/:userId", messageController.createMessage) // Is Doc
 
 // Protocol
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
+
+// WeekDisplay
+router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay)
 
 export default router;
