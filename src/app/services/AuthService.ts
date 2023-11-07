@@ -11,14 +11,14 @@ class AuthService {
 
             if (!user) {
                 console.log('User not found');
-                throw new Error('Authentication failed');
+                throw new Error('User not found');
             }
 
             const passwordMatch = await (user as User).comparePassword(password);
 
             if (!passwordMatch) {
                 console.log('Password does not match');
-                throw new Error('Authentication failed');
+                throw new Error('Password does not match');
             }
 
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
