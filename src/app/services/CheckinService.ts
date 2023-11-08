@@ -39,6 +39,7 @@ class CheckInService {
         try{
             const user = await UserModel.findById(userId)
             const userCheckIn = await CheckIn.findOne({user: userId})
+            
             if(!user){
                 throw new Error("User not found")
             }
