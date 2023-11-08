@@ -11,14 +11,22 @@ class AuthService {
 
             if (!user) {
                 console.log('User not found');
-                throw new Error('User not found');
+                return {
+                    success: false,
+                    code: 404,
+                    message: 'User not found'
+                }
             }
 
             const passwordMatch = await (user as User).comparePassword(password);
 
             if (!passwordMatch) {
                 console.log('Password does not match');
-                throw new Error('Password does not match');
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Authentication failed'
+                }
             }
 
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
@@ -27,6 +35,8 @@ class AuthService {
                 const userId = user._id;
 
                 return {
+                    success: true,
+                    code: 200,
                     token,
                     userId
                 }
@@ -36,12 +46,18 @@ class AuthService {
             const userId = user._id;
 
             return {
+                success: true,
+                code: 200,
                 token,
                 userId
             }
         } catch (error) {
-            console.error('Login error:', error);
-            throw error;
+            console.log('Login error:', error);
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error"
+            }
         }
     }
 
@@ -49,10 +65,27 @@ class AuthService {
         try {
             const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as {userId: string, userRole: string};
             const user = await UserModel.findById(decodedToken.userId).exec();
-            return user?._id;
+
+            if(!token){
+                return {
+                    success: false,
+                    code: 404,
+                    message: "No token found"
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                userId: user?._id
+            };
         } catch (error) {
-            console.error('Get user from token error:', error);
-            throw error;
+            console.log('Get user from token error:', error);
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
         }
     }
 }

@@ -3,36 +3,35 @@ import authService from '../services/AuthService';
 
 class AuthController {
     async login(req: Request, res: Response) {
-        const { email, password, alwaysLogedIn } = req.body;
-
         try {
-            const { token, userId } = await authService.loginUser(email, password, alwaysLogedIn);
+            const { email, password, alwaysLogedIn } = req.body;
+
+            const { success, code, message, token, userId } = await authService.loginUser(email, password, alwaysLogedIn);
 
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
             if (alwaysLogedIn){
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000 });
-                return res.json({ message: 'Authentication successful', userid: userId });
+                return res.status(code).json({ success, message, userId: userId });
             }
 
             res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
-
-            return res.json({ message: 'Authentication successful', userid: userId });
+            return res.status(code).json({ success, message, userId: userId });
         } catch (error) {
             console.error('Login error:', error);
-            res.status(401).json({ message: 'Authentication failed' });
+            res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
 
     async getUserFromToken(req: Request, res: Response) {
-        const token = req.cookies.token;
-
         try {
-            const user = await authService.getUserFromToken(token);
+            const token = req.cookies.token;
 
-            return res.json({ userid: user });
+            const { success, code, message, userId } = await authService.getUserFromToken(token);
+
+            return res.status(code).json({ success, message, userId: userId });
         } catch (error) {
             console.error('Get user from token error:', error);
-            res.status(401).json({ message: 'Authentication failed' });
+            return res.status(500).json({success: false, message: 'Internal Server error' });
         }
     }
 }
