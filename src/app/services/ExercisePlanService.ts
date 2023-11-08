@@ -32,7 +32,6 @@ class ExercisePlanService {
 
     async createExercisePlanFromExcel(userId: string, exerciseFile: any, warmupFile: any) {
         try {
-
             // ExerciseFile Workbook
             const workbook = new ExcelJS.Workbook();
             await workbook.xlsx.readFile(exerciseFile);
@@ -131,7 +130,7 @@ class ExercisePlanService {
             }
 
         } catch (error) {
-            console.error('Error processing the Excel file:', error);
+            console.log('Error processing the Excel file in Service:', error);
         }
     };
 
@@ -139,18 +138,29 @@ class ExercisePlanService {
         try {
             const user = await UserModel.findById(userId).populate('exercisePlan');
             if(!user){
-                throw new Error("User not found!")
+                console.log("User not found!");
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found!"
+                }
             }
 
             if (user) {
-                return user.exercisePlan;
-            }
-            else {
-                throw new Error("User does not have an exercise plan")
+                return {
+                    success: true,
+                    code: 200,
+                    exercisePlan: user.exercisePlan
+                }
             }
 
         } catch (error) {
-            throw new Error("Error getting the exercise plan")
+            console.log("Error while getting exercise plan in Service: ", error);
+            return {
+                success: false,
+                code: 500,
+                message: "Internal Server error"
+            }
         }
     }
 }

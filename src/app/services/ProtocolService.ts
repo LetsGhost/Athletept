@@ -33,10 +33,10 @@ class ProtocolService{
         try {
 
             const user = await UserModel.findById(userId);
+
             // Check if the user already has an protocol
             if (user?.protocolExercisePlan) {
-                console.log('User already has a protocol');
-                // Update the exisitng one with a new one
+                // Update the existing one with a new one
                 const protocolExerciseDays: ProtocolExerciseDay[] = [];
 
                 for (const key in protocol) {
@@ -91,13 +91,16 @@ class ProtocolService{
                     await existingProtocol.save();
                 }
 
-                return existingProtocol;
+                return {
+                    success: true,
+                    code: 201,
+                    newProtocol: existingProtocol,
+                }
             }
 
             const protocolExerciseDays: ProtocolExerciseDay[] = [];
 
             for (const key in protocol) {
-                //console.log(key);
                 if (protocol.hasOwnProperty(key)){
                     const [day, type, exerciseName] = key.split('-');
                     const dayInt = parseInt(day);
@@ -133,9 +136,6 @@ class ProtocolService{
                 }
             }
 
-            // Find the user and update the exercise plan
-
-
             // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
             const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
             const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
@@ -155,11 +155,20 @@ class ProtocolService{
 
                 await user.save();
 
-                return createdExercisePlan;
+                return {
+                    success: true,
+                    code: 201,
+                    newProtocol: createdExercisePlan,
+                };
+                
             }
         } catch (error) {
             console.log('Error creating ProtocolExercisePlan:', error);
-            throw error;
+            return {
+                success: false,
+                code: 500,
+                message: 'Error creating ProtocolExercisePlan',
+            };
         }
     }
 
@@ -167,11 +176,19 @@ class ProtocolService{
         try {
             const user = await UserModel.findById(userId).populate('protocolExercisePlan');
             if (user) {
-                return user.protocolExercisePlan;
+                return {
+                    success: true,
+                    code: 200,
+                    protocol: user.protocolExercisePlan,
+                }
             }
         } catch (error) {
             console.log('Error getting ProtocolExercisePlan:', error);
-            throw error;
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error',
+            };
         }
     }
 }

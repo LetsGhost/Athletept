@@ -16,15 +16,29 @@ class MessageService{
             // Update the user's messages array with the message's ObjectId
             const user = await UserModel.findById(userId);
             if (!user) {
-                throw new Error('User not found');
+                console.log('User not found');
+                return {
+                    success: false,
+                    code: 404,
+                    messageo: 'User not found'
+                }
             }
 
-            user.messages.push(newMessage._id);
-            await user.save();
+            user?.messages.push(newMessage._id);
+            await user?.save();
 
-            return newMessage;
+            return {
+                success: true,
+                code: 201,
+                newMessage,
+            }
         } catch (error) {
-            throw error;
+            console.log('Error creating message:', error);
+            return {
+                success: false,
+                code: 500,
+                messageo: 'Internal server error'
+            }
         }
     };
 
@@ -33,13 +47,25 @@ class MessageService{
             const user = await UserModel.findById(userId).populate('messages');
             if (!user) {
                 console.error('User not found');
-                throw new Error('User not found');
+                return {
+                    success: false,
+                    code: 404,
+                    message: 'User not found'
+                }
             }
 
-            return user.messages;
+            return {
+                success: true,
+                code: 200,
+                messages: user.messages,
+            }
         } catch (error) {
             console.error('Error getting messages:', error);
-            throw error;
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
         }
     }
 

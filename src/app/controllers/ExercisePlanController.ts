@@ -7,11 +7,18 @@ class ExercisePlanController {
             const { userId } = req.params;
 
             // Get the exercise plan
-            const exercisePlan = await exercisePlanService.getExercisePlan(userId);
+            const result = await exercisePlanService.getExercisePlan(userId);
 
-            res.status(200).json({ message: 'Exercise plan retrieved successfully', exercisePlan: exercisePlan });
+            if (result && 'success' in result) {
+                const { success, code, message, exercisePlan } = result;
+                return res.status(code).json({ success, message, exercisePlan });
+            } else {
+                console.log('Unexpected response from exercisePlanService.getExercisePlan');
+                throw new Error('Unexpected response from exercisePlanService.getExercisePlan');
+            }
         } catch (error) {
-            res.status(400).json({ message: 'Exercise plan retrieval failed', error: error });
+            console.log("Error while getting exercise plan in Controller: ", error);
+            res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
 }

@@ -11,7 +11,8 @@ class UserController{
             const { email, password, userInfo } = req.body;
 
             if (!req.files) {
-                return res.status(400).json({ message: 'No file provided' });
+                console.log("No files were uploaded.")
+                return res.status(400).json({ success: false, message: 'No files were uploaded.' });
             }
 
             // I don´t know why this has to be here, but it works
@@ -28,11 +29,12 @@ class UserController{
             const warmupFilePath = toJSON["warmupFile"][0].path
 
             // Register the user
-            const newUser = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
+            const {success, code, message, newUser} = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
 
             // Create exercise plan from Excel file
-            await exercisePlanService.createExercisePlanFromExcel(newUser._id, exerciseFilePath, warmupFilePath);
+            await exercisePlanService.createExercisePlanFromExcel(newUser?._id, exerciseFilePath, warmupFilePath);
 
+            // Deletes the files after the processing
             if (exerciseFilePath) {
                 fs.unlink(exerciseFilePath, (err) => {
                     if (err) {
@@ -49,9 +51,10 @@ class UserController{
                 });
             }
 
-            res.status(201).json({ message: 'User registered successfully' });
+            return res.status(code).json({ success, message, newUser });
         } catch (error) {
-            res.status(400).json({ message: 'Registration failed', error: error });
+            console.log("Error while registration in Controller: ", error)
+            return res.status(500).json({ success: false, message: "Internal Server error" });
         }
     };
 
@@ -59,12 +62,12 @@ class UserController{
         try {
             const { userId } = req.params;
 
-            await userService.deleteUserById(userId);
+            const {success, code, message} = await userService.deleteUserById(userId);
 
-            res.status(200).json({ message: 'User deleted successfully' });
+            res.status(code).json({ success, message });
         } catch (error) {
-            console.log(error)
-            res.status(400).json({ message: 'Delete failed', error: error });
+            console.log("Error while deleting user in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
 
@@ -72,20 +75,21 @@ class UserController{
         try {
             const { userId } = req.params;
 
-            const user = await userService.getUserById(userId);
+            const { success, code, message, user } = await userService.getUserById(userId);
 
-            res.status(200).json(user);
+            return res.status(code).json({success, message, user});
         } catch (error) {
-            res.status(404).json({ message: "User not found", error: error });
+            return res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
 
     async getAllUsers(req: Request,res: Response ) {
         try {
-            const users = await userService.getAllUsers();
-            res.status(200).json(users);
+            const {success, code, message, users} = await userService.getAllUsers();
+            res.status(code).json({success, message, users});
         } catch (error) {
-            res.status(404).json({ message: error });
+            console.log("Error while getting all users in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
 }

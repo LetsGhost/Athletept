@@ -10,12 +10,12 @@ class MessageController {
 
             const decoodedToken = decodeToken(req.cookies.token)
 
-            const newMessage = await messageService.createMessage( message, decoodedToken.userId, userId);
+            const {success, code, messageo, newMessage} = await messageService.createMessage( message, decoodedToken.userId, userId);
 
-            res.status(201).json({message: "Message got Created", newMessage});
+            res.status(code).json({ success, message: messageo, newMessage});
         } catch (error) {
             console.error('Error creating message:', error);
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({ success: false, message: 'Internal server error' });
         }
     };
 
@@ -23,12 +23,12 @@ class MessageController {
         try {
             const userId = req.params.userId;
 
-            const messages = await messageService.getAllMessagesFromUser(userId);
+            const {success, code, message, messages} = await messageService.getAllMessagesFromUser(userId);
 
-            res.status(200).json(messages);
+            res.status(code).json({ success, message, messages});
         } catch (error) {
-            console.error('Error getting messages:', error);
-            res.status(500).json({ message: 'Internal server error' });
+            console.log('Error getting messages:', error);
+            res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
 }
