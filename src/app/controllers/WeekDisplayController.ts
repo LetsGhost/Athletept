@@ -4,17 +4,42 @@ import WeekDisplayService from '../services/WeekDisplayService';
 class WeekDisplayController {
     async createWeekDisplay(req: Request, res: Response) {
         try{
-            const { userId, trainingsWeek } = req.body;
+            const { trainingsWeek } = req.body;
+            const userId = req.params.userId;
 
-            const result = await WeekDisplayService.createWeekDisplay(userId, trainingsWeek);
+            const { success, code, message, weekDisplay } = await WeekDisplayService.createWeekDisplay(userId, trainingsWeek);
     
-            if(!result){
-                res.status(404).json({Success: false, error: "User not found"});
-            }
-    
-            res.status(201).json({Success: true, result});
+            res.status(code).json({success, message, weekDisplay});
         } catch(error) {
-            throw error;
+            console.log("Error creating week display in Controller: ", error);
+            res.status(500).json({success: false, message: 'Internal Server Error'});
+        }
+    }
+
+    async getWeekDisplay(req: Request, res: Response) {
+        try{
+            const userId = req.params.userId;
+
+            const { success, code, message, weekDisplay } = await WeekDisplayService.getWeekDisplay(userId);
+    
+            res.status(code).json({success, message, weekDisplay});
+        } catch(error) {
+            console.log("Error getting week display in Controller: ", error);
+            res.status(500).json({success: false, message: 'Internal Server Error'});
+        }
+    }
+
+    async updateWeekDisplay(req: Request, res: Response) {
+        try{
+            const { trainingsWeek } = req.body;
+            const userId = req.params.userId;
+
+            const { success, code, message, weekDisplay } = await WeekDisplayService.updateWeekDisplay(userId, trainingsWeek);
+    
+            res.status(code).json({success, message, weekDisplay});
+        } catch(error) {
+            console.log("Error updating week display in Controller: ", error);
+            res.status(500).json({success: false, message: 'Internal Server Error'});
         }
     }
 }

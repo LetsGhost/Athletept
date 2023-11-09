@@ -36,5 +36,7 @@ router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documen
 
 // WeekDisplay
 router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay)
+router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
+router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay)
 
 export default router;
