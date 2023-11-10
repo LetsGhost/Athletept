@@ -48,7 +48,7 @@ class ExercisePlanService {
             let currentDay: ExerciseDay | null = null;
             let previousType: string | null = null; // Store the previous type
 
-            worksheet.eachRow((row, rowNumber) => {
+            worksheet?.eachRow((row, rowNumber) => {
                 if (row.getCell(1).value === 'Nummer') return; // Skip the first row
 
                 const currentType = row.getCell(1).value as string; // Is the nummer of the day
@@ -68,7 +68,7 @@ class ExercisePlanService {
                         Execution: row.getCell(10).value as string,
                     });
 
-                    warmupWorksheet.eachRow((warmupRow, warmupRowNumber) => {
+                    warmupWorksheet?.eachRow((warmupRow, warmupRowNumber) => {
                         if (warmupRow.getCell(1).value === 'Nummer') return; // Skip the first row
 
                         const warmupType = warmupRow.getCell(1).value as string;
