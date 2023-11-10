@@ -36,8 +36,8 @@ router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
 
 // WeekDisplay
-router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay)
-router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
-router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay)
+router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay) // Is Documented
+router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // Is Documented
+router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay) // Is Documented
 
 export default router;
