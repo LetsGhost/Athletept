@@ -30,6 +30,7 @@ router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) 
 
 // Message
 router.post("/createMessage/:userId", messageController.createMessage) // Is Documented
+router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
 
 // Protocol
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
