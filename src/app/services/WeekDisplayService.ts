@@ -16,14 +16,14 @@ class WeekDisplayService {
                 const createdWeekDisplay = await WeekDisplay.create(weekDisplay);
                 user.weekDisplay = createdWeekDisplay._id;
                 await user.save();
-                console.log("B");
+                
                 return {
                     success: true,
                     code: 201,
                     weekDisplay: createdWeekDisplay
                 }
             }
-            console.log("A");
+            
             return {
                 success: false,
                 code: 404,
