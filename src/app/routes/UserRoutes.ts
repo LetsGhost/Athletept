@@ -29,7 +29,7 @@ router.post("/createProtocol", protocolController.createProtocol) // Is Document
 // Check-in
 router.post("/createCheckIn/:userId", checkInController.createCheckIn) 
 
-// Weeke Display
+// Week Display
 router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
 
 export default router;
