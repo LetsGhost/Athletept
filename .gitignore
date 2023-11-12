@@ -704,4 +704,6 @@ Dockerfile
 
 .idea/*
 
+settings.json
+
 # End of https://www.toptal.com/developers/gitignore/api/node,webstorm,visualstudiocode,visualstudio,dotenv,expressionengine,typings
