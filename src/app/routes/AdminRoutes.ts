@@ -30,11 +30,14 @@ router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) 
 
 // Message
 router.post("/createMessage/:userId", messageController.createMessage) // Is Documented
+router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
 
 // Protocol
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
 
 // WeekDisplay
-router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay)
+router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay) // Is Documented
+router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // Is Documented
+router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay) // Is Documented
 
 export default router;
