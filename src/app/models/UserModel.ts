@@ -23,6 +23,7 @@ export interface User extends Document {
         issues: string;
     }
     exercisePlan: mongoose.Schema.Types.ObjectId;
+    oldProtocol: Array<String>;
     protocolExercisePlan: mongoose.Schema.Types.ObjectId;
     messages: mongoose.Schema.Types.ObjectId[];
     checkIn: mongoose.Schema.Types.ObjectId;
@@ -56,6 +57,7 @@ const userSchema = new Schema<User>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ExercisePlan'
     },
+    oldProtocol: [String],
     protocolExercisePlan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProtocolExercisePlan'
