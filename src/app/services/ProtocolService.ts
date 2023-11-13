@@ -65,6 +65,13 @@ class ProtocolService{
                         await exercisePlan?.save();
                     }
 
+                    // Pushes the daynumber of the protocol to the trainingDone array in the weekDisplay
+                    const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+                    if(weekDisplay){
+                        weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
+                        await weekDisplay.save();
+                    }
+
                     if (user) {
                         const protocolExercisePlanDocument = new ProtocolExercisePlan({
                             exerciseDays: protocolExerciseDays
