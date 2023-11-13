@@ -2,6 +2,7 @@ import UserModel from "../models/UserModel";
 import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {Document, Model} from "mongoose";
 import {ExercisePlan} from "../models/ExercisePlanModel";
+import protocolUtils from "../utils/protocolUtils";
 
 interface ProtocolExercise {
     Exercises: string;
@@ -41,53 +42,19 @@ class ProtocolService{
                 const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
                 const createdAt = (user?.protocolExercisePlan as any as ProtocolExercisePlanDocument).createdAt;
 
+                // Calculates the date that should be one week ago
                 const currentDate = new Date();
                 const oneWeekAgo = new Date();
                 oneWeekAgo.setDate(currentDate.getDate() - 7);
 
+                // If the createdAt date is older than one week, move the protocol to the oldProtocol array and create a new one
                 if(createdAt <= oneWeekAgo) {
                     await UserModel.findByIdAndUpdate(userId, {
                         $push: { oldProtocol: user?.protocolExercisePlan },
                         $unset: { protocolExercisePlan: "" }
                     });
 
-                    const protocolExerciseDays: ProtocolExerciseDay[] = [];
-
-                    for (const key in protocol) {
-                        if (protocol.hasOwnProperty(key)){
-                            const [day, type, exerciseName] = key.split('-');
-                            const dayInt = parseInt(day);
-
-                            const protocolExercise: ProtocolExercise = {
-                                Exercises: exerciseName,
-                                Weight: protocol[key].Weight,
-                                Repetitions: protocol[key].Repetitions,
-                            }
-
-                            // Check if there's already an exercise plan for the same day
-                            const existingDay = protocolExerciseDays.find((day) => day.dayNumber === dayInt);
-
-                            if (existingDay) {
-                                // If the day is the same, add the exercise to the existing day
-                                existingDay.exercises.push(protocolExercise);
-                            } else {
-                                // Otherwise, create a new exercise day
-                                const protocolExerciseDay: ProtocolExerciseDay = {
-                                    dayNumber: dayInt,
-                                    type: type,
-                                    comment: {
-                                        Scale: comment.Scale,
-                                        Changes: comment.Changes,
-                                        Problems: comment.Problems,
-                                    },
-                                    exercises: [protocolExercise],
-                                }
-
-                                // Push the new exercise day to the list
-                                protocolExerciseDays.push(protocolExerciseDay);
-                            }
-                        }
-                    }
+                    const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
                     // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
                     const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
@@ -123,45 +90,7 @@ class ProtocolService{
                     }
                 }
 
-                // Update the existing one with a new one
-                const protocolExerciseDays: ProtocolExerciseDay[] = [];
-
-                for (const key in protocol) {
-                    
-                    if (protocol.hasOwnProperty(key)){
-                        const [day, type, exerciseName] = key.split('-');
-                        const dayInt = parseInt(day);
-
-                        const protocolExercise: ProtocolExercise = {
-                            Exercises: exerciseName,
-                            Weight: protocol[key].Weight,
-                            Repetitions: protocol[key].Repetitions,
-                        }
-
-                        // Check if there's already an exercise plan for the same day
-                        const existingDay = protocolExerciseDays.find((day) => day.dayNumber === dayInt);
-
-                        if (existingDay) {
-                            // If the day is the same, add the exercise to the existing day
-                            existingDay.exercises.push(protocolExercise);
-                        } else {
-                            // Otherwise, create a new exercise day
-                            const protocolExerciseDay: ProtocolExerciseDay = {
-                                dayNumber: dayInt,
-                                type: type,
-                                comment: {
-                                    Scale: comment.Scale,
-                                    Changes: comment.Changes,
-                                    Problems: comment.Problems,
-                                },
-                                exercises: [protocolExercise],
-                            }
-
-                            // Push the new exercise day to the list
-                            protocolExerciseDays.push(protocolExerciseDay);
-                        }
-                    }
-                }
+                const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
                 // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
                 const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
@@ -185,43 +114,7 @@ class ProtocolService{
                 }
             }
 
-            const protocolExerciseDays: ProtocolExerciseDay[] = [];
-
-            for (const key in protocol) {
-                if (protocol.hasOwnProperty(key)){
-                    const [day, type, exerciseName] = key.split('-');
-                    const dayInt = parseInt(day);
-
-                    const protocolExercise: ProtocolExercise = {
-                        Exercises: exerciseName,
-                        Weight: protocol[key].Weight,
-                        Repetitions: protocol[key].Repetitions,
-                    }
-
-                    // Check if there's already an exercise plan for the same day
-                    const existingDay = protocolExerciseDays.find((day) => day.dayNumber === dayInt);
-
-                    if (existingDay) {
-                        // If the day is the same, add the exercise to the existing day
-                        existingDay.exercises.push(protocolExercise);
-                    } else {
-                        // Otherwise, create a new exercise day
-                        const protocolExerciseDay: ProtocolExerciseDay = {
-                            dayNumber: dayInt,
-                            type: type,
-                            comment: {
-                                Scale: comment.Scale,
-                                Changes: comment.Changes,
-                                Problems: comment.Problems,
-                            },
-                            exercises: [protocolExercise],
-                        }
-
-                        // Push the new exercise day to the list
-                        protocolExerciseDays.push(protocolExerciseDay);
-                    }
-                }
-            }
+            const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
             // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
             const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
