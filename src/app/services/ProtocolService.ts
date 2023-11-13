@@ -3,6 +3,7 @@ import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {Document, Model} from "mongoose";
 import {ExercisePlan} from "../models/ExercisePlanModel";
 import protocolUtils from "../utils/protocolUtils";
+import { WeekDisplay } from "../models/WeekDisplayModel";
 
 interface ProtocolExercise {
     Exercises: string;
@@ -100,6 +101,13 @@ class ProtocolService{
                     await exercisePlan?.save();
                 }
 
+                // Pushes the daynumber of the protocol to the trainingDone array in the weekDisplay
+                const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+                if(weekDisplay){
+                    weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
+                    await weekDisplay.save();
+                }
+
                 // Append the new protocol to the existing one
                 const existingProtocol = await ProtocolExercisePlan.findById(user?.protocolExercisePlan);
                 if (existingProtocol) {
@@ -122,6 +130,14 @@ class ProtocolService{
             if (exerciseDay) {
                 exerciseDay.trainingDone = true;
                 await exercisePlan?.save();
+            }
+
+            const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+            console.log(weekDisplay);
+            if(weekDisplay){
+                weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
+                console.log(weekDisplay.trainingDone);
+                await weekDisplay.save();
             }
 
             if (user) {
