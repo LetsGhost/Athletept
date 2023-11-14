@@ -1,5 +1,6 @@
 import {MessageModel} from "../models/MessagModel";
 import UserModel from "../models/UserModel";
+import mongoose from "mongoose";
 
 class MessageService{
     async createMessage( message: string, sender: string, userId: string) {
@@ -69,8 +70,73 @@ class MessageService{
         }
     }
 
-    async deleteMessageById(messageId: string) {
+    async getMessageById(messageId: string) {
+        try{
+            const messageText = await MessageModel.findById(new mongoose.Types.ObjectId(messageId));
+            if(!messageText){
+                console.error('Message not found');
+                return {
+                    success: false,
+                    code: 404,
+                    message: 'Message not found'
+                }
+            }
+    
+            return {
+                success: true,
+                code: 200,
+                messageText,
+            }
+        } catch(error){
+            console.error('Error getting message by id in MessageService.getMessageById:', error);
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
+        }
+    }
 
+    async deleteMessageById(messageId: string) {
+        try{
+            // Delete the message from the database
+            const deletedMessage = await MessageModel.findByIdAndDelete(messageId);
+            if(!deletedMessage){
+                console.error('Message not found');
+                return {
+                    success: false,
+                    code: 404,
+                    message: 'Message not found'
+                }
+            }
+
+            // Delete the message from the user's messages array
+            const user = await UserModel.findOne({messages: messageId});
+            if(!user){
+                console.error('User not found');
+                return {
+                    success: false,
+                    code: 404,
+                    message: 'User not found'
+                }
+            }
+
+            user.messages = user.messages.filter(message => message.toString() !== messageId);
+            await user.save();
+
+            return {
+                success: true,
+                code: 200,
+                deletedMessage,
+            }
+        } catch(error){
+            console.error('Error deleting message in MessageService.deleteMessageById:', error);
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
+        }
     }
 }
 

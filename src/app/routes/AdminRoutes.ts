@@ -32,6 +32,8 @@ router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) 
 // Message
 router.post("/createMessage/:userId", messageController.createMessage) // Is Documented
 router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
+router.delete("/deleteMessageById/:messageId", messageController.deleteMessageById)
+router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented

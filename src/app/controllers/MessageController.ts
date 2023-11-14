@@ -31,6 +31,32 @@ class MessageController {
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
+
+    async getMessageById(req: Request, res: Response) {
+        try{
+            const messageId = req.params.messageId;
+
+            const {success, code, message, messageText} = await messageService.getMessageById(messageId);
+
+            res.status(code).json({ success, message, messageText});
+        } catch (error) {
+            console.error('Error getting message in MessageController.getMessageById:', error);
+            res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+    }
+
+    async deleteMessageById(req: Request, res: Response) {
+        try{
+            const messageId = req.params.messageId;
+
+            const {success, code, message} = await messageService.deleteMessageById(messageId);
+
+            res.status(code).json({ success, message});
+        } catch (error) {
+            console.error('Error deleting message in MessageController.deleteMessageById:', error);
+            res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+    }
 }
 
 
