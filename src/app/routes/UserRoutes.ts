@@ -22,6 +22,7 @@ router.get("/getUser/:userId", userController.getUserById) // Is Documented
 
 // Message
 router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) // Is Documented
+router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
 router.post("/createProtocol", protocolController.createProtocol) // Is Documented
