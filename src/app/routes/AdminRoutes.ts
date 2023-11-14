@@ -15,6 +15,7 @@ import protocolController from "../controllers/ProtocolController";
 import adminController from "../controllers/AdminController";
 import exercisePlanController from "../controllers/ExercisePlanController";
 import weekDisplayController from '../controllers/WeekDisplayController';
+import checkInController from '../controllers/CheckInController';
 
 // Import routes
 const router = express.Router();
@@ -39,5 +40,8 @@ router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documen
 router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay) // Is Documented
 router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // Is Documented
 router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay) // Is Documented
+
+// CheckIn
+router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
 
 export default router;

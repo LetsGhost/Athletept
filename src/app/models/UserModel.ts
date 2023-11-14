@@ -26,6 +26,7 @@ export interface User extends Document {
     oldProtocol: Array<String>;
     protocolExercisePlan: mongoose.Schema.Types.ObjectId;
     messages: mongoose.Schema.Types.ObjectId[];
+    oldCheckIn: Array<String>;
     checkIn: mongoose.Schema.Types.ObjectId;
     weekDisplay: mongoose.Schema.Types.ObjectId;
     trainingduration: mongoose.Schema.Types.ObjectId;
@@ -66,6 +67,7 @@ const userSchema = new Schema<User>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
     }],
+    oldCheckIn: [String],
     checkIn: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CheckIn'
