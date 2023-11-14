@@ -3,6 +3,7 @@ import {ExercisePlan} from "../models/ExercisePlanModel";
 import {Message, MessageModel} from "../models/MessagModel";
 import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {TrainingDuration} from "../models/TrainingdurationModel";
+import {CheckIn} from "../models/CheckInModel";
 
 interface RegistrationData {
     email: string;
@@ -106,12 +107,9 @@ class UserService{
             if (user?.trainingduration){
                 await TrainingDuration.findByIdAndDelete(user.trainingduration);
             }
-            // WeekDisplay doesnt exist jet
-            /* Checkin doesnt exist jet
             if(user?.checkIn){
                 await CheckIn.findByIdAndDelete(user.checkIn);
             }
-            */
             if (user){
                 await UserModel.findByIdAndDelete(userId);
             }
