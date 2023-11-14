@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 const fileFilter = (req: any, file: any, cb: any) => {
     // Accept .xlsx files only
     if (!file.originalname.match(/\.(xlsx)$/)) { 
-        return cb(null, false);
+        return cb("No compatable file type.", false);
     }
     cb(null, true);
 };
