@@ -8,6 +8,7 @@ interface Trainingduration {
 
 interface TrainingdurationDocument extends Document {
     trainingduration: Trainingduration;
+    createdAt: Date;
 }
 
 interface TrainingDurationPlanModel extends Model<TrainingdurationDocument> {}
@@ -19,7 +20,8 @@ const trainingdurationSchema = new Schema<Trainingduration>({
 })
 
 const trainingDurationPlanSchema = new Schema<TrainingdurationDocument>({
-    trainingduration: trainingdurationSchema
+    trainingduration: trainingdurationSchema,
+    createdAt: { type: Date, required: true, default: Date.now },
 })
 
 const TrainingDuration: TrainingDurationPlanModel = mongoose.model<TrainingdurationDocument, TrainingDurationPlanModel>('Trainingduration', trainingDurationPlanSchema);
