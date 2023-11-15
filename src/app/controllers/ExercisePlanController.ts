@@ -53,7 +53,7 @@ class ExercisePlanController {
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
-
+    /*
     async createWarmupOnly(req: Request, res: Response) {
         try{
             const { userId } = req.params;
@@ -83,6 +83,7 @@ class ExercisePlanController {
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
+    */
 
 }
 
