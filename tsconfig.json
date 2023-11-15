@@ -11,7 +11,7 @@
     "allowImportingTsExtensions": false,
     "noEmit": false,
     "resolveJsonModule": true,
-    "types": ["node", "express", "exceljs"],
+    "types": ["node", "express", "exceljs", "jest"],
     "paths": {
       "*": ["*"]
     }
