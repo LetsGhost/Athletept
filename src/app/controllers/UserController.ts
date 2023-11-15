@@ -92,6 +92,20 @@ class UserController{
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
+
+    async updatePassword(req: Request, res: Response) {
+        try{
+            const { userId } = req.params;
+            const { password } = req.body;
+
+            const {success, code, message} = await userService.updatePassword(userId, password);
+
+            res.status(code).json({success, message});
+        } catch (error) {
+            console.log("Error while updating password in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
 }
 
 export default new UserController();

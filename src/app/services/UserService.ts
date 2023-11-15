@@ -155,6 +155,38 @@ class UserService{
             }
         }
     }
+
+    async updatePassword(userId: string, newPassword: string) {
+        try{
+            const user = await UserModel.findById(userId);
+
+            if(!user){
+                console.log("User not found!");
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found!"
+                }
+            }
+
+            // Update the password
+            user.password = newPassword;
+            await user.save();
+
+            return {
+                success: true,
+                code: 200,
+                user
+            }
+        } catch(error){
+            console.log("Error while updating password in Service: ", error);
+            return {
+                success: false,
+                code: 500,
+                message: "Internal Server error"
+            }
+        }
+    }
 }
 
 export default new UserService();

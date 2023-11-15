@@ -19,6 +19,7 @@ router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) 
 
 // User
 router.get("/getUser/:userId", userController.getUserById) // Is Documented
+router.patch("/updatePassword/:userId", userController.updatePassword)
 
 // Message
 router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) // Is Documented
