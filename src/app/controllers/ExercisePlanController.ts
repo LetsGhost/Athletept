@@ -47,6 +47,15 @@ class ExercisePlanController {
 
             const { success, code, message, exercisePlan } = await exercisePlanService.createExercisePlanOnly(userId, exerciseFilePath); 
             
+            // Deletes the files after the processing
+            if (exerciseFilePath) {
+                fs.unlink(exerciseFilePath, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+
             res.status(code).json({ success, message, exercisePlan });
         } catch (error) {  
             console.log("Error while creating exercise plan in Controller: ", error);
