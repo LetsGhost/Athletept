@@ -73,6 +73,7 @@ class MessageService{
     async getMessageById(messageId: string) {
         try{
             const messageText = await MessageModel.findById(new mongoose.Types.ObjectId(messageId));
+            
             if(!messageText){
                 console.error('Message not found');
                 return {
