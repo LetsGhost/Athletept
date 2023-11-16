@@ -30,6 +30,7 @@ export interface User extends Document {
     checkIn: mongoose.Schema.Types.ObjectId;
     weekDisplay: mongoose.Schema.Types.ObjectId;
     trainingduration: mongoose.Schema.Types.ObjectId;
+    weightAnalytics: mongoose.Schema.Types.ObjectId;
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -76,6 +77,10 @@ const userSchema = new Schema<User>({
     trainingduration: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Trainingduration'
+    },
+    weightAnalytics: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'WeightAnalytics'
     }
 });
 
