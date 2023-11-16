@@ -1,5 +1,5 @@
 class TimeUtils {
-    getDayOfWeek(date: Date) {
+    getToday(date: Date) {
         try{
             const myDate = new Date(date);
 
