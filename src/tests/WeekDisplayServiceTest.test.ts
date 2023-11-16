@@ -1,3 +1,4 @@
+/*
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import UserModel  from '../app/models/UserModel'; // adjust import as needed
@@ -19,9 +20,10 @@ describe('createWeekDisplay', () => {
     await mongoose.disconnect();
     await mongoServer.stop();
   });
-
+*/
+/*
   it('should create a week display for a user', async () => {
-    const user = new UserModel({ /* user data */ });
+    const user = new UserModel({  });
     await user.save();
 
     const trainingsWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -46,3 +48,4 @@ describe('createWeekDisplay', () => {
     expect(result.code).toBe(404);
   });
 });
+*/

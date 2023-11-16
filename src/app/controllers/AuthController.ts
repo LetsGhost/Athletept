@@ -10,10 +10,6 @@ class AuthController {
             const { success, code, message, token, userId } = await authService.loginUser(email, password, alwaysLogedIn);
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
             if (alwaysLogedIn){
-                let time = timeUtils.convertToMilliseconds('30d');
-                    if (typeof time === 'string') {
-                        throw new Error('Invalid time input');
-                    }
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000 });
                 return res.status(code).json({ success, message, userId: userId });
             }
