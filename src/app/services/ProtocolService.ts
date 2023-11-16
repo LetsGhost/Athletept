@@ -2,6 +2,7 @@ import UserModel from "../models/UserModel";
 import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {Document, Model} from "mongoose";
 import {ExercisePlan} from "../models/ExercisePlanModel";
+import timeUtils from "../utils/timeUtils";
 import protocolUtils from "../utils/protocolUtils";
 import { WeekDisplay } from "../models/WeekDisplayModel";
 
@@ -45,11 +46,9 @@ class ProtocolService{
 
                 // Calculates the date that should be one week ago
                 const currentDate = new Date();
-                const oneWeekAgo = new Date();
-                oneWeekAgo.setDate(currentDate.getDate() - 7);
 
                 // If the createdAt date is older than one week, move the protocol to the oldProtocol array and create a new one
-                if(createdAt <= oneWeekAgo) {
+                if(currentDate.getDay() === 1 && currentDate > createdAt) {
                     await UserModel.findByIdAndUpdate(userId, {
                         $push: { oldProtocol: user?.protocolExercisePlan },
                         $unset: { protocolExercisePlan: "" }
