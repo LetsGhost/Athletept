@@ -58,6 +58,8 @@ class WeightAnalyticsService {
             }
         }        
     }
+
+    // TODO: Patch the analytics after every checkin and push the new values to it
 }
 
 export default new WeightAnalyticsService();
