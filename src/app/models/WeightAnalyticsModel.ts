@@ -12,6 +12,7 @@ interface bodyWeightGraphSixteenWeeks {
 }
 
 interface weightAnalyticsModel {
+    createdAt: Date;
     bodyWeight: bodyWeight;
     bodyWeightGraphSixteenWeeks: bodyWeightGraphSixteenWeeks[];
 }
@@ -30,6 +31,7 @@ const bodyWeightGraphSixteenWeeksSchema = new Schema<bodyWeightGraphSixteenWeeks
 });
 
 const weightAnalyticsSchema = new Schema<weightAnalyticsModel>({
+    createdAt: { type: Date, required: true, default: Date.now },
     bodyWeight: bodyWeightSchema,
     bodyWeightGraphSixteenWeeks: [bodyWeightGraphSixteenWeeksSchema],
 });

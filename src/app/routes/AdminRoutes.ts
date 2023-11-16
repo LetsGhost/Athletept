@@ -16,6 +16,7 @@ import adminController from "../controllers/AdminController";
 import exercisePlanController from "../controllers/ExercisePlanController";
 import weekDisplayController from '../controllers/WeekDisplayController';
 import checkInController from '../controllers/CheckInController';
+import WeightAnalyticsController from '../controllers/WeightAnalyticsController';
 
 // Import routes
 const router = express.Router();
@@ -47,5 +48,8 @@ router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDispl
 
 // CheckIn
 router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
+
+// Test
+router.post("/analytic/:userId", WeightAnalyticsController.createWeightAnalytics)
 
 export default router;
