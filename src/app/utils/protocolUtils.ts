@@ -8,8 +8,7 @@ interface ProtocolExercise {
 
 interface Comment{
     Scale: number;
-    Changes: string;
-    Problems: string;
+    Notes: string
 }
 
 interface ProtocolExerciseDay {
@@ -27,50 +26,50 @@ interface ProtocolExercisePlanDocument extends Document {
 interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> {}
 
 class ProtocolUtils {
-    processRequest(protocol: Record<string, ProtocolExercise>, comment: Record<string, any>){
+    processRequest(protocol: Record<string, any>, comment: Record<string, any>){
         try{
             const protocolExerciseDays: ProtocolExerciseDay[] = [];
-
-            for (const key in protocol) {
-                if (protocol.hasOwnProperty(key)){
-                    const [day, type, exerciseName] = key.split('-');
-                    const dayInt = parseInt(day);
-
+    
+            const dayNumber = protocol.dayNumber;
+            const dayType = protocol.dayType;
+            const exercises = protocol.exercises;
+    
+            for (const exerciseName in exercises) {
+                if (exercises.hasOwnProperty(exerciseName)){
                     const protocolExercise: ProtocolExercise = {
                         Exercises: exerciseName,
-                        Weight: protocol[key].Weight,
-                        Repetitions: protocol[key].Repetitions,
+                        Weight: exercises[exerciseName].Weight,
+                        Repetitions: exercises[exerciseName].Repetitions,
                     }
-
+    
                     // Check if there's already an exercise plan for the same day
-                    const existingDay = protocolExerciseDays.find((day) => day.dayNumber === dayInt);
-
+                    const existingDay = protocolExerciseDays.find((day) => day.dayNumber === dayNumber);
+    
                     if (existingDay) {
                         // If the day is the same, add the exercise to the existing day
                         existingDay.exercises.push(protocolExercise);
                     } else {
                         // Otherwise, create a new exercise day
                         const protocolExerciseDay: ProtocolExerciseDay = {
-                            dayNumber: dayInt,
-                            type: type,
+                            dayNumber: dayNumber,
+                            type: dayType,
                             comment: {
                                 Scale: comment.Scale,
-                                Changes: comment.Changes,
-                                Problems: comment.Problems,
+                                Notes: comment.Notes
                             },
                             exercises: [protocolExercise],
                         }
-
+    
                         // Push the new exercise day to the list
                         protocolExerciseDays.push(protocolExerciseDay);
                     }
                 }
             }
-
+    
             return protocolExerciseDays;
-        } catch(error){
-            console.log(error);
-            throw new Error('Error processing protocol request in protocolUtils.ts');
+        } catch (error) {
+            console.error(error);
+            return [];
         }
     }
 }

@@ -8,8 +8,7 @@ interface ProtocolExercise {
 
 interface Comment{
     Scale: number;
-    Changes: string;
-    Problems: string;
+    Notes: string
 }
 
 interface ProtocolExerciseDay {
@@ -34,8 +33,7 @@ const protocolExerciseSchema = new Schema<ProtocolExercise>({
 
 const commentSchema = new Schema<Comment>({
     Scale: Number,
-    Changes: String,
-    Problems: String
+    Notes: String
 });
 
 const protocolExerciseDaySchema = new Schema<ProtocolExerciseDay>({
