@@ -347,7 +347,7 @@ class ExercisePlanService {
 
                 const currentDate = new Date();
                 const createdAt = (user.exercisePlan as any).createdAt;
-                console.log("createdAt: ", createdAt);
+                
                 const currentDayNumber = timeUtils.getWeekNumber(currentDate);
                 const createdAtWeekNumber = timeUtils.getWeekNumber(createdAt);
 
