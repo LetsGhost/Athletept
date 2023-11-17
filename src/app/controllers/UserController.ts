@@ -3,6 +3,7 @@ import userService from "../services/UserService";
 import path from "path";
 import exercisePlanService from "../services/ExercisePlanService";
 import fs from "fs";
+import WeightAnalyticsService from "../services/WeightAnalyticsService";
 //import { File } from "multer";
 
 class UserController{
@@ -33,6 +34,8 @@ class UserController{
 
             // Create exercise plan from Excel file
             await exercisePlanService.createExercisePlanFromExcel(newUser?._id, exerciseFilePath, warmupFilePath);
+
+            await WeightAnalyticsService.createWeightAnalytics(newUser?._id);
 
             // Deletes the files after the processing
             if (exerciseFilePath) {

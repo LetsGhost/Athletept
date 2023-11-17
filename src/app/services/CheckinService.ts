@@ -1,6 +1,7 @@
 import { CheckIn } from "../models/CheckInModel"
 import UserModel from "../models/UserModel";
 import { Document, Model } from 'mongoose';
+import WeightAnalyticsService from "./WeightAnalyticsService";
 
 interface currentGrowth {
     answer: string;
@@ -73,7 +74,7 @@ class CheckInService {
             const currentDate = new Date();
 
             if(currentDate.getDay() === 1 && currentDate > currentCheckIn?.createdAt){
-                console.log(user?.checkIn)
+
                 await UserModel.findByIdAndUpdate(userId, {
                     $push: { oldCheckIn: user?.checkIn },
                     $unset: { checkIn: "" }
@@ -85,7 +86,7 @@ class CheckInService {
                 const change = checkIn.change
                 const weight = checkIn.weight
 
-                console.log(weight)
+                await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
 
                 const newCheckIn = new CheckIn({
                     checkIn: {
@@ -122,6 +123,8 @@ class CheckInService {
             const regeneration = checkIn.regeneration
             const change = checkIn.change
             const weight = checkIn.weight
+
+            await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
 
             const newCheckIn = new CheckIn({
                 checkIn: {
@@ -185,6 +188,34 @@ class CheckInService {
             }
         } catch(err){
             console.log("Error while getting check-in in CheckInService.getCheckIn: ", err)
+            return {
+                success: false,
+                code: 500,
+                message: "Internal Server error"
+            }
+        }
+    }
+
+    async getCheckInById(checkInId: string){
+        try{
+            const checkIn = await CheckIn.findById(checkInId)
+
+            if(!checkIn){
+                console.log("Check-in not found")
+                return {
+                    success: false,
+                    code: 404,
+                    message: "Check-in not found"
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                checkIn: checkIn
+            }
+        } catch(err){
+            console.log("Error while getting check-in in CheckInService.getCheckInById: ", err)
             return {
                 success: false,
                 code: 500,

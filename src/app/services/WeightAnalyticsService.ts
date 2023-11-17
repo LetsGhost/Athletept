@@ -1,7 +1,27 @@
 import { WeightAnalyticsModel } from "../models/WeightAnalyticsModel";
 import UserService from "./UserService";
 import UserModel  from "../models/UserModel";
-import { Schema } from 'mongoose';
+import { Schema, Model } from 'mongoose';
+import CheckInService from "./CheckInService";
+
+interface bodyWeight {
+    lastWeight: number;
+    actualWeight: number;
+    weightGoal: number;
+    weightStart: number;
+}
+
+interface bodyWeightGraphSixteenWeeks {
+    weight: number[];
+}
+
+interface weightAnalyticsModel {
+    createdAt: Date;
+    bodyWeight: bodyWeight;
+    bodyWeightGraphSixteenWeeks: bodyWeightGraphSixteenWeeks[];
+}
+
+interface WeightAnalyticsPlanModel extends Model<weightAnalyticsModel> {}
 
 class WeightAnalyticsService {
     async createWeightAnalytics(userId: string) {
@@ -60,6 +80,48 @@ class WeightAnalyticsService {
     }
 
     // TODO: Patch the analytics after every checkIn and push the new values to it
+    async updateWeightAnalytics(userId: string, weight: number, oldWeight: number) {
+        try {
+            // Find the user and update the weight analytics
+            const user = await UserModel.findById(userId);
+
+            if(user){
+                const weightAnalytics = await WeightAnalyticsModel.findById(user?.weightAnalytics);
+
+                if(weightAnalytics){
+                    weightAnalytics.bodyWeight.lastWeight = oldWeight;
+                    weightAnalytics.bodyWeight.actualWeight = weight;
+
+                    const weightGraph = weightAnalytics.bodyWeightGraphSixteenWeeks[0].weight;
+                    weightGraph.unshift(weight);
+                    if (weightGraph.length > 16) {
+                        weightGraph.pop();
+                    }
+
+                    await weightAnalytics?.save();
+
+                    return {
+                        success: true,
+                        code: 200,
+                        weightAnalytics
+                    }
+                }
+            }
+
+            return {
+                success: false,
+                code: 404,
+                message: "User not found"
+            }
+        } catch(error){
+            console.log("Error updating weight analytics WeightAnalyticsService.updateWeightAnalytics()")
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error"
+            }
+        }
+    }
 }
 
 export default new WeightAnalyticsService();
