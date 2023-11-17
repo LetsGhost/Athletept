@@ -16,9 +16,13 @@ interface Exercise {
 interface Warmup {
     warmupExercise: {
         Exercises: string;
+        weight: number;
+        repetitions: number;
     };
     warmupMaterials: {
         Materials: string;
+        weight: number;
+        repetitions: number;
     };
 }
 
@@ -79,9 +83,13 @@ class ExercisePlanService {
                             warmup.push({
                                 warmupExercise: {
                                     Exercises: warmupRow.getCell(2).value as string,
+                                    weight: warmupRow.getCell(4).value as number,
+                                    repetitions: warmupRow.getCell(5).value as number,
                                 },
                                 warmupMaterials: {
                                     Materials: warmupRow.getCell(3).value as string,
+                                    weight: warmupRow.getCell(6).value as number,
+                                    repetitions: warmupRow.getCell(7).value as number,
                                 },
                             });
                         }

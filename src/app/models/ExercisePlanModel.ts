@@ -12,10 +12,14 @@ interface Exercise {
 
 interface warmupExercise {
     Exercises: string;
+    weight: number;
+    repetitions: number;
 }
 
 interface warmupMaterials {
     Materials: string;
+    weight: number;
+    repetitions: number;
 }
 
 interface warmup {
@@ -51,10 +55,14 @@ const exerciseSchema = new Schema<Exercise>({
 
 const warmupExerciseSchema = new Schema<warmupExercise>({
     Exercises: String,
+    weight: Number,
+    repetitions: Number,
 });
 
 const warmupMaterialsSchema = new Schema<warmupMaterials>({
     Materials: String,
+    weight: Number,
+    repetitions: Number,
 })
 
 const warmupSchema = new Schema<warmup>({
