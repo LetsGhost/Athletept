@@ -73,7 +73,7 @@ class CheckInService {
             // Calculates the date that should be one week ago
             const currentDate = new Date();
 
-            if(currentDate.getDay() === 1 && currentDate > currentCheckIn?.createdAt){
+            if(currentDate.getDay() === 1 && currentDate > currentCheckIn?.createdAt){ //<- If its Monday and the createdAt date is less than the current date is later then currentDate than ist true!
 
                 await UserModel.findByIdAndUpdate(userId, {
                     $push: { oldCheckIn: user?.checkIn },
