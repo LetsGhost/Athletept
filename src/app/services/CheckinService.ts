@@ -2,6 +2,7 @@ import { CheckIn } from "../models/CheckInModel"
 import UserModel from "../models/UserModel";
 import { Document, Model } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService";
+import timeUtils from "../utils/timeUtils";
 
 interface currentGrowth {
     answer: string;
@@ -73,7 +74,10 @@ class CheckInService {
             // Calculates the date that should be one week ago
             const currentDate = new Date();
 
-            if(currentDate.getDay() === 1 && currentDate > currentCheckIn?.createdAt){ //<- If its Monday and the createdAt date is less than the current date is later then currentDate than ist true!
+            const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
+            const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
+
+            if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
 
                 await UserModel.findByIdAndUpdate(userId, {
                     $push: { oldCheckIn: user?.checkIn },
