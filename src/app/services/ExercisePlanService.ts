@@ -24,6 +24,7 @@ interface Warmup {
 
 interface ExerciseDay {
     dayNumber: number;
+    weekDay?: string;
     type?: string;
     exercises: Exercise[];
     warmup: Warmup[];
@@ -88,6 +89,7 @@ class ExercisePlanService {
 
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
+                        weekDay: row.getCell(3).value as string,
                         type: row.getCell(2).value as string,
                         exercises: exercises,
                         warmup: warmup,
@@ -170,6 +172,7 @@ class ExercisePlanService {
 
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
+                        weekDay: row.getCell(3).value as string,
                         type: row.getCell(2).value as string,
                         exercises: exercises,
                         warmup: warmup,
@@ -330,6 +333,8 @@ class ExercisePlanService {
                     message: "User not found!"
                 }
             }
+
+            // TODO: CHeck if created At was one week ago if yes set trainingDone in every day to false
 
             if (user) {
                 return {
