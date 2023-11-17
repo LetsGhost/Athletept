@@ -2,6 +2,7 @@ import ExcelJS from "exceljs";
 import { Workbook, Worksheet, Row } from 'exceljs';
 import UserModel from "../models/UserModel";
 import {ExercisePlan} from "../models/ExercisePlanModel";
+import timeUtils from "../utils/timeUtils";
 
 interface Exercise {
     Exercises: string;
@@ -342,9 +343,22 @@ class ExercisePlanService {
                 }
             }
 
-            // TODO: CHeck if created At was one week ago if yes set trainingDone in every day to false
+            if (user && user.exercisePlan) {
 
-            if (user) {
+                const currentDate = new Date();
+                const createdAt = (user.exercisePlan as any).createdAt;
+                console.log("createdAt: ", createdAt);
+                const currentDayNumber = timeUtils.getWeekNumber(currentDate);
+                const createdAtWeekNumber = timeUtils.getWeekNumber(createdAt);
+
+                if(currentDayNumber > createdAtWeekNumber){
+                    // Set trainingDone to false for every day
+                    (user.exercisePlan as any).exerciseDays.forEach((day: any) => {
+                        day.trainingDone = false;
+                    });
+                    await (user.exercisePlan as any).save();
+                }
+
                 return {
                     success: true,
                     code: 200,
