@@ -2,7 +2,6 @@ import { WeightAnalyticsModel } from "../models/WeightAnalyticsModel";
 import UserService from "./UserService";
 import UserModel  from "../models/UserModel";
 import { Schema, Model } from 'mongoose';
-import CheckInService from "./CheckInService";
 
 interface bodyWeight {
     lastWeight: number;
