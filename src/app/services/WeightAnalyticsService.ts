@@ -121,6 +121,37 @@ class WeightAnalyticsService {
             }
         }
     }
+
+    async getWeightAnalytics(userId: string) {
+        try {
+            const user = await UserModel.findById(userId);
+
+            if(user){
+                const weightAnalytics = await WeightAnalyticsModel.findById(user?.weightAnalytics);
+
+                if(weightAnalytics){
+                    return {
+                        success: true,
+                        code: 200,
+                        weightAnalytics
+                    }
+                }
+            }
+
+            return {
+                success: false,
+                code: 404,
+                message: "User not found"
+            }
+        } catch(error){
+            console.log("Error getting weight analytics WeightAnalyticsService.getWeightAnalytics()")
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error"
+            }
+        }
+    }
 }
 
 export default new WeightAnalyticsService();
