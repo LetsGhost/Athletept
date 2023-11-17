@@ -21,11 +21,16 @@ interface change{
     boolean: boolean;
 }
 
+interface weight {
+    weight: number;
+}
+
 interface checkIn {
     currentGrowth: currentGrowth;
     problems: problems;
     regeneration: regeneration;
     change: change;
+    weight: weight;
 }
 
 interface checkInDocument extends Document {
@@ -41,6 +46,7 @@ interface request {
     problems: { answer: string, boolean: boolean },
     regeneration: { boolean: boolean },
     change: { answer: string, boolean: boolean }
+    weight: { weight: number }
     checkInStatus: boolean
 }
 
@@ -77,6 +83,9 @@ class CheckInService {
                 const problems = checkIn.problems
                 const regeneration = checkIn.regeneration
                 const change = checkIn.change
+                const weight = checkIn.weight
+
+                console.log(weight)
 
                 const newCheckIn = new CheckIn({
                     checkIn: {
@@ -84,6 +93,7 @@ class CheckInService {
                         problems: problems,
                         regeneration: regeneration,
                         change: change,
+                        weight: weight,
                     },
                     checkInStatus: true,
                 })
@@ -111,6 +121,7 @@ class CheckInService {
             const problems = checkIn.problems
             const regeneration = checkIn.regeneration
             const change = checkIn.change
+            const weight = checkIn.weight
 
             const newCheckIn = new CheckIn({
                 checkIn: {
@@ -118,6 +129,7 @@ class CheckInService {
                     problems: problems,
                     regeneration: regeneration,
                     change: change,
+                    weight: weight,
                 },
                 checkInStatus: true,
             })
