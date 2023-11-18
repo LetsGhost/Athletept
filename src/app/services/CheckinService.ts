@@ -68,22 +68,62 @@ class CheckInService {
 
             // Populate the checkIn field
             const userCheckIn = await UserModel.findById(userId).populate('checkIn');
-            // Cast userCheckIn to CheckInModel
-            const currentCheckIn = (userCheckIn?.checkIn as unknown) as checkInDocument;
 
-            // Calculates the date that should be one week ago
-            const currentDate = new Date();
+            if(userCheckIn?.checkIn){
+                // Cast userCheckIn to CheckInModel
+                const currentCheckIn = (userCheckIn?.checkIn as unknown) as checkInDocument;
 
-            const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
-            const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
+                // Calculates the date that should be one week ago
+                const currentDate = new Date();
 
-            if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
+                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
+                const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
 
-                await UserModel.findByIdAndUpdate(userId, {
-                    $push: { oldCheckIn: user?.checkIn },
-                    $unset: { checkIn: "" }
-                });
+                if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
+
+                    await UserModel.findByIdAndUpdate(userId, {
+                        $push: { oldCheckIn: user?.checkIn },
+                        $unset: { checkIn: "" }
+                    });
+                    
+                    const currentGrowth = checkIn.currentGrowth
+                    const problems = checkIn.problems
+                    const regeneration = checkIn.regeneration
+                    const change = checkIn.change
+                    const weight = checkIn.weight
+
+                    await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
+
+                    const newCheckIn = new CheckIn({
+                        checkIn: {
+                            currentGrowth: currentGrowth,
+                            problems: problems,
+                            regeneration: regeneration,
+                            change: change,
+                            weight: weight,
+                        },
+                        checkInStatus: true,
+                    })
+                    await newCheckIn.save()
+
+                    user.checkIn = newCheckIn._id
+                    await user.save()
+
+                    return {
+                        success: true,
+                        code: 201,
+                        checkIn: newCheckIn
+                    }
+                }
                 
+                if(currentCheckIn?.checkInStatus){
+                    return {
+                        success: false,
+                        code: 400,
+                        message: "Check-in already done for this week"
+                    }
+                }
+
                 const currentGrowth = checkIn.currentGrowth
                 const problems = checkIn.problems
                 const regeneration = checkIn.regeneration
@@ -109,16 +149,8 @@ class CheckInService {
 
                 return {
                     success: true,
-                    code: 201,
+                    code: 200,
                     checkIn: newCheckIn
-                }
-            }
-            
-            if(currentCheckIn?.checkInStatus){
-                return {
-                    success: false,
-                    code: 400,
-                    message: "Check-in already done for this week"
                 }
             }
 
@@ -147,9 +179,11 @@ class CheckInService {
 
             return {
                 success: true,
-                code: 200,
+                code: 201,
                 checkIn: newCheckIn
-            }            
+            }
+
+                        
         } catch(err){
             console.log("Error while creating check-in in CheckInService.createCheckIn: ", err)
             return {
