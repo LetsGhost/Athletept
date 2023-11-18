@@ -33,7 +33,7 @@ router.post("/createProtocol", protocolController.createProtocol) // Is Document
 router.post("/createCheckIn/:userId", checkInController.createCheckIn) 
 
 // Week Display
-router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
+router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // Is Documented
 
 // Week Analytics
 router.get("/getWeightAnalytics/:userId", weightAnalyticsController.getWeightAnalytics)
