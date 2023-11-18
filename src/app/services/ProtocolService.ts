@@ -30,8 +30,6 @@ interface ProtocolExercisePlanDocument extends Document {
     createdAt: Date;
 }
 
-interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> {}
-
 class ProtocolService{
     async createProtocol (userId: string, protocol: Record<string, ProtocolExercise>, comment: Record<string, any>) {
         try {
@@ -40,6 +38,7 @@ class ProtocolService{
 
             // Check if the user already has an protocol
             if (user?.protocolExercisePlan) {
+                console.log("User already has a protocol");
 
                 const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
                 const createdAt = (user?.protocolExercisePlan as any as ProtocolExercisePlanDocument).createdAt;
@@ -47,8 +46,9 @@ class ProtocolService{
                 // Calculates the date that should be one week ago
                 const currentDate = new Date();
 
-                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
                 const createdAtWeekNumber = timeUtils.getWeekNumber(createdAt);
+                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
+
 
                 // If the createdAt date is older than one week, move the protocol to the oldProtocol array and create a new one
                 if(createdAtWeekNumber < currentWeekNumber) {
@@ -110,7 +110,7 @@ class ProtocolService{
                     await exercisePlan?.save();
                 }
 
-                // Pushes the daynumber of the protocol to the trainingDone array in the weekDisplay
+                // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
                 const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
                 if(weekDisplay){
                     weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
@@ -133,20 +133,12 @@ class ProtocolService{
 
             const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
-            // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
+            // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
             const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
             const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
             if (exerciseDay) {
                 exerciseDay.trainingDone = true;
                 await exercisePlan?.save();
-            }
-
-            const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
-            console.log(weekDisplay);
-            if(weekDisplay){
-                weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
-                console.log(weekDisplay.trainingDone);
-                await weekDisplay.save();
             }
 
             if (user) {
@@ -159,6 +151,14 @@ class ProtocolService{
                 user.protocolExercisePlan = createdExercisePlan._id;
 
                 await user.save();
+
+                // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
+                const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+
+                if(weekDisplay){
+                    weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
+                    await weekDisplay.save();
+                }
 
                 return {
                     success: true,
