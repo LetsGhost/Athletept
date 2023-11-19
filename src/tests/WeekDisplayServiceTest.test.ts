@@ -1,51 +1,39 @@
-/*
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import mongoose from 'mongoose';
-import UserModel  from '../app/models/UserModel'; // adjust import as needed
-import { WeekDisplay } from '../app/models/WeekDisplayModel'; // adjust import as needed
-import weekDisplayService from '../app/services/WeekDisplayService'; // adjust import as needed
+import weekDisplay from '../app/services/WeekDisplayService';
+import UserModel from '../app/models/UserModel';
+import {WeekDisplay} from '../app/models/WeekDisplayModel';
 
-// To test indivudal files npm run test:file -- path/to/your/testfile.ts
+jest.mock('../app/models/UserModel');
+jest.mock('../app/models/WeekDisplayModel');
 
-describe('createWeekDisplay', () => {
-  let mongoServer: MongoMemoryServer;
+describe('WeekDisplayService', () => {
+  it('should create a week display', async () => {
+    const mockUser = {
+      _id: 'userId1',
+      save: jest.fn().mockResolvedValue(true),
+    };
 
-  beforeAll(async () => {
-    mongoServer = new MongoMemoryServer();
-    const mongoUri = await mongoServer.getUri();
-    await mongoose.connect(mongoUri);
-  });
+    const mockWeekDisplay = {
+      _id: 'weekDisplayId1',
+      save: jest.fn().mockResolvedValue(true),
+    };
 
-  afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-  });
-*/
-/*
-  it('should create a week display for a user', async () => {
-    const user = new UserModel({  });
-    await user.save();
+    UserModel.findById = jest.fn().mockResolvedValue(mockUser);
+    WeekDisplay.create = jest.fn().mockResolvedValue(mockWeekDisplay);
 
-    const trainingsWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const result = await weekDisplayService.createWeekDisplay(user._id, trainingsWeek);
+    const userId = 'userId1';
+    const trainingsWeek = ['training1', 'training2', 'training3'];
 
-    expect(result.success).toBe(true);
-    expect(result.code).toBe(201);
-    expect(result.weekDisplay).toBeDefined();
+    const result = await weekDisplay.createWeekDisplay(userId, trainingsWeek);
 
-    const updatedUser = await UserModel.findById(user._id).populate('weekDisplay');
-    if (updatedUser) {
-        expect(updatedUser.weekDisplay).toBeDefined();
-    } else {
-        throw new Error('User not found');
-    }
-  });
-
-  it('should return an error if the user does not exist', async () => {
-    const result = await weekDisplayService.createWeekDisplay('nonexistentid', []);
-
-    expect(result.success).toBe(false);
-    expect(result.code).toBe(404);
+    expect(UserModel.findById).toHaveBeenCalledWith(userId);
+    expect(WeekDisplay.create).toHaveBeenCalledWith({
+      trainingsWeek,
+    });
+    expect(mockUser.save).toHaveBeenCalled();
+    expect(result).toEqual({
+      success: true,
+      code: 201,
+      weekDisplay: mockWeekDisplay,
+    });
   });
 });
-*/
