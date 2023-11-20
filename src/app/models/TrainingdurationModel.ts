@@ -1,9 +1,9 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 interface Trainingduration {
-    coachingStartDate: string,
-    coachingDurationMonths: [],
-    coachingDuration: []
+    coachingStartDate: Date,
+    coachingDurationMonths: string[],
+    coachingDuration: string[]
 }
 
 interface TrainingdurationDocument extends Document {
@@ -14,9 +14,9 @@ interface TrainingdurationDocument extends Document {
 interface TrainingDurationPlanModel extends Model<TrainingdurationDocument> {}
 
 const trainingdurationSchema = new Schema<Trainingduration>({
-    coachingStartDate: String,
-    coachingDurationMonths: [],
-    coachingDuration: []
+    coachingStartDate: { type: Date, required: true, default: Date.now },
+    coachingDurationMonths: [String],
+    coachingDuration: [String]
 })
 
 const trainingDurationPlanSchema = new Schema<TrainingdurationDocument>({
