@@ -10,6 +10,14 @@ class TrainingDurationController{
 
         res.status(code).json({success, message, newTrainingduration})
     }
+
+    async getTrainingDuration(req: Request, res: Response){
+        const userId = req.params.userId
+
+        const {success, code, message, trainingduration} = await trainingDurationService.getTrainingduration(userId)
+
+        res.status(code).json({success, message, trainingduration})
+    }
 }
 
 export default new TrainingDurationController();

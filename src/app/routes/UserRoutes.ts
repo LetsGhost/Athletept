@@ -11,6 +11,7 @@ import protocolController from "../controllers/ProtocolController";
 import checkInController from "../controllers/CheckInController";
 import weekDisplayController from '../controllers/WeekDisplayController';
 import weightAnalyticsController from '../controllers/WeightAnalyticsController';
+import trainingDurationController from '../controllers/TrainingDurationController';
 
 // Import routes
 const router = express.Router();
@@ -37,5 +38,8 @@ router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // I
 
 // Week Analytics
 router.get("/getWeightAnalytics/:userId", weightAnalyticsController.getWeightAnalytics)
+
+// Training Duration
+router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 
 
 export default router;

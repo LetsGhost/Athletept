@@ -40,6 +40,24 @@ class TrainingdurationService{
             newTrainingduration
         }
     }
+
+    async getTrainingduration(userId: string){
+        const user = await UserModel.findById(userId).populate('trainingduration')
+
+        if(!user){
+            return {
+                success: false,
+                code: 404,
+                message: "User not found"
+            }
+        }
+
+        return {
+            success: true,
+            code: 200,
+            trainingduration: user.trainingduration
+        }
+    }
 }
 
 export default new TrainingdurationService();

@@ -50,6 +50,9 @@ router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDispl
 // CheckIn
 router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
 
+// TrainingDuration
+router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 
+
 // Test will be deletet for production
 router.post("/analytic/:userId", WeightAnalyticsController.createWeightAnalytics)
 router.post("/training/:userId", trainingDurationController.createTrainingDuration)
