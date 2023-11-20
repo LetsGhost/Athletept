@@ -4,12 +4,14 @@ import path from "path";
 import exercisePlanService from "../services/ExercisePlanService";
 import fs from "fs";
 import WeightAnalyticsService from "../services/WeightAnalyticsService";
+import TrainingDurationService from "../services/TrainingdurationService";
 //import { File } from "multer";
 
 class UserController{
     async registerUser(req: Request, res: Response) {
         try {
-            const { email, password, userInfo } = req.body;
+            const { email, password, userInfo, trainingduration } = req.body;
+            console.log(trainingduration)
 
             if (!req.files) {
                 console.log("No files were uploaded.")
@@ -36,6 +38,8 @@ class UserController{
             await exercisePlanService.createExercisePlanFromExcel(newUser?._id, exerciseFilePath, warmupFilePath);
 
             await WeightAnalyticsService.createWeightAnalytics(newUser?._id);
+
+            await TrainingDurationService.createTrainingduration(newUser?._id, trainingduration);
 
             // Deletes the files after the processing
             if (exerciseFilePath) {
