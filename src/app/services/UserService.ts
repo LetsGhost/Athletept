@@ -4,6 +4,7 @@ import {Message, MessageModel} from "../models/MessagModel";
 import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {TrainingDuration} from "../models/TrainingdurationModel";
 import {CheckIn} from "../models/CheckInModel";
+import templateUtils from '../utils/templateUtils';
 
 interface RegistrationData {
     email: string;
@@ -186,6 +187,22 @@ class UserService{
                 message: "Internal Server error"
             }
         }
+    }
+
+    async downloadUserData(userId: string) {
+        const user = await UserModel.findById(userId);
+
+        if(!user){
+            console.log("User not found!");
+            return {
+                success: false,
+                code: 404,
+                message: "User not found!"
+            }
+        }
+
+        const template = templateUtils.renderTemplateWithData('../../public/templates/UserInfo.ejs', user);
+        
     }
 }
 
