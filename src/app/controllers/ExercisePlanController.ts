@@ -24,6 +24,53 @@ class ExercisePlanController {
         }
     }
 
+    async createExercisePlan(req: Request, res: Response) {
+        try{
+            const { userId } = req.params;
+
+            if (!req.files) {
+                console.log("No files were uploaded.")
+                return res.status(400).json({ success: false, message: 'No files were uploaded.' });
+            }
+
+            // I don´t know why this has to be here, but it works
+            const uploadedFilePath = path.join();
+
+            // Getting the files
+            const excelFiles = req.files as Express.Multer.File[]
+
+            // That`s very stupid I know but it works
+            const toString = JSON.stringify(excelFiles)
+            const toJSON = JSON.parse(toString)
+
+            const exerciseFilePath = toJSON["exerciseFile"][0].path
+            const warmupFilePath = toJSON["warmupFile"][0].path
+
+            const { success, code, message, exercisePlan } = await exercisePlanService.createExercisePlanFromExcel(userId, exerciseFilePath, warmupFilePath); 
+            
+            // Deletes the files after the processing
+            if (exerciseFilePath) {
+                fs.unlink(exerciseFilePath, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+            if (warmupFilePath) {
+                fs.unlink(warmupFilePath, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+
+            res.status(code).json({ success, message, exercisePlan });
+        } catch (error) {  
+            console.log("Error while creating exercise plan in Controller: ", error);
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
+
     async createExercisePlanOnly(req: Request, res: Response) {
         try{
             const { userId } = req.params;

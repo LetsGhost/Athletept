@@ -139,10 +139,27 @@ class ExercisePlanService {
                 const createdExercisePlan = await ExercisePlan.create(exercisePlanDocument);
                 user.exercisePlan = createdExercisePlan._id;
                 await user.save();
+
+                return {
+                    success: true,
+                    code: 200,
+                    exercisePlan: createdExercisePlan
+                }
+            }
+
+            return {
+                success: false,
+                code: 404,
+                message: "User not found!"
             }
 
         } catch (error) {
             console.log('Error processing the Excel file in Service:', error);
+            return {
+                success: false,
+                code: 500,
+                message: "Internal Server error"
+            }
         }
     };
 
