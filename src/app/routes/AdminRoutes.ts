@@ -27,6 +27,7 @@ router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {na
 router.get("/getUser/:userId", userController.getUserById) // Is Documented
 router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented
+router.post("/createAdmin", userController.createAdmin) 
 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented

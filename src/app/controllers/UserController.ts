@@ -92,8 +92,8 @@ class UserController{
 
     async getAllUsers(req: Request,res: Response ) {
         try {
-            const {success, code, message, users} = await userService.getAllUsers();
-            res.status(code).json({success, message, users});
+            const {success, code, message, filteredUsers} = await userService.getAllUsers();
+            res.status(code).json({success, message, filteredUsers});
         } catch (error) {
             console.log("Error while getting all users in Controller: ", error)
             res.status(500).json({ success: false, message: "Internal Server error" });
@@ -110,6 +110,19 @@ class UserController{
             res.status(code).json({success, message});
         } catch (error) {
             console.log("Error while updating password in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
+
+    async createAdmin(req: Request, res: Response) {
+        try{
+            const { email, password } = req.body;
+
+            const {success, code, message} = await userService.createAdminUser({email: email as string, password: password as string});
+
+            res.status(code).json({success, message});
+        } catch (error) {
+            console.log("Error while creating admin in Controller: ", error)
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
