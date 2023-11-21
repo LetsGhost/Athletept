@@ -4,7 +4,7 @@ import * as puppeteer from 'puppeteer';
 
 class TemplateUtils {
     renderTemplateWithData(templatePath: string, data: any): string {
-        const template = fs.readFileSync(templatePath, 'utf-8');
+        const template = fs.readFileSync(`dist/public/templates/${templatePath}`, 'utf-8');
         return ejs.render(template, data);
     }
 

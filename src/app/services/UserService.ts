@@ -263,15 +263,16 @@ class UserService{
             }
         }
 
-        const templatePath = "dist/public/templates/userInfo.ejs";
+        const templatePath = "userInfo.ejs";
         const html = templateUtils.renderTemplateWithData(templatePath, user);
         const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
 
-    return {
-        success: true,
-        code: 200,
-        pdfBuffer
-    }
+        return {
+            success: true,
+            code: 200,
+            pdfBuffer,
+            user
+        }
     }
 }
 

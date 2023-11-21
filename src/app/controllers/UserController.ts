@@ -131,11 +131,11 @@ class UserController{
         try{
             const { userId } = req.params;
 
-            const {success, code, message, pdfBuffer} = await userService.downloadUserData(userId);
+            const {success, code, message, pdfBuffer, user} = await userService.downloadUserData(userId);
 
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'attachment; filename=userInfo.pdf');
-            res.send(pdfBuffer);
+            res.setHeader('Content-Disposition', `attachment; filename=${user?.userInfo.name}-${new Date()}.pdf`);
+            res.status(code).send(pdfBuffer);
         } catch (error) {
             console.log("Error while downloading user info in Controller: ", error)
             res.status(500).json({ success: false, message: "Internal Server error" });
