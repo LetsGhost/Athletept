@@ -7,6 +7,7 @@ import { upload } from '../../config/multerConfig';
 // Disable authentication for now
 import authenticateRole from "../middleware/AuthenticateRole";
 import authenticateToken from "../middleware/AuthenticateToken";
+import limiter from '../middleware/Limiter';
 
 // Import Controllers
 import userController from "../controllers/UserController";
@@ -21,6 +22,9 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 
 // Import routes
 const router = express.Router();
+
+// Activate for production
+//router.use(limiter);
 
 // User
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented

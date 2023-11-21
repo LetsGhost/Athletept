@@ -2,6 +2,7 @@ import express from 'express';
 
 // Import Middlewares
 import authenticateToken from "../middleware/AuthenticateToken";
+import limiter from '../middleware/Limiter';
 
 // Import Controllers
 import exercisePlanController from "../controllers/ExercisePlanController";
@@ -15,6 +16,8 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 
 // Import routes
 const router = express.Router();
+
+router.use(limiter);
 
 // Exercise Plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
