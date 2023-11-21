@@ -11,7 +11,13 @@ import userRoutes from "./app/routes/UserRoutes";
 import adminRoutes from "./app/routes/AdminRoutes";
 import authRoutes from "./app/routes/AuthRoute";
 
+import limiter from './app/middleware/Limiter';
+import logger from './config/winstonLogger';
+
 const server = express();
+
+// Activate for production
+//server.use(limiter);
 
 server.use(bodyParser.json());
 server.use(cookieParser());
@@ -24,5 +30,5 @@ server.use('/admin', adminRoutes);
 server.use('/auth', authRoutes);
 
 server.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`)
+    logger.info(`Server is running on port ${process.env.PORT}`, { service: 'Server'});
 });
