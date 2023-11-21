@@ -3,6 +3,7 @@ import UserModel from "../models/UserModel";
 import { Document, Model } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService";
 import timeUtils from "../utils/timeUtils";
+import logger from "../../config/winstonLogger";
 
 interface currentGrowth {
     answer: string;
@@ -58,7 +59,7 @@ class CheckInService {
             const user = await UserModel.findById(userId)
             
             if(!user){
-                console.log("User not found")
+                logger.error('User not found', {service: 'CheckInService.createCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -185,7 +186,7 @@ class CheckInService {
 
                         
         } catch(err){
-            console.log("Error while creating check-in in CheckInService.createCheckIn: ", err)
+            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.createCheckIn'});
             return {
                 success: false,
                 code: 500,
@@ -199,7 +200,7 @@ class CheckInService {
             const user = await UserModel.findById(userId)
 
             if(!user){
-                console.log("User not found")
+                logger.error('User not found', {service: 'CheckInService.getCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -211,7 +212,7 @@ class CheckInService {
             const currentCheckIn = (userCheckIn?.checkIn as unknown) as checkInDocument;
 
             if(!currentCheckIn){
-                console.log("Check-in not found")
+                logger.error('Check-in not found', {service: 'CheckInService.getCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -225,7 +226,7 @@ class CheckInService {
                 checkIn: currentCheckIn
             }
         } catch(err){
-            console.log("Error while getting check-in in CheckInService.getCheckIn: ", err)
+            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.getCheckIn'});
             return {
                 success: false,
                 code: 500,
@@ -239,7 +240,7 @@ class CheckInService {
             const checkIn = await CheckIn.findById(checkInId)
 
             if(!checkIn){
-                console.log("Check-in not found")
+                logger.error('Check-in not found', {service: 'CheckInService.getCheckInById'});
                 return {
                     success: false,
                     code: 404,
@@ -253,7 +254,7 @@ class CheckInService {
                 checkIn: checkIn
             }
         } catch(err){
-            console.log("Error while getting check-in in CheckInService.getCheckInById: ", err)
+            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.getCheckInById'});
             return {
                 success: false,
                 code: 500,

@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import UserModel, {User} from '../models/UserModel';
 import {Document} from 'mongoose';
 import * as process from "process";
+import logger from '../../config/winstonLogger';
 
 class AuthService {
     async loginUser(email: string, password: string, alwaysLogedIn: boolean) {
@@ -10,7 +11,7 @@ class AuthService {
             const userRole = user as User;
 
             if (!user) {
-                console.log('User not found');
+                logger.error('User not found', {service: 'AuthService.loginUser'});
                 return {
                     success: false,
                     code: 404,
@@ -21,7 +22,7 @@ class AuthService {
             const passwordMatch = await (user as User).comparePassword(password);
 
             if (!passwordMatch) {
-                console.log('Password does not match');
+                logger.error('Authentication failed', {service: 'AuthService.loginUser'});
                 return {
                     success: false,
                     code: 401,
@@ -45,6 +46,8 @@ class AuthService {
             const token = jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: '3h'});
             const userId = user._id;
 
+            logger.info('User logged in', {service: 'AuthService.loginUser', userId: user._id});
+
             return {
                 success: true,
                 code: 200,
@@ -52,7 +55,7 @@ class AuthService {
                 userId
             }
         } catch (error) {
-            console.log('Login error:', error);
+            logger.error('Internal server error', {service: 'AuthService.loginUser'});
             return {
                 success: false,
                 code: 500,
@@ -67,6 +70,7 @@ class AuthService {
             const user = await UserModel.findById(decodedToken.userId).exec();
 
             if(!token){
+                logger.error('No token found', {service: 'AuthService.getUserFromToken'});
                 return {
                     success: false,
                     code: 404,
@@ -80,7 +84,7 @@ class AuthService {
                 userId: user?._id
             };
         } catch (error) {
-            console.log('Get user from token error:', error);
+            logger.error(`Internal server error: ${error}`, {service: 'AuthService.getUserFromToken'});
             return {
                 success: false,
                 code: 500,

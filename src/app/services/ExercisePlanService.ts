@@ -3,6 +3,7 @@ import { Workbook, Worksheet, Row } from 'exceljs';
 import UserModel from "../models/UserModel";
 import {ExercisePlan} from "../models/ExercisePlanModel";
 import timeUtils from "../utils/timeUtils";
+import logger from "../../config/winstonLogger";
 
 interface Exercise {
     Exercises: string;
@@ -154,7 +155,7 @@ class ExercisePlanService {
             }
 
         } catch (error) {
-            console.log('Error processing the Excel file in Service:', error);
+            logger.error(`Error processing the Excel file: ${error}`, {service: 'ExercisePlanService.createExercisePlanFromExcel'});
             return {
                 success: false,
                 code: 500,
@@ -253,7 +254,7 @@ class ExercisePlanService {
                 message: "User not found!"
             }
         } catch (error) {
-            console.log('Error processing the Excel file in ExerciseplanService.createExercersiePlanOnly:', error);
+            logger.error(`Error processing the Excel file: ${error}`, {service: 'ExercisePlanService.createExercisePlanOnly'});
             return {
                 success: false,
                 code: 500,
@@ -352,7 +353,7 @@ class ExercisePlanService {
         try {
             const user = await UserModel.findById(userId).populate('exercisePlan');
             if(!user){
-                console.log("User not found!");
+                logger.error('User not found', {service: 'ExercisePlanService.getExercisePlan'});
                 return {
                     success: false,
                     code: 404,
@@ -384,7 +385,7 @@ class ExercisePlanService {
             }
 
         } catch (error) {
-            console.log("Error while getting exercise plan in Service: ", error);
+            logger.error(`Error getting the exercise plan: ${error}`, {service: 'ExercisePlanService.getExercisePlan'});
             return {
                 success: false,
                 code: 500,
