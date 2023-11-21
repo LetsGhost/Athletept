@@ -5,7 +5,7 @@ import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {TrainingDuration} from "../models/TrainingdurationModel";
 import {CheckIn} from "../models/CheckInModel";
 import templateUtils from '../utils/templateUtils';
-import { userInfo } from 'os';
+import path from 'path';
 
 interface RegistrationData {
     email: string;
@@ -263,8 +263,15 @@ class UserService{
             }
         }
 
-        const template = templateUtils.renderTemplateWithData('../../public/templates/UserInfo.ejs', user);
-        
+        const templatePath = "dist/public/templates/userInfo.ejs";
+        const html = templateUtils.renderTemplateWithData(templatePath, user);
+        const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
+
+    return {
+        success: true,
+        code: 200,
+        pdfBuffer
+    }
     }
 }
 

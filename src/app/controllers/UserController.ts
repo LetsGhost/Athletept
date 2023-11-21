@@ -126,6 +126,21 @@ class UserController{
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
+
+    async downLoadUserInfo(req: Request, res: Response) {
+        try{
+            const { userId } = req.params;
+
+            const {success, code, message, pdfBuffer} = await userService.downloadUserData(userId);
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=userInfo.pdf');
+            res.send(pdfBuffer);
+        } catch (error) {
+            console.log("Error while downloading user info in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
 }
 
 export default new UserController();

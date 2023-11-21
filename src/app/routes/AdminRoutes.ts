@@ -32,6 +32,7 @@ router.get("/getUser/:userId", userController.getUserById) // Is Documented
 router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
+router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) 
 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
