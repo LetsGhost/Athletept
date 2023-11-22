@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 dotenv.config();
 
 // Routes
@@ -25,6 +26,18 @@ if(process.env.ENV === "production"){
 server.use(bodyParser.json());
 server.use(cookieParser());
 server.use(cors());
+server.use(helmet({
+    contentSecurityPolicy: false, // set to false if you have issues with your app
+    dnsPrefetchControl: false, // controls browser DNS prefetching
+    frameguard: { action: 'deny' }, // prevent clickjacking
+    hidePoweredBy: true, // hide X-Powered-By header
+    hsts: { maxAge: 60 }, // HTTP Strict Transport Security
+    ieNoOpen: true, // X-Download-Options for IE8+
+    noSniff: true, // X-Content-Type-Options
+    permittedCrossDomainPolicies: true, // restrict Adobe Flash and Acrobat
+    referrerPolicy: { policy: 'same-origin' }, // Referrer-Policy header
+    xssFilter: true, // X-XSS-Protection
+}));
 
 connectToDatabase()
 
