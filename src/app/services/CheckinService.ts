@@ -250,7 +250,6 @@ class CheckInService {
             }
 
             const userCheckIn = await UserModel.findById(userId).populate('checkIn');
-            console.log(userCheckIn?.checkIn)
             if(!userCheckIn?.checkIn){
                 logger.error('Check-in not found', {service: 'CheckInService.downloadCheckIn'});
                 return {
