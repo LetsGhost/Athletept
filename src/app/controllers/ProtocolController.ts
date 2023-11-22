@@ -46,7 +46,7 @@ class ProtocolController{
             const { userId } = req.params;
 
             const {success, code, message, pdfBuffer, userInfo} = await protocolService.downloadProtocol(userId);
-            console.log("hi")
+            
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', `attachment; filename=${userInfo?.userInfo.name}-Protokol-${new Date()}.pdf`);
             res.status(code).send(pdfBuffer);

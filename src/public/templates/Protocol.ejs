@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h2, h3 {
+            color: #007bff;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <% protocolExercisePlan.exerciseDays.forEach(function(day) { %>
+            <h2>Day <%= day.dayNumber %>: <%= day.type %></h2>
+            <p>Comment: <%= day.comment.Notes %></p>
+            <p>Scale: <%= day.comment.Scale %></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Weight</th>
+                        <th>Repetitions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% day.exercises.forEach(function(exercise) { %>
+                        <tr>
+                            <td><%= exercise.Exercises %></td>
+                            <td><%= exercise.Weight %></td>
+                            <td><%= exercise.Repetitions %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% }); %>
+    </section>
+
+    <footer>
+        &copy; 2023 AthletePT
+    </footer>
+</body>
+</html>

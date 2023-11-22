@@ -27,6 +27,21 @@ class CheckInController {
             res.status(500).json({cuccess: false, message: "Internal server error"})
         }
     }
+
+    async downloadCheckIn(req: Request, res: Response){
+        try{
+            const {userId} = req.params
+
+            const {success, code, message, pdfBuffer, userInfo} = await CheckInService.downloadCheckIn(userId)
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=${userInfo?.userInfo.name}-Protokol-${new Date()}.pdf`);
+            res.status(code).send(pdfBuffer);
+        } catch(err){
+            console.log("Error while downloading check-in in CheckInController.downloadCheckIn: ", err)
+            res.status(500).json({cuccess: false, message: "Internal server error"})
+        }
+    }
 }
 
 export default new CheckInController();

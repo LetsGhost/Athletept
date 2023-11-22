@@ -4,6 +4,7 @@ import { Document, Model } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService";
 import timeUtils from "../utils/timeUtils";
 import logger from "../../config/winstonLogger";
+import templateUtils from "../utils/templateUtils";
 
 interface currentGrowth {
     answer: string;
@@ -235,12 +236,23 @@ class CheckInService {
         }
     }
 
-    async getCheckInById(checkInId: string){
+    async downloadCheckIn(userId: string){
         try{
-            const checkIn = await CheckIn.findById(checkInId)
+            const user = await UserModel.findById(userId)
 
-            if(!checkIn){
-                logger.error('Check-in not found', {service: 'CheckInService.getCheckInById'});
+            if(!user){
+                logger.error('User not found', {service: 'CheckInService.downloadCheckIn'});
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found"
+                }
+            }
+
+            const userCheckIn = await UserModel.findById(userId).populate('checkIn');
+            console.log(userCheckIn?.checkIn)
+            if(!userCheckIn?.checkIn){
+                logger.error('Check-in not found', {service: 'CheckInService.downloadCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -248,13 +260,18 @@ class CheckInService {
                 }
             }
 
+            const templatePath = "CheckIn.ejs";
+            const html = templateUtils.renderTemplateWithData(templatePath, { checkIn: userCheckIn?.checkIn });
+            const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
+
             return {
                 success: true,
                 code: 200,
-                checkIn: checkIn
+                pdfBuffer,
+                userInfo: user
             }
         } catch(err){
-            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.getCheckInById'});
+            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.downloadCheckIn'});
             return {
                 success: false,
                 code: 500,

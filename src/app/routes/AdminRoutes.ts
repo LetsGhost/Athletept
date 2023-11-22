@@ -56,6 +56,7 @@ router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDispl
 
 // CheckIn
 router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
+router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn)
 
 // TrainingDuration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 
