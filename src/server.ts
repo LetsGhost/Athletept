@@ -17,7 +17,10 @@ import logger from './config/winstonLogger';
 const server = express();
 
 // Activate for production
-//server.use(limiter);
+if(process.env.ENV === "production"){
+    server.use(limiter);
+}
+
 
 server.use(bodyParser.json());
 server.use(cookieParser());
