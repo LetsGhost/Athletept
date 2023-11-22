@@ -5,6 +5,7 @@ import {ExercisePlan} from "../models/ExercisePlanModel";
 import timeUtils from "../utils/timeUtils";
 import protocolUtils from "../utils/protocolUtils";
 import { WeekDisplay } from "../models/WeekDisplayModel";
+import templateUtils from "../utils/templateUtils";
 
 interface ProtocolExercise {
     Exercises: string;
@@ -189,6 +190,39 @@ class ProtocolService{
             }
         } catch (error) {
             console.log('Error getting ProtocolExercisePlan:', error);
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error',
+            };
+        }
+    }
+
+    async downloadProtocol (userId: string) {
+        try{
+            // Get the protocol
+            const user = await UserModel.findById(userId).populate('protocolExercisePlan');
+            const userInfo = await UserModel.findById(userId).populate('exercisePlan');
+
+            if (!user) {
+                return {
+                    success: false,
+                    code: 500,
+                }
+            }
+
+            const templatePath = "Protocol.ejs";
+            const html = templateUtils.renderTemplateWithData(templatePath, { protocolExercisePlan: user?.protocolExercisePlan });
+            const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
+
+            return {
+                success: true,
+                code: 200,
+                pdfBuffer,
+                userInfo
+            }
+        } catch(error) {
+            console.log('Error downloading ProtocolExercisePlan:', error);
             return {
                 success: false,
                 code: 500,

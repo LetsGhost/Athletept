@@ -47,6 +47,7 @@ router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
+router.get("/downloadProtocol/:userId", protocolController.downloadProtocol)
 
 // WeekDisplay
 router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay) // Is Documented
