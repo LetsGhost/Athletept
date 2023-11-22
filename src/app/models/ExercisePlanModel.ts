@@ -5,6 +5,8 @@ interface Exercise {
     Weight: number;
     Sets: number;
     WarmUpSets: number;
+    WarmupWeight: number;
+    WarmupRepetitions: number;
     Repetitions: string;
     Rest: string;
     Execution: string;
@@ -48,6 +50,8 @@ const exerciseSchema = new Schema<Exercise>({
     Weight: Number,
     Sets: Number,
     WarmUpSets: Number,
+    WarmupWeight: Number,
+    WarmupRepetitions: Number,
     Repetitions: String,
     Rest: String,
     Execution: String,

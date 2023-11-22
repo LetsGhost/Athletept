@@ -10,6 +10,8 @@ interface Exercise {
     Weight: number;
     Sets: number;
     WarmUpSets: number;
+    WarmupWeight: number,
+    WarmupRepetitions: number,
     Repetitions: string;
     Rest: string;
     Execution: string;
@@ -71,9 +73,11 @@ class ExercisePlanService {
                         Weight: row.getCell(5).value as number,
                         Sets: row.getCell(6).value as number,
                         WarmUpSets: row.getCell(7).value as number,
-                        Repetitions: row.getCell(8).value as string,
-                        Rest: row.getCell(9).value as string,
-                        Execution: row.getCell(10).value as string,
+                        WarmupWeight: row.getCell(8).value as number,
+                        WarmupRepetitions: row.getCell(9).value as number,
+                        Repetitions: row.getCell(10).value as string,
+                        Rest: row.getCell(11).value as string,
+                        Execution: row.getCell(12).value as string,
                     });
 
                     warmupWorksheet?.eachRow((warmupRow, warmupRowNumber) => {
@@ -115,9 +119,11 @@ class ExercisePlanService {
                         Weight: row.getCell(5).value as number,
                         Sets: row.getCell(6).value as number,
                         WarmUpSets: row.getCell(7).value as number,
-                        Repetitions: row.getCell(8).value as string,
-                        Rest: row.getCell(9).value as string,
-                        Execution: row.getCell(10).value as string,
+                        WarmupWeight: row.getCell(8).value as number,
+                        WarmupRepetitions: row.getCell(9).value as number,
+                        Repetitions: row.getCell(10).value as string,
+                        Rest: row.getCell(11).value as string,
+                        Execution: row.getCell(12).value as string,
                     });
                 }
             });
@@ -192,9 +198,11 @@ class ExercisePlanService {
                         Weight: row.getCell(5).value as number,
                         Sets: row.getCell(6).value as number,
                         WarmUpSets: row.getCell(7).value as number,
-                        Repetitions: row.getCell(8).value as string,
-                        Rest: row.getCell(9).value as string,
-                        Execution: row.getCell(10).value as string,
+                        WarmupWeight: row.getCell(8).value as number,
+                        WarmupRepetitions: row.getCell(9).value as number,
+                        Repetitions: row.getCell(10).value as string,
+                        Rest: row.getCell(11).value as string,
+                        Execution: row.getCell(12).value as string,
                     });
 
                     currentDay = {
@@ -215,9 +223,11 @@ class ExercisePlanService {
                         Weight: row.getCell(5).value as number,
                         Sets: row.getCell(6).value as number,
                         WarmUpSets: row.getCell(7).value as number,
-                        Repetitions: row.getCell(8).value as string,
-                        Rest: row.getCell(9).value as string,
-                        Execution: row.getCell(10).value as string,
+                        WarmupWeight: row.getCell(8).value as number,
+                        WarmupRepetitions: row.getCell(9).value as number,
+                        Repetitions: row.getCell(10).value as string,
+                        Rest: row.getCell(11).value as string,
+                        Execution: row.getCell(12).value as string,
                     });
                 }
             });
