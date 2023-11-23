@@ -45,7 +45,6 @@ router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFi
 router.post("/createMessage/:userId", messageController.createMessage) // Is Documented
 router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) // Is Documented
 router.delete("/deleteMessageById/:messageId", messageController.deleteMessageById) // Is Documented
-router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
 router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
