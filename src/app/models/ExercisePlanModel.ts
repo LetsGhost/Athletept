@@ -6,7 +6,7 @@ interface Exercise {
     Sets: number;
     WarmUpSets: number;
     WarmupWeight: number;
-    WarmupRepetitions: number;
+    WarmupRepetitions: string;
     Repetitions: string;
     Rest: string;
     Execution: string;

@@ -32,7 +32,7 @@ if(process.env.ENV === "production"){
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented
 router.get("/getUser/:userId", userController.getUserById) // Is Documented
 router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
-router.get("/getAllUsers", authenticateToken.authenticateToken, userController.getAllUsers) // Is Documented
+router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
 router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) 
 
@@ -56,7 +56,7 @@ router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // I
 router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay) // Is Documented
 
 // CheckIn
-router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
+router.get("/getCheckIn/:userId", checkInController.getCheckIn)
 router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn)
 
 // TrainingDuration
