@@ -60,7 +60,7 @@ router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
 router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn)
 
 // TrainingDuration
-router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 
+router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) // Is Documented
 
 // Test will be deletet for production
 router.post("/analytic/:userId", WeightAnalyticsController.createWeightAnalytics)
