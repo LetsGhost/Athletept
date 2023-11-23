@@ -11,11 +11,11 @@ class AuthController {
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
             if (alwaysLogedIn){
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000 });
-                return res.status(code).json({ success, message, userId: userId });
+                return res.status(code).json({ success, message, token, userId: userId });
             }
 
             res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
-            return res.status(code).json({ success, message, userId: userId });
+            return res.status(code).json({ success, message, token, userId: userId });
         } catch (error) {
             console.error('Login error:', error);
             res.status(500).json({ success: false, message: 'Internal server error' });

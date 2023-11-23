@@ -39,7 +39,6 @@ class ProtocolService{
 
             // Check if the user already has an protocol
             if (user?.protocolExercisePlan) {
-                console.log("User already has a protocol");
 
                 const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
                 const createdAt = (user?.protocolExercisePlan as any as ProtocolExercisePlanDocument).createdAt;
