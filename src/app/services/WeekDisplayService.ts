@@ -1,5 +1,13 @@
 import {WeekDisplay} from '../models/WeekDisplayModel';
 import UserModel from '../models/UserModel';
+import timeUtils from '../utils/timeUtils';
+
+interface TrainingWeekDisplayModel extends Document {
+    trainingDone: number[];
+    trainingsWeek: string[];
+    createdAt: Date;
+    lastUpdate: Date;
+}
 
 class WeekDisplayService {
     async createWeekDisplay(userId: string, trainingsWeek: Array<string>) {
@@ -41,10 +49,38 @@ class WeekDisplayService {
 
     async getWeekDisplay(userId: string) {
         try{
-            const user = await UserModel.findById(userId);
+            const user = await UserModel.findById(userId).populate('weekDisplay');
 
             if(user){
                 const weekDisplay = await WeekDisplay.findById(user.weekDisplay);
+
+                if(!weekDisplay){
+
+                    return {
+                        success: false,
+                        code: 404,
+                        message: 'Week display not found'
+                    }
+                }
+                console.log(weekDisplay)
+                // Calculates the date that should be one week ago
+                const currentDate = new Date();
+
+                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
+                const createdAtWeekNumber = timeUtils.getWeekNumber(weekDisplay.lastUpdate);
+
+                if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
+                    weekDisplay.trainingDone = []
+                    weekDisplay.lastUpdate = new Date();
+                    weekDisplay.save();
+
+                    return {
+                        success: true,
+                        code: 200,
+                        checkInStatus: false
+                    }
+                }
+
                 return {
                     success: true,
                     code: 200,
