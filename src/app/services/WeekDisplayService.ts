@@ -62,7 +62,6 @@ class WeekDisplayService {
                         message: 'Week display not found'
                     }
                 }
-                console.log(weekDisplay)
                 // Calculates the date that should be one week ago
                 const currentDate = new Date();
 
@@ -77,7 +76,7 @@ class WeekDisplayService {
                     return {
                         success: true,
                         code: 200,
-                        checkInStatus: false
+                        weekDisplay
                     }
                 }
 
