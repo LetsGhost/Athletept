@@ -92,10 +92,8 @@ class WeightAnalyticsService {
                     weightAnalytics.bodyWeight.actualWeight = weight;
 
                     const weightGraph = weightAnalytics.bodyWeightGraphSixteenWeeks[0].weight;
-                    weightGraph.unshift(weight);
-                    if (weightGraph.length > 16) {
-                        weightGraph.pop();
-                    }
+                    weightGraph.splice(0, 1);
+                    weightGraph.splice(15, 0, weight);
 
                     await weightAnalytics?.save();
 
