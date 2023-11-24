@@ -38,7 +38,8 @@ router.get("/getMessageById/:messageId", messageController.getMessageById)
 router.post("/createProtocol", protocolController.createProtocol) // Is Documented
 
 // Check-in
-router.post("/createCheckIn/:userId", checkInController.createCheckIn) 
+router.post("/createCheckIn/:userId", checkInController.createCheckIn) // Is Documented
+router.get("/getCheckInStatus/:userId", checkInController.getCheckInStatus)
 
 // Week Display
 router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // Is Documented

@@ -42,6 +42,19 @@ class CheckInController {
             res.status(500).json({cuccess: false, message: "Internal server error"})
         }
     }
+
+    async getCheckInStatus(req: Request, res: Response){
+        try{
+            const {userId} = req.params
+
+            const {success, code, message, checkInStatus} = await CheckInService.getCheckInStatus(userId)
+
+            res.status(code).json({success, message, checkInStatus})
+        } catch(err){
+            console.log("Error while getting check-in status in CheckInController.getCheckInStatus: ", err)
+            res.status(500).json({cuccess: false, message: "Internal server error"})
+        }
+    }
 }
 
 export default new CheckInController();
