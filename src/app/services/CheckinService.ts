@@ -299,7 +299,24 @@ class CheckInService {
                 return {
                     success: true,
                     code: 404,
-                    chekcinStatus: false,
+                    checkInStatus: false,
+                }
+            }
+
+            // Calculates the date that should be one week ago
+            const currentDate = new Date();
+
+            const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
+            const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
+
+            if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
+                currentCheckIn.checkInStatus = false;
+                await currentCheckIn.save();
+
+                return {
+                    success: true,
+                    code: 200,
+                    checkInStatus: false
                 }
             }
 
