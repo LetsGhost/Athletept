@@ -36,6 +36,7 @@ router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
 router.post("/createProtocol", protocolController.createProtocol) // Is Documented
+router.post("/createBlankProtocol/:userId", protocolController.createBlankProtocol)
 
 // Check-in
 router.post("/createCheckIn/:userId", checkInController.createCheckIn) // Is Documented
