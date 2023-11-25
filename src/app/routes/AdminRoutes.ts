@@ -23,11 +23,6 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 // Import routes
 const router = express.Router();
 
-if(process.env.ENV === "production"){
-    router.use(authenticateToken.authenticateToken)
-    router.use(authenticateRole.authenticateRole)
-}
-
 // User
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented
 router.get("/getUser/:userId", userController.getUserById) // Is Documented
