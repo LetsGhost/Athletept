@@ -11,7 +11,7 @@ interface problems{
 }
 
 interface regeneration{
-    boolean: boolean;
+    answer: string;
 }
 
 interface change{
@@ -51,7 +51,7 @@ const problemsSchema = new Schema<problems>({
 })
 
 const regenerationSchema = new Schema<regeneration>({
-    boolean: Boolean,
+    answer: String,
 })
 
 const changeSchema = new Schema<change>({

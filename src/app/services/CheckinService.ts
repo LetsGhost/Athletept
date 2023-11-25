@@ -278,6 +278,62 @@ class CheckInService {
             }
         }
     }
+
+    async getCheckInStatus(userId: string){
+        try{
+            const user = await UserModel.findById(userId)
+
+            if(!user){
+                logger.error('User not found', {service: 'CheckInService.getCheckInStatus'});
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found"
+                }
+            }
+
+            const userCheckIn = await UserModel.findById(userId).populate('checkIn');
+            const currentCheckIn = (userCheckIn?.checkIn as unknown) as checkInDocument;
+
+            if(!currentCheckIn){
+                return {
+                    success: true,
+                    code: 404,
+                    checkInStatus: false,
+                }
+            }
+
+            // Calculates the date that should be one week ago
+            const currentDate = new Date();
+
+            const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
+            const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
+
+            if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
+                currentCheckIn.checkInStatus = false;
+                await currentCheckIn.save();
+
+                return {
+                    success: true,
+                    code: 200,
+                    checkInStatus: false
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                checkInStatus: currentCheckIn.checkInStatus
+            }
+        } catch(err){
+            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.getCheckInStatus'});
+            return {
+                success: false,
+                code: 500,
+                message: "Internal Server error"
+            }
+        }
+    }
 }
 
 export default new CheckInService();

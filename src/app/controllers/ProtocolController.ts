@@ -41,6 +41,27 @@ class ProtocolController{
         }
     }
 
+    async createBlankProtocol(req: Request, res: Response) {
+        try{
+            const { userId } = req.params;
+            const { day, type} = req.body;
+
+            const result = await protocolService.createBlankProtocol(userId, day, type);
+
+            if (result && 'success' in result) {
+                const { success, code, message, newProtocol } = result;
+                return res.status(code).json({ success, message, newProtocol });
+            } else {
+                console.log('Unexpected response from protocolService.createBlankProtocol');
+                throw new Error('Unexpected response from protocolService.createBlankProtocol');
+            }
+        }
+        catch(error){
+            console.error('Error creating ProtocolExercisePlan:', error);
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
+
     async downloadProtocol(req: Request, res: Response) {
         try{
             const { userId } = req.params;
