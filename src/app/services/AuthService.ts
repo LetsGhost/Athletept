@@ -39,7 +39,8 @@ class AuthService {
                     success: true,
                     code: 200,
                     token,
-                    userId
+                    userId,
+                    role: userRole.role
                 }
             }
 
@@ -52,7 +53,8 @@ class AuthService {
                 success: true,
                 code: 200,
                 token,
-                userId
+                userId,
+                role: userRole.role
             }
         } catch (error) {
             logger.error('Internal server error', {service: 'AuthService.loginUser'});

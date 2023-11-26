@@ -17,12 +17,6 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 // Import routes
 const router = express.Router();
 
-router.use(limiter);
-
-if(process.env.ENV === "production"){
-    router.use(authenticateToken.authenticateToken)
-}
-
 // Exercise Plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
 
