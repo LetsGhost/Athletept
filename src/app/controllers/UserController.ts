@@ -141,6 +141,17 @@ class UserController{
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
+
+    async getAdmins(req: Request, res: Response) {
+        try{
+            const {success, code, message, admins} = await userService.getAdmins();
+
+            res.status(code).json({success, message, admins});
+        } catch (error) {
+            console.log("Error while getting admins in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
 }
 
 export default new UserController();

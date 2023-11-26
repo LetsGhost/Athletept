@@ -30,7 +30,7 @@ router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
 router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) 
-
+router.get("/getAdmins", userController.getAdmins) 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
 router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}]), exercisePlanController.createExercisePlanOnly) // Is Documented

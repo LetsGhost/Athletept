@@ -274,6 +274,34 @@ class UserService{
             user
         }
     }
+
+    async getAdmins() {
+        try{
+            const admins = await UserModel.find({role: 'admin'});
+
+            if(!admins){
+                console.log("Admins not found!");
+                return {
+                    success: false,
+                    code: 404,
+                    message: "Admins not found!"
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                admins
+            }
+        } catch (error) {
+            console.log("Error while getting all admins in Service: ", error);
+            return {
+                success: false,
+                code: 500,
+                message: "Internal Server error"
+            }
+        }
+    }
 }
 
 export default new UserService();
