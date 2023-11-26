@@ -10,11 +10,11 @@ class AuthController {
             const { success, code, message, token, userId } = await authService.loginUser(email, password, alwaysLogedIn);
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
             if (alwaysLogedIn){
-                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000 });
+                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true });
                 return res.status(code).json({ success, message, userId: userId });
             }
 
-            res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+            res.cookie('token', token, { httpOnly: true, maxAge: 3600000, sameSite: 'none', secure: true });
             return res.status(code).json({ success, message, userId: userId });
         } catch (error) {
             console.error('Login error:', error);
