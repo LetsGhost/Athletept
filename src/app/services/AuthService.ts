@@ -4,6 +4,7 @@ import {Document} from 'mongoose';
 import * as process from "process";
 import logger from '../../config/winstonLogger';
 
+
 class AuthService {
     async loginUser(email: string, password: string, alwaysLogedIn: boolean) {
         try {
@@ -46,8 +47,6 @@ class AuthService {
 
             const token = jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: '3h'});
             const userId = user._id;
-
-            logger.info('User logged in', {service: 'AuthService.loginUser', userId: user._id});
 
             return {
                 success: true,

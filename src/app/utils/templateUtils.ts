@@ -1,6 +1,7 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
+import logger from '../../config/winstonLogger';
 
 class TemplateUtils {
     renderTemplateWithData(templatePath: string, data: any): string {
