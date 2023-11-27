@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import authService from '../services/AuthService';
-import logger from 'src/config/winstonLogger';
+import logger from '../../config/winstonLogger';
 import {getClientIp} from '../utils/ipUtils';
 
 class AuthController {
