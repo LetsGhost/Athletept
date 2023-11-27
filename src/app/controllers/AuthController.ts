@@ -12,16 +12,16 @@ class AuthController {
 
             if (alwaysLogedIn){
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true });
-                return res.status(code).json({ success, message, userId: userId });
+                return res.status(code).json({ success, message, userId: userId, role: role });
             }
 
             res.cookie('token', token, { httpOnly: true, maxAge: 3600000, sameSite: 'none', secure: true });
 
             if(success){
-                logger.info('User logged in' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
+                logger.info('User logged in: ' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
             }
 
-            return res.status(code).json({ success, message, userId: userId });
+            return res.status(code).json({ success, message, userId: userId, role: role });
         } catch (error) {
             logger.error('Internal server error' + error, {service: 'AuthController.login'});
             res.status(500).json({ success: false, message: 'Internal server error' });
