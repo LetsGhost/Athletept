@@ -1,8 +1,9 @@
 import Redis from 'ioredis';
 import logger from './winstonLogger';
 
+let redisClient: Redis | null = null;
+
 const connectToRedis = async (): Promise<Redis | null> => {
-  let redisClient: Redis | null = null;
 
   try {
     const redisUrl = `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || '6379'}`;
@@ -16,4 +17,4 @@ const connectToRedis = async (): Promise<Redis | null> => {
   return redisClient;
 };
 
-export { connectToRedis };
+export { connectToRedis, redisClient };
