@@ -13,7 +13,6 @@ import { connectToRedis } from './config/redis';
 import userRoutes from "./app/routes/UserRoutes";
 import adminRoutes from "./app/routes/AdminRoutes";
 import authRoutes from "./app/routes/AuthRoute";
-import redisRoutes from "./app/routes/RedisRoutes";
 
 import limiter from './app/middleware/Limiter';
 import logger from './config/winstonLogger';
@@ -48,7 +47,6 @@ connectToRedis();
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
 server.use('/auth', authRoutes);
-server.use("/redis", redisRoutes)
 
 server.listen(process.env.PORT, () => {
     logger.info(`Server is running on port ${process.env.PORT}`, { service: 'Server'});
