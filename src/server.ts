@@ -8,6 +8,8 @@ dotenv.config();
 
 // Routes
 import { connectToDatabase, } from "./config/db";
+import { connectToRedis } from './config/redis';
+
 import userRoutes from "./app/routes/UserRoutes";
 import adminRoutes from "./app/routes/AdminRoutes";
 import authRoutes from "./app/routes/AuthRoute";
@@ -40,6 +42,7 @@ server.use(helmet({
 }));
 
 connectToDatabase()
+connectToRedis();
 
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
