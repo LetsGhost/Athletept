@@ -8,12 +8,12 @@ import { upload } from '../../config/multerConfig';
 import authenticateRole from "../middleware/AuthenticateRole";
 import authenticateToken from "../middleware/AuthenticateToken";
 import limiter from '../middleware/Limiter';
+import { performanceLogger } from '../middleware/Performance';
 
 // Import Controllers
 import userController from "../controllers/UserController";
 import messageController from "../controllers/MessageController";
 import protocolController from "../controllers/ProtocolController";
-import adminController from "../controllers/AdminController";
 import exercisePlanController from "../controllers/ExercisePlanController";
 import weekDisplayController from '../controllers/WeekDisplayController';
 import checkInController from '../controllers/CheckInController';
@@ -22,6 +22,8 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 
 // Import routes
 const router = express.Router();
+
+router.use(performanceLogger);
 
 // User
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented

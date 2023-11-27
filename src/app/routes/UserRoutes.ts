@@ -3,6 +3,7 @@ import express from 'express';
 // Import Middlewares
 import authenticateToken from "../middleware/AuthenticateToken";
 import limiter from '../middleware/Limiter';
+import { performanceLogger } from '../middleware/Performance';
 
 // Import Controllers
 import exercisePlanController from "../controllers/ExercisePlanController";
@@ -16,6 +17,8 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 
 // Import routes
 const router = express.Router();
+
+router.use(performanceLogger);
 
 // Exercise Plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
