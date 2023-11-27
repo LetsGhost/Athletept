@@ -8,7 +8,6 @@ export function performanceLogger(req: Request, res: Response, next: NextFunctio
   res.on('finish', async () => { 
     const duration = Date.now() - start;
     const today = new Date().toISOString().slice(0, 10);
-    logger.info(`Request to ${req.path} took ${duration}ms`, {service: 'PerformanceLogger'});
 
     if (redisClient) {
       try {
@@ -25,3 +24,25 @@ export function performanceLogger(req: Request, res: Response, next: NextFunctio
 
   next();
 }
+
+export async function logResourceUsage(): Promise<void> {
+  try{
+    const usage = process.cpuUsage();
+    const memUsage = process.memoryUsage();
+
+    const cpuUsage = ((usage.user + usage.system) / 1000).toFixed(2);
+    const rssMemUsage = (memUsage.rss / 1024 / 1024).toFixed(2);
+    const heapUsed = (memUsage.heapUsed / 1024 / 1024).toFixed(2);
+
+    if(redisClient){
+      const key = 'resourceUsage';
+
+      await redisClient.lpush(key, `CPU usage: ${cpuUsage}ms, Memory usage: ${rssMemUsage}MB, Heap used: ${heapUsed}MB`);
+      await redisClient.ltrim(key, 0, 9); // Keep only the last 10 durations
+    }
+  } catch(err) {
+    logger.error(`Failed to log resource usage: ${err}`, {service: 'ResourceLogger'});
+  }
+}
+
+

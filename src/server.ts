@@ -10,12 +10,15 @@ dotenv.config();
 import { connectToDatabase, } from "./config/db";
 import { connectToRedis } from './config/redis';
 
+import { logResourceUsage } from './app/middleware/Performance';
+
 import userRoutes from "./app/routes/UserRoutes";
 import adminRoutes from "./app/routes/AdminRoutes";
 import authRoutes from "./app/routes/AuthRoute";
 
 import limiter from './app/middleware/Limiter';
 import logger from './config/winstonLogger';
+import { log } from 'console';
 
 const server = express();
 
@@ -43,6 +46,9 @@ server.use(helmet({
 
 connectToDatabase()
 connectToRedis();
+
+setInterval(logResourceUsage, 60 * 60 * 1000);
+logResourceUsage();
 
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
