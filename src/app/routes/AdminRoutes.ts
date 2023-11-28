@@ -33,6 +33,7 @@ router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo)
 router.get("/getAdmins", userController.getAdmins) 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
+router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan)
 router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}]), exercisePlanController.createExercisePlanOnly) // Is Documented
 //router.post("/createWarmupOnly/:userId", upload.fields([{name: "warmupFile", maxCount: 1}]), exercisePlanController.createWarmupOnly)
 
