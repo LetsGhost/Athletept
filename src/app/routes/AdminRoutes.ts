@@ -31,6 +31,7 @@ router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
 router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) 
 router.get("/getAdmins", userController.getAdmins) 
+
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
 router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan)
