@@ -5,7 +5,7 @@ interface Exercise {
     Weight: number;
     Sets: number;
     WarmUpSets: number;
-    WarmupWeight: number;
+    WarmupWeight: string;
     WarmupRepetitions: string;
     Repetitions: string;
     Rest: string;
@@ -51,7 +51,7 @@ const exerciseSchema = new Schema<Exercise>({
     Sets: Number,
     WarmUpSets: Number,
     WarmupWeight: Number,
-    WarmupRepetitions: Number,
+    WarmupRepetitions: String,
     Repetitions: String,
     Rest: String,
     Execution: String,
