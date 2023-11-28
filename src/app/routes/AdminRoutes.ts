@@ -23,8 +23,6 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 // Import routes
 const router = express.Router();
 
-router.use(performanceLogger);
-
 // User
 router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented
 router.get("/getUser/:userId", userController.getUserById) // Is Documented

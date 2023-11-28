@@ -18,8 +18,6 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 // Import routes
 const router = express.Router();
 
-router.use(performanceLogger);
-
 // Exercise Plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
 

@@ -9,8 +9,6 @@ import { performanceLogger } from '../middleware/Performance';
 // Import routes
 const router = express.Router();
 
-router.use(performanceLogger);
-
 router.post('/login', auhtController.login); // Is Documented
 router.get('/getUserFromToken', auhtController.getUserFromToken); // Is Documented
 
