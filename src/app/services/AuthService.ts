@@ -16,7 +16,7 @@ class AuthService {
                 return {
                     success: false,
                     code: 404,
-                    message: 'User not found'
+                    message: 'Authentication failed'
                 }
             }
 
