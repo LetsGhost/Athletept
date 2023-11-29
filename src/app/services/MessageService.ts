@@ -4,12 +4,11 @@ import mongoose from "mongoose";
 import logger from "../../config/winstonLogger";
 
 class MessageService{
-    async createMessage( message: string, sender: string, userId: string) {
+    async createMessage( message: string, userId: string) {
         try {
             // Create a new message
             const newMessage = new MessageModel({
                 message,
-                sender,
             });
 
             // Save the message to the database

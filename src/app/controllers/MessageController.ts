@@ -9,14 +9,12 @@ class MessageController {
             const { message } = req.body;
             const userId = req.params.userId;
 
-            const decoodedToken = decodeToken(req.cookies.token)
-
             if(!decodeToken) {
                 res.status(401).json({ success: false, message: 'You are not logged in.' });
                 return;
             }
 
-            const {success, code, messageo, newMessage} = await messageService.createMessage( message, decoodedToken.userId, userId);
+            const {success, code, messageo, newMessage} = await messageService.createMessage( message, userId);
 
             res.status(code).json({ success, message: messageo, newMessage});
         } catch (error) {
