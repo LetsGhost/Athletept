@@ -4,9 +4,9 @@ import logger from './winstonLogger';
 let redisClient: Redis | null = null;
 
 const connectToRedis = async (): Promise<Redis | null> => {
-  //redis://:password@localhost:6379
+  // redis://:password@localhost:6379
   try {
-    const redisUrl = `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || '6379'}`;
+    const redisUrl = `process.env.REDIS_URL`;
     logger.info(`Connecting to Redis at ${redisUrl}`, { service: 'connectToRedis' });
 
     redisClient = new Redis(redisUrl);
