@@ -235,7 +235,7 @@ class ProtocolService{
                     const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
                     const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays.exerciseDays[0].dayNumber);
                     if (exerciseDay) {
-                        exerciseDay.trainingDone = true;
+                        exerciseDay.trainingMissed = true;
                         await exercisePlan?.save();
                     }
 
