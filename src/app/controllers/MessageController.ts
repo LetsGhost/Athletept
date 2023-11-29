@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import messageService from '../services/MessageService';
 import { decodeToken} from "../utils/helper";
+import { decode } from 'punycode';
 
 class MessageController {
     async createMessage(req: Request, res: Response)  {
@@ -9,6 +10,11 @@ class MessageController {
             const userId = req.params.userId;
 
             const decoodedToken = decodeToken(req.cookies.token)
+
+            if(!decodeToken) {
+                res.status(401).json({ success: false, message: 'You are not logged in.' });
+                return;
+            }
 
             const {success, code, messageo, newMessage} = await messageService.createMessage( message, decoodedToken.userId, userId);
 
