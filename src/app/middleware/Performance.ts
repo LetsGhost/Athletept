@@ -34,11 +34,14 @@ export async function logResourceUsage(): Promise<void> {
     const rssMemUsage = (memUsage.rss / 1024 / 1024).toFixed(2);
     const heapUsed = (memUsage.heapUsed / 1024 / 1024).toFixed(2);
 
+    const timestamp = new Date().toISOString();
+
     if(redisClient){
       const key = 'resourceUsage';
 
-      await redisClient.lpush(key, `CPU usage: ${cpuUsage}ms, Memory usage: ${rssMemUsage}MB, Heap used: ${heapUsed}MB`);
+      await redisClient.lpush(key, `[${timestamp}] CPU usage: ${cpuUsage}ms, Memory usage: ${rssMemUsage}MB, Heap used: ${heapUsed}MB`);
       await redisClient.ltrim(key, 0, 9); // Keep only the last 10 durations
+      console.log('Resource usage logged' + `[${timestamp}] CPU usage: ${cpuUsage}ms, Memory usage: ${rssMemUsage}MB, Heap used: ${heapUsed}MB`);
     }
   } catch(err) {
     logger.error(`Failed to log resource usage: ${err}`, {service: 'ResourceLogger'});
