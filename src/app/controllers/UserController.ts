@@ -152,6 +152,20 @@ class UserController{
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
+
+    async updateUserInfo(req: Request, res: Response) {
+        try{
+            const { userId } = req.params;
+            const body = req.body;
+
+            const {success, code, message} = await userService.updateUserInfo(userId, body);
+
+            res.status(code).json({success, message});
+        } catch (error) {
+            console.log("Error while updating user info in Controller: ", error)
+            res.status(500).json({ success: false, message: "Internal Server error" });
+        }
+    }
 }
 
 export default new UserController();

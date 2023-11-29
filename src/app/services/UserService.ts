@@ -1,15 +1,21 @@
 import UserModel from '../models/UserModel';
 import {ExercisePlan} from "../models/ExercisePlanModel";
-import {Message, MessageModel} from "../models/MessagModel";
+import {MessageModel} from "../models/MessagModel";
 import {ProtocolExercisePlan} from "../models/ProtocolModel";
 import {TrainingDuration} from "../models/TrainingdurationModel";
 import {CheckIn} from "../models/CheckInModel";
 import templateUtils from '../utils/templateUtils';
-import path from 'path';
+import { Types } from 'mongoose';
+
 
 interface RegistrationData {
     email: string;
     password: string;
+}
+
+interface User {
+    _id: Types.ObjectId;
+    [key: string]: any;
 }
 
 class UserService{
@@ -301,6 +307,41 @@ class UserService{
                 message: "Internal Server error"
             }
         }
+    }
+
+    async updateUserInfo(userId: string, newInfo: { [key: string]: any }) {
+        // Check if newInfo is undefined or null
+        if (!newInfo) {
+            return {
+                success: false,
+                code: 400,
+                message: "No information provided for update!"
+            };
+        }
+    
+        // Find the user by userId
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return {
+                success: false,
+                code: 404,
+                message: "User not found!"
+            };
+        }
+    
+        // Update the user's information
+        Object.keys(newInfo).forEach((key) => {
+            (user.userInfo as any)[key] = newInfo[key];
+        });
+    
+        // Save the updated user information
+        const updatedUser = await user.save();
+    
+        return {
+            success: true,
+            code: 200,
+            updatedUser
+        };
     }
 }
 

@@ -29,12 +29,13 @@ router.get("/getUser/:userId", userController.getUserById) // Is Documented
 router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
-router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) 
+router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) // Is Documented
 router.get("/getAdmins", userController.getAdmins) 
+router.patch("/updateUserInfo/:userId", userController.updateUserInfo)
 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
-router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan)
+router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan) // Is Documented
 router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}]), exercisePlanController.createExercisePlan) // Is Documented
 //router.post("/createWarmupOnly/:userId", upload.fields([{name: "warmupFile", maxCount: 1}]), exercisePlanController.createWarmupOnly)
 
@@ -53,14 +54,14 @@ router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // I
 router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDisplay) // Is Documented
 
 // CheckIn
-router.get("/getCheckIn/:userId", checkInController.getCheckIn)
-router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn)
+router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
+router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn) // Is Documented
 
 // TrainingDuration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) // Is Documented
 
 // Test will be deletet for production
-router.post("/analytic/:userId", WeightAnalyticsController.createWeightAnalytics)
+router.post("/analytic/:userId", WeightAnalyticsController.createWeightAnalytics) 
 router.post("/training/:userId", trainingDurationController.createTrainingDuration)
 
 export default router;
