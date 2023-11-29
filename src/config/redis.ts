@@ -4,16 +4,14 @@ import logger from './winstonLogger';
 let redisClient: Redis | null = null;
 
 const connectToRedis = async (): Promise<Redis | null> => {
-  // redis://:password@localhost:6379
   try {    
-    const redisUrl = `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
-    console.log(`REDIS_URL: ${redisUrl}`); // Add this line
+    const redisUrl = `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
     if (!redisUrl) {
       logger.error('REDIS_URL is not defined', { service: 'connectToRedis' });
       return null;
     }
 
-    logger.info(`Connecting to Redis at ${redisUrl}`, { service: 'connectToRedis' });
+    logger.info(`Connecting to Redis at ${process.env.REDIS_PORT}`, { service: 'connectToRedis' });
 
     redisClient = new Redis(redisUrl);
 
