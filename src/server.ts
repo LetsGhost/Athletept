@@ -7,7 +7,7 @@ import helmet from 'helmet';
 dotenv.config();
 
 // Routes
-import { connectToDatabase, } from "./config/db";
+import connectToDatabase from './config/db';
 import { connectToRedis } from './config/redis';
 
 import { logResourceUsage } from './app/middleware/Performance';
@@ -18,7 +18,6 @@ import authRoutes from "./app/routes/AuthRoute";
 
 import limiter from './app/middleware/Limiter';
 import logger from './config/winstonLogger';
-import { log } from 'console';
 
 const server = express();
 

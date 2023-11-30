@@ -1,4 +1,4 @@
-import logger from "src/config/winstonLogger";
+import logger from "../../config/winstonLogger";
 
 class TimeUtils {
     getToday(date: Date) {
