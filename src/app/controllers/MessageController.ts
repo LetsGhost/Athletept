@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import messageService from '../services/MessageService';
-import { decodeToken} from "../utils/helper";
-import { decode } from 'punycode';
+import logger from '../../config/winstonLogger';
 
 class MessageController {
     async createMessage(req: Request, res: Response)  {
@@ -9,16 +8,15 @@ class MessageController {
             const { message } = req.body;
             const userId = req.params.userId;
 
-            if(!decodeToken) {
-                res.status(401).json({ success: false, message: 'You are not logged in.' });
-                return;
-            }
-
             const {success, code, messageo, newMessage} = await messageService.createMessage( message, userId);
+
+            if(success){
+                logger.info('Message created', {service: 'MessageController.createMessage'});
+            }
 
             res.status(code).json({ success, message: messageo, newMessage});
         } catch (error) {
-            console.error('Error creating message:', error);
+            logger.error('Error creating message:', error, {service: 'MessageController.createMessage'});
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     };
@@ -31,7 +29,7 @@ class MessageController {
 
             res.status(code).json({ success, message, messages});
         } catch (error) {
-            console.log('Error getting messages:', error);
+            logger.error('Error getting all messages from user:', error, {service: 'MessageController.getAllMessagesFromUser'});
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
@@ -44,7 +42,7 @@ class MessageController {
 
             res.status(code).json({ success, message, messageText});
         } catch (error) {
-            console.error('Error getting message in MessageController.getMessageById:', error);
+            logger.error('Error getting message by id:', error, {service: 'MessageController.getMessageById'});
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
@@ -55,9 +53,13 @@ class MessageController {
 
             const {success, code, message} = await messageService.deleteMessageById(messageId);
 
+            if(success){
+                logger.info('Message deleted', {service: 'MessageController.deleteMessageById'});
+            }
+
             res.status(code).json({ success, message});
         } catch (error) {
-            console.error('Error deleting message in MessageController.deleteMessageById:', error);
+            logger.error('Error deleting message by id:', error, {service: 'MessageController.deleteMessageById'});
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }

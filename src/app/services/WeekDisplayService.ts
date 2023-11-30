@@ -1,6 +1,7 @@
 import {WeekDisplay} from '../models/WeekDisplayModel';
 import UserModel from '../models/UserModel';
 import timeUtils from '../utils/timeUtils';
+import logger from '../../config/winstonLogger';
 
 interface TrainingWeekDisplayModel extends Document {
     trainingDone: number[];
@@ -38,7 +39,7 @@ class WeekDisplayService {
                 message: 'User not found'
             }
         } catch (error) {
-            console.log("Error creating week display in Service: ", error);
+            logger.error('Error creating week display:', error, {service: 'WeekDisplayService.createWeekDisplay'});
             return {
                 success: false,
                 code: 500,
@@ -93,7 +94,7 @@ class WeekDisplayService {
                 message: 'User not found'
             }
         } catch(error){
-            console.log("Error getting week display in Service: ", error);
+            logger.error('Error getting week display:', error, {service: 'WeekDisplayService.getWeekDisplay'});
             return {
                 success: false,
                 code: 500,
@@ -133,7 +134,7 @@ class WeekDisplayService {
                 weekDisplay
             }
         } catch(error){
-            console.log("Error updating week display in Service: ", error);
+            logger.error('Error updating week display:', error, {service: 'WeekDisplayService.updateWeekDisplay'});
             return {
                 success: false,
                 code: 500,

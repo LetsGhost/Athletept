@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import WeekDisplayService from '../services/WeekDisplayService';
+import logger from '../../config/winstonLogger';
 
 class WeekDisplayController {
     async createWeekDisplay(req: Request, res: Response) {
@@ -8,10 +9,14 @@ class WeekDisplayController {
             const userId = req.params.userId;
 
             const { success, code, message, weekDisplay } = await WeekDisplayService.createWeekDisplay(userId, trainingsWeek);
+
+            if(success){
+                logger.info('Week display created', {service: 'WeekDisplayController.createWeekDisplay'});
+            }
     
             res.status(code).json({success, message, weekDisplay});
         } catch(error) {
-            console.log("Error creating week display in Controller: ", error);
+            logger.error('Error creating week display:', error, {service: 'WeekDisplayController.createWeekDisplay'});
             res.status(500).json({success: false, message: 'Internal Server Error'});
         }
     }
@@ -24,7 +29,7 @@ class WeekDisplayController {
     
             res.status(code).json({success, message, weekDisplay});
         } catch(error) {
-            console.log("Error getting week display in Controller: ", error);
+            logger.error('Error getting week display:', error, {service: 'WeekDisplayController.getWeekDisplay'});
             res.status(500).json({success: false, message: 'Internal Server Error'});
         }
     }
@@ -35,10 +40,14 @@ class WeekDisplayController {
             const userId = req.params.userId;
 
             const { success, code, message, weekDisplay } = await WeekDisplayService.updateWeekDisplay(userId, trainingsWeek);
+
+            if(success){
+                logger.info('Week display updated', {service: 'WeekDisplayController.updateWeekDisplay'});
+            }
     
             res.status(code).json({success, message, weekDisplay});
         } catch(error) {
-            console.log("Error updating week display in Controller: ", error);
+            logger.error('Error updating week display:', error, {service: 'WeekDisplayController.updateWeekDisplay'});
             res.status(500).json({success: false, message: 'Internal Server Error'});
         }
     }

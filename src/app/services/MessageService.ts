@@ -17,7 +17,6 @@ class MessageService{
             // Update the user's messages array with the message's ObjectId
             const user = await UserModel.findById(userId);
             if (!user) {
-                console.log('User not found');
                 return {
                     success: false,
                     code: 404,
@@ -34,7 +33,7 @@ class MessageService{
                 newMessage,
             }
         } catch (error) {
-            console.log('Error creating message:', error);
+            logger.error('Error creating message:', error, {service: 'MessageService.createMessage'});
             return {
                 success: false,
                 code: 500,
@@ -47,7 +46,6 @@ class MessageService{
         try {
             const user = await UserModel.findById(userId).populate('messages');
             if (!user) {
-                console.error('User not found');
                 return {
                     success: false,
                     code: 404,
@@ -61,7 +59,7 @@ class MessageService{
                 messages: user.messages,
             }
         } catch (error) {
-            console.error('Error getting messages:', error);
+            logger.error('Error getting all messages from user:', error, {service: 'MessageService.getAllMessagesFromUser'});
             return {
                 success: false,
                 code: 500,
@@ -75,7 +73,6 @@ class MessageService{
             const messageText = await MessageModel.findById(new mongoose.Types.ObjectId(messageId));
             
             if(!messageText){
-                console.error('Message not found');
                 return {
                     success: false,
                     code: 404,
@@ -89,7 +86,7 @@ class MessageService{
                 messageText,
             }
         } catch(error){
-            console.error('Error getting message by id in MessageService.getMessageById:', error);
+            logger.error('Error getting message by id:', error, {service: 'MessageService.getMessageById'});
             return {
                 success: false,
                 code: 500,
@@ -103,7 +100,6 @@ class MessageService{
             // Delete the message from the database
             const deletedMessage = await MessageModel.findByIdAndDelete(messageId);
             if(!deletedMessage){
-                console.error('Message not found');
                 return {
                     success: false,
                     code: 404,
@@ -114,7 +110,6 @@ class MessageService{
             // Delete the message from the user's messages array
             const user = await UserModel.findOne({messages: messageId});
             if(!user){
-                console.error('User not found');
                 return {
                     success: false,
                     code: 404,
@@ -131,7 +126,7 @@ class MessageService{
                 deletedMessage,
             }
         } catch(error){
-            console.error('Error deleting message in MessageService.deleteMessageById:', error);
+            logger.error('Error deleting message by id:', error, {service: 'MessageService.deleteMessageById'});
             return {
                 success: false,
                 code: 500,

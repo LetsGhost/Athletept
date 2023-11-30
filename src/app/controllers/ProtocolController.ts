@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import protocolService from "../services/ProtocolService";
+import logger from "../../config/winstonLogger";
 
 class ProtocolController{
     async createProtocol(req: Request, res: Response) {
@@ -10,13 +11,18 @@ class ProtocolController{
 
             if (result && 'success' in result) {
                 const { success, code, message, newProtocol } = result;
+
+                if(success){
+                    logger.info('Protocol created', {service: 'ProtocolController.createProtocol'});
+                }
+
                 return res.status(code).json({ success, message, newProtocol });
             } else {
                 console.log('Unexpected response from protocolService.createProtocol');
                 throw new Error('Unexpected response from protocolService.createProtocol');
             }
         } catch (error) {
-            console.error('Error creating ProtocolExercisePlan:', error);
+            logger.error('Error creating protocol:', error, {service: 'ProtocolController.createProtocol'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -31,12 +37,12 @@ class ProtocolController{
                 const { success, code, message, protocol } = result;
                 return res.status(code).json({ success, message, protocol });
             } else {
-                console.log('Unexpected response from exercisePlanService.getExercisePlan');
-                throw new Error('Unexpected response from exercisePlanService.getExercisePlan');
+                logger.error('Unexpected response', {service: 'ProtocolController.getProtocol'});
+                return res.status(500).json({ success: false, message: "Internal Server error" });
             }
         }
         catch(error){
-            console.error('Error getting ProtocolExercisePlan:', error);
+            logger.error('Error getting protocol:', error, {service: 'ProtocolController.getProtocol'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -50,6 +56,11 @@ class ProtocolController{
 
             if (result && 'success' in result) {
                 const { success, code, message, newProtocol } = result;
+
+                if(success){
+                    logger.info('Blank protocol created', {service: 'ProtocolController.createBlankProtocol'});
+                }
+
                 return res.status(code).json({ success, message, newProtocol });
             } else {
                 console.log('Unexpected response from protocolService.createBlankProtocol');
@@ -57,7 +68,7 @@ class ProtocolController{
             }
         }
         catch(error){
-            console.error('Error creating ProtocolExercisePlan:', error);
+            logger.error('Error creating blank protocol:', error, {service: 'ProtocolController.createBlankProtocol'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -67,13 +78,17 @@ class ProtocolController{
             const { userId } = req.params;
 
             const {success, code, message, pdfBuffer, userInfo} = await protocolService.downloadProtocol(userId);
+
+            if(success){
+                logger.info('Protocol downloaded', {service: 'ProtocolController.downloadProtocol'});
+            }
             
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', `attachment; filename=${userInfo?.userInfo.name}-Protokol-${new Date()}.pdf`);
             res.status(code).send(pdfBuffer);
         }
         catch(error){
-            console.error('Error downloading ProtocolExercisePlan:', error);
+            logger.error('Error downloading protocol:', error, {service: 'ProtocolController.downloadProtocol'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }

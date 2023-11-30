@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import exercisePlanService from "../services/ExercisePlanService";
 import fs from "fs";
 import path from "path";
+import logger from "../../config/winstonLogger";
 
 class ExercisePlanController {
     async getExercisePlan(req: Request, res: Response) {
@@ -19,7 +20,7 @@ class ExercisePlanController {
                 throw new Error('Unexpected response from exercisePlanService.getExercisePlan');
             }
         } catch (error) {
-            console.log("Error while getting exercise plan in Controller: ", error);
+            logger.error('Error getting exercise plan:', error, {service: 'ExercisePlanController.getExercisePlan'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -29,7 +30,6 @@ class ExercisePlanController {
             const { userId } = req.params;
 
             if (!req.files) {
-                console.log("No files were uploaded.")
                 return res.status(400).json({ success: false, message: 'No files were uploaded.' });
             }
 
@@ -64,9 +64,13 @@ class ExercisePlanController {
                 });
             }
 
+            if(success){
+                logger.info('Exercise plan created', {service: 'ExercisePlanController.createExercisePlan'});
+            }
+
             res.status(code).json({ success, message, exercisePlan });
         } catch (error) {  
-            console.log("Error while creating exercise plan in Controller: ", error);
+            logger.error('Error creating exercise plan:', error, {service: 'ExercisePlanController.createExercisePlan'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -76,7 +80,6 @@ class ExercisePlanController {
             const { userId } = req.params;
 
             if (!req.files) {
-                console.log("No files were uploaded.")
                 return res.status(400).json({ success: false, message: 'No files were uploaded.' });
             }
 
@@ -94,6 +97,10 @@ class ExercisePlanController {
 
             const { success, code, message, exercisePlan } = await exercisePlanService.createExercisePlanOnly(userId, exerciseFilePath); 
             
+            if(success){
+                logger.info('Exercise plan created', {service: 'ExercisePlanController.createExercisePlanOnly'});
+            }
+
             // Deletes the files after the processing
             if (exerciseFilePath) {
                 fs.unlink(exerciseFilePath, (err) => {
@@ -105,7 +112,7 @@ class ExercisePlanController {
 
             res.status(code).json({ success, message, exercisePlan });
         } catch (error) {  
-            console.log("Error while creating exercise plan in Controller: ", error);
+            logger.error('Error creating exercise plan:', error, {service: 'ExercisePlanController.createExercisePlanOnly'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }

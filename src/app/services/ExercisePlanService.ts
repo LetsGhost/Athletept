@@ -363,7 +363,6 @@ class ExercisePlanService {
         try {
             const user = await UserModel.findById(userId).populate('exercisePlan');
             if(!user){
-                logger.error('User not found', {service: 'ExercisePlanService.getExercisePlan'});
                 return {
                     success: false,
                     code: 404,

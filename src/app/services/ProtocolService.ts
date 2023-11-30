@@ -6,6 +6,7 @@ import timeUtils from "../utils/timeUtils";
 import protocolUtils from "../utils/protocolUtils";
 import { WeekDisplay } from "../models/WeekDisplayModel";
 import templateUtils from "../utils/templateUtils";
+import logger from "../../config/winstonLogger";
 
 interface ProtocolExercise {
     Exercises: string;
@@ -167,7 +168,7 @@ class ProtocolService{
                 
             }
         } catch (error) {
-            console.log('Error creating ProtocolExercisePlan:', error);
+            logger.error('Error creating ProtocolExercisePlan:', error, {service: 'ProtocolService.createProtocol'});
             return {
                 success: false,
                 code: 500,
@@ -187,7 +188,7 @@ class ProtocolService{
                 }
             }
         } catch (error) {
-            console.log('Error getting ProtocolExercisePlan:', error);
+            logger.error('Error getting ProtocolExercisePlan:', error, {service: 'ProtocolService.getProtocol'});
             return {
                 success: false,
                 code: 500,
@@ -361,7 +362,7 @@ class ProtocolService{
                 
             }
         } catch(error) {
-            console.log('Error creating blank ProtocolExercisePlan:', error);
+            logger.error('Error creating ProtocolExercisePlan:', error, {service: 'ProtocolService.createBlankProtocol'});
             return {
                 success: false,
                 code: 500,
@@ -394,7 +395,7 @@ class ProtocolService{
                 userInfo
             }
         } catch(error) {
-            console.log('Error downloading ProtocolExercisePlan:', error);
+            logger.error('Error downloading ProtocolExercisePlan:', error, {service: 'ProtocolService.downloadProtocol'});
             return {
                 success: false,
                 code: 500,

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import CheckInService from '../services/CheckInService'; // May need to be changed to CheckInService because the renamed file doesn't get recognized
+import logger from '../../config/winstonLogger';
 
 class CheckInController {
     async createCheckIn(req: Request, res: Response){
@@ -8,9 +9,13 @@ class CheckInController {
 
             const {success, code, message, checkIn} = await CheckInService.createCheckIn(userId, req.body)
 
+            if(success){
+                logger.info('Check-in created', {service: 'CheckInController.createCheckIn'});
+            }
+
             res.status(code).json({success, message, checkIn})
         } catch(err){
-            console.log("Error while creating check-in in CheckInController.createCheckIn: ", err)
+            logger.error('Error creating check-in:', err, {service: 'CheckInController.createCheckIn'});
             res.status(500).json({cuccess: false, message: "Internal server error"})
         }
     }
@@ -23,7 +28,7 @@ class CheckInController {
 
             res.status(code).json({success, message, checkIn})
         } catch(err){
-            console.log("Error while getting check-in in CheckInController.getCheckIn: ", err)
+            logger.error('Error getting check-in:', err, {service: 'CheckInController.getCheckIn'});
             res.status(500).json({cuccess: false, message: "Internal server error"})
         }
     }
@@ -34,11 +39,15 @@ class CheckInController {
 
             const {success, code, message, pdfBuffer, userInfo} = await CheckInService.downloadCheckIn(userId)
 
+            if(success){
+                logger.info('Check-in downloaded', {service: 'CheckInController.downloadCheckIn'});
+            }
+
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', `attachment; filename=${userInfo?.userInfo.name}-Protokol-${new Date()}.pdf`);
             res.status(code).send(pdfBuffer);
         } catch(err){
-            console.log("Error while downloading check-in in CheckInController.downloadCheckIn: ", err)
+            logger.error('Error downloading check-in:', err, {service: 'CheckInController.downloadCheckIn'});
             res.status(500).json({cuccess: false, message: "Internal server error"})
         }
     }
@@ -51,7 +60,7 @@ class CheckInController {
 
             res.status(code).json({success, message, checkInStatus})
         } catch(err){
-            console.log("Error while getting check-in status in CheckInController.getCheckInStatus: ", err)
+            logger.error('Error getting check-in status:', err, {service: 'CheckInController.getCheckInStatus'});
             res.status(500).json({cuccess: false, message: "Internal server error"})
         }
     }

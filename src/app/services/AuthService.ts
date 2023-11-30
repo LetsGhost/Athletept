@@ -12,7 +12,6 @@ class AuthService {
             const userRole = user as User;
 
             if (!user) {
-                logger.error('User not found', {service: 'AuthService.loginUser'});
                 return {
                     success: false,
                     code: 404,
@@ -23,7 +22,6 @@ class AuthService {
             const passwordMatch = await (user as User).comparePassword(password);
 
             if (!passwordMatch) {
-                logger.error('Authentication failed', {service: 'AuthService.loginUser'});
                 return {
                     success: false,
                     code: 401,

@@ -6,7 +6,7 @@ import {TrainingDuration} from "../models/TrainingdurationModel";
 import {CheckIn} from "../models/CheckInModel";
 import templateUtils from '../utils/templateUtils';
 import { Types } from 'mongoose';
-
+import logger from '../../config/winstonLogger';
 
 interface RegistrationData {
     email: string;
@@ -26,7 +26,6 @@ class UserService{
             // Check if the email is already registered
             const existingUser = await UserModel.findOne({ email });
             if (existingUser) {
-                console.log("User already exists!");
                 return {
                     success: false,
                     code: 400,
@@ -49,7 +48,7 @@ class UserService{
                 newUser
             };
         } catch (error) {
-            console.log("Error while registration in Service: ", error);
+            logger.error('Error registering user:', error, {service: 'UserService.registerUser'});
             return {
                 success: false,
                 code: 500,
@@ -63,7 +62,6 @@ class UserService{
             const user = await UserModel.findById(userId);
 
             if(!user){
-                console.log("User not found!");
                 return {
                     success: false,
                     code: 404,
@@ -77,7 +75,7 @@ class UserService{
                 user
             }
         } catch (error) {
-            console.log("Error while getting user in Service: ", error);
+            logger.error('Error getting user by id:', error, {service: 'UserService.getUserById'});
             return {
                 success: false,
                 code: 500,
@@ -91,7 +89,6 @@ class UserService{
             const user = await UserModel.findById(userId);
 
             if(!user){
-                console.log("User not found!");
                 return {
                     success: false,
                     code: 404,
@@ -127,7 +124,7 @@ class UserService{
                 code: 200,
             }
         } catch (error) {
-            console.log("Error while deleting user in Service: ", error);
+            logger.error('Error deleting user by id:', error, {service: 'UserService.deleteUserById'});
             return {
                 success: false,
                 code: 500,
@@ -141,7 +138,6 @@ class UserService{
             const users = await UserModel.find();
 
             if(!users){
-                console.log("Users not found!");
                 return {
                     success: false,
                     code: 404,
@@ -157,7 +153,7 @@ class UserService{
                 filteredUsers
             }
         } catch (error) {
-            console.log("Error while getting all users in Service: ", error);
+            logger.error('Error getting all users:', error, {service: 'UserService.getAllUsers'});
             return {
                 success: false,
                 code: 500,
@@ -171,7 +167,6 @@ class UserService{
             const user = await UserModel.findById(userId);
 
             if(!user){
-                console.log("User not found!");
                 return {
                     success: false,
                     code: 404,
@@ -189,7 +184,7 @@ class UserService{
                 user
             }
         } catch(error){
-            console.log("Error while updating password in Service: ", error);
+            logger.error('Error updating password:', error, {service: 'UserService.updatePassword'});
             return {
                 success: false,
                 code: 500,
@@ -205,7 +200,6 @@ class UserService{
             // Check if the email is already registered
             const existingUser = await UserModel.findOne({ email });
             if (existingUser) {
-                console.log("User already exists!");
                 return {
                     success: false,
                     code: 400,
@@ -247,7 +241,7 @@ class UserService{
                 newUser
             };
         } catch(error){
-            console.log("Error while creating admin user in Service: ", error);
+            logger.error('Error creating admin user:', error, {service: 'UserService.createAdminUser'});
             return {
                 success: false,
                 code: 500,
@@ -258,26 +252,34 @@ class UserService{
     }
 
     async downloadUserData(userId: string) {
-        const user = await UserModel.findById(userId);
+        try{
+            const user = await UserModel.findById(userId);
 
-        if(!user){
-            console.log("User not found!");
+            if(!user){
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found!"
+                }
+            }
+
+            const templatePath = "userInfo.ejs";
+            const html = templateUtils.renderTemplateWithData(templatePath, user);
+            const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
+
+            return {
+                success: true,
+                code: 200,
+                pdfBuffer,
+                user
+            }
+        } catch(error){
+            logger.error('Error downloading user data:', error, {service: 'UserService.downloadUserData'});
             return {
                 success: false,
-                code: 404,
-                message: "User not found!"
+                code: 500,
+                message: "Internal Server error"
             }
-        }
-
-        const templatePath = "userInfo.ejs";
-        const html = templateUtils.renderTemplateWithData(templatePath, user);
-        const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
-
-        return {
-            success: true,
-            code: 200,
-            pdfBuffer,
-            user
         }
     }
 
@@ -286,7 +288,6 @@ class UserService{
             const admins = await UserModel.find({role: 'admin'});
 
             if(!admins){
-                console.log("Admins not found!");
                 return {
                     success: false,
                     code: 404,
@@ -300,7 +301,7 @@ class UserService{
                 admins
             }
         } catch (error) {
-            console.log("Error while getting all admins in Service: ", error);
+            logger.error('Error getting admins:', error, {service: 'UserService.getAdmins'});
             return {
                 success: false,
                 code: 500,
@@ -310,38 +311,47 @@ class UserService{
     }
 
     async updateUserInfo(userId: string, newInfo: { [key: string]: any }) {
-        // Check if newInfo is undefined or null
-        if (!newInfo) {
+        try{
+            // Check if newInfo is undefined or null
+            if (!newInfo) {
+                return {
+                    success: false,
+                    code: 400,
+                    message: "No information provided for update!"
+                };
+            }
+        
+            // Find the user by userId
+            const user = await UserModel.findById(userId);
+            if (!user) {
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found!"
+                };
+            }
+        
+            // Update the user's information
+            Object.keys(newInfo).forEach((key) => {
+                (user.userInfo as any)[key] = newInfo[key];
+            });
+        
+            // Save the updated user information
+            const updatedUser = await user.save();
+        
+            return {
+                success: true,
+                code: 200,
+                updatedUser
+            };
+        } catch(error){
+            logger.error('Error updating user info:', error, {service: 'UserService.updateUserInfo'});
             return {
                 success: false,
-                code: 400,
-                message: "No information provided for update!"
-            };
+                code: 500,
+                message: "Internal Server error"
+            }
         }
-    
-        // Find the user by userId
-        const user = await UserModel.findById(userId);
-        if (!user) {
-            return {
-                success: false,
-                code: 404,
-                message: "User not found!"
-            };
-        }
-    
-        // Update the user's information
-        Object.keys(newInfo).forEach((key) => {
-            (user.userInfo as any)[key] = newInfo[key];
-        });
-    
-        // Save the updated user information
-        const updatedUser = await user.save();
-    
-        return {
-            success: true,
-            code: 200,
-            updatedUser
-        };
     }
 }
 

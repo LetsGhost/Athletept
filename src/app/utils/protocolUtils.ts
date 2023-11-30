@@ -1,4 +1,5 @@
 import {Document, Model} from "mongoose";
+import logger from "../../config/winstonLogger";
 
 interface ProtocolExercise {
     Exercises: string;
@@ -68,7 +69,7 @@ class ProtocolUtils {
     
             return protocolExerciseDays;
         } catch (error) {
-            console.error(error);
+            logger.error('Error processing protocol request:', error, {service: 'ProtocolUtils.processRequest'});
             return [];
         }
     }

@@ -1,5 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import jwt, {JwtPayload} from "jsonwebtoken";
+import logger from "../../config/winstonLogger";
+import getClientIp from "../utils/ipUtils";
 
 interface CustomJwtPayload extends JwtPayload{
     userId: string;
@@ -8,25 +10,24 @@ interface CustomJwtPayload extends JwtPayload{
 
 class AuthenticateRole {
     authenticateRole(req: Request, res: Response, next: NextFunction) {
-        const token = req.cookies.token;
-
-        if (!token) {
-            console.log('Token not provided');
-            return res.status(401).json({ message: 'Token not provided' });
-        }
-
         try {
+            const token = req.cookies.token;
+
+            if (!token) {
+                return res.status(401).json({success: false, message: 'Unauthorized' });
+            }
+
             const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as CustomJwtPayload;
 
             if(decodedToken.userRole !== 'admin') {
-                console.log('Invalid role');
-                return res.status(401).json({ message: 'Invalid role' });
+                logger.warn('User tried to acces admin Endpoints: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
+                return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
             next();
         } catch (error) {
-            console.log('Invalid token', error);
-            return res.status(401).json({ message: 'Invalid token' });
+            logger.error('Error authenticating role:', error, {service: 'AuthenticateRole.authenticateRole'});
+            return res.status(401).json({success: false, message: 'Unauthorized' });
         }
     }
 }

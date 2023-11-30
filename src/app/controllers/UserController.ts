@@ -5,16 +5,15 @@ import exercisePlanService from "../services/ExercisePlanService";
 import fs from "fs";
 import WeightAnalyticsService from "../services/WeightAnalyticsService";
 import TrainingDurationService from "../services/TrainingdurationService";
-//import { File } from "multer";
+import logger from "../../config/winstonLogger";
+import getClientIp from "../utils/ipUtils";
 
 class UserController{
     async registerUser(req: Request, res: Response) {
         try {
             const { email, password, userInfo, trainingduration } = req.body;
-            console.log(trainingduration)
 
             if (!req.files) {
-                console.log("No files were uploaded.")
                 return res.status(400).json({ success: false, message: 'No files were uploaded.' });
             }
 
@@ -58,9 +57,13 @@ class UserController{
                 });
             }
 
+            if(success){
+                logger.info('User registered: ' + newUser?._id, {service: 'UserController.registerUser'});
+            }
+
             return res.status(code).json({ success, message, newUser });
         } catch (error) {
-            console.log("Error while registration in Controller: ", error)
+            logger.error('Error registering user:', error, {service: 'UserController.registerUser'});
             return res.status(500).json({ success: false, message: "Internal Server error" });
         }
     };
@@ -71,9 +74,13 @@ class UserController{
 
             const {success, code, message} = await userService.deleteUserById(userId);
 
+            if(success){
+                logger.info('User deleted: ' + userId, {service: 'UserController.deleteUser'});
+            }
+
             res.status(code).json({ success, message });
         } catch (error) {
-            console.log("Error while deleting user in Controller: ", error)
+            logger.error('Error deleting user:', error, {service: 'UserController.deleteUser'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -86,6 +93,7 @@ class UserController{
 
             return res.status(code).json({success, message, user});
         } catch (error) {
+            logger.error('Error getting user by id:', error, {service: 'UserController.getUserById'});
             return res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -109,7 +117,7 @@ class UserController{
 
             res.status(code).json({success, message});
         } catch (error) {
-            console.log("Error while updating password in Controller: ", error)
+            logger.error('Error updating password:', error, {service: 'UserController.updatePassword'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -120,9 +128,13 @@ class UserController{
 
             const {success, code, message} = await userService.createAdminUser({email: email as string, password: password as string});
 
+            if(success){
+                logger.info('Admin created from: ' + getClientIp(req), {service: 'UserController.createAdmin'});
+            }
+
             res.status(code).json({success, message});
         } catch (error) {
-            console.log("Error while creating admin in Controller: ", error)
+            logger.error('Error creating admin:', error, {service: 'UserController.createAdmin'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -133,11 +145,15 @@ class UserController{
 
             const {success, code, message, pdfBuffer, user} = await userService.downloadUserData(userId);
 
+            if(success){
+                logger.info('User info downloaded: ' + userId, {service: 'UserController.downLoadUserInfo'});
+            }
+
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', `attachment; filename=${user?.userInfo.name}-${new Date()}.pdf`);
             res.status(code).send(pdfBuffer);
         } catch (error) {
-            console.log("Error while downloading user info in Controller: ", error)
+            logger.error('Error downloading user info:', error, {service: 'UserController.downLoadUserInfo'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -148,7 +164,7 @@ class UserController{
 
             res.status(code).json({success, message, admins});
         } catch (error) {
-            console.log("Error while getting admins in Controller: ", error)
+            logger.error('Error getting admins:', error, {service: 'UserController.getAdmins'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
@@ -160,9 +176,13 @@ class UserController{
 
             const {success, code, message} = await userService.updateUserInfo(userId, body);
 
+            if(success){
+                logger.info('User info updated: ' + userId, {service: 'UserController.updateUserInfo'});
+            }
+
             res.status(code).json({success, message});
         } catch (error) {
-            console.log("Error while updating user info in Controller: ", error)
+            logger.error('Error updating user info:', error, {service: 'UserController.updateUserInfo'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }

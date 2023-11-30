@@ -34,6 +34,10 @@ class AuthController {
 
             const { success, code, message, userId } = await authService.getUserFromToken(token);
 
+            if(success){
+                logger.info('User retrieved from token: '+ userId, {service: 'AuthController.getUserFromToken'});
+            }
+
             logger.info('User retrieved from token', {service: 'AuthController.getUserFromToken', userId: userId});
 
             return res.status(code).json({ success, message, userId: userId });

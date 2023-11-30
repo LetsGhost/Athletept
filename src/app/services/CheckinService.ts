@@ -60,7 +60,6 @@ class CheckInService {
             const user = await UserModel.findById(userId)
             
             if(!user){
-                logger.error('User not found', {service: 'CheckInService.createCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -201,7 +200,6 @@ class CheckInService {
             const user = await UserModel.findById(userId)
 
             if(!user){
-                logger.error('User not found', {service: 'CheckInService.getCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -241,7 +239,6 @@ class CheckInService {
             const user = await UserModel.findById(userId)
 
             if(!user){
-                logger.error('User not found', {service: 'CheckInService.downloadCheckIn'});
                 return {
                     success: false,
                     code: 404,
@@ -284,7 +281,6 @@ class CheckInService {
             const user = await UserModel.findById(userId)
 
             if(!user){
-                logger.error('User not found', {service: 'CheckInService.getCheckInStatus'});
                 return {
                     success: false,
                     code: 404,

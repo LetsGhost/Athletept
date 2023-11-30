@@ -2,6 +2,7 @@ import { WeightAnalyticsModel } from "../models/WeightAnalyticsModel";
 import UserService from "./UserService";
 import UserModel  from "../models/UserModel";
 import { Schema, Model } from 'mongoose';
+import logger from "../../config/winstonLogger";
 
 interface bodyWeight {
     lastWeight: number;
@@ -69,7 +70,7 @@ class WeightAnalyticsService {
                 weightAnalytics
             }
         } catch(error){
-            console.log("Error creating weight analytics WeightAnalyticsService.createWeightAnalytics()")
+            logger.error('Error creating weight analytics:', error, {service: 'WeightAnalyticsService.createWeightAnalytics'});
             return {
                 success: false,
                 code: 500,
@@ -78,7 +79,6 @@ class WeightAnalyticsService {
         }        
     }
 
-    // TODO: Patch the analytics after every checkIn and push the new values to it
     async updateWeightAnalytics(userId: string, weight: number, oldWeight: number) {
         try {
             // Find the user and update the weight analytics
@@ -111,7 +111,7 @@ class WeightAnalyticsService {
                 message: "User not found"
             }
         } catch(error){
-            console.log("Error updating weight analytics WeightAnalyticsService.updateWeightAnalytics()")
+            logger.error('Error updating weight analytics:', error, {service: 'WeightAnalyticsService.updateWeightAnalytics'});
             return {
                 success: false,
                 code: 500,
@@ -142,7 +142,7 @@ class WeightAnalyticsService {
                 message: "User not found"
             }
         } catch(error){
-            console.log("Error getting weight analytics WeightAnalyticsService.getWeightAnalytics()")
+            logger.error('Error getting weight analytics:', error, {service: 'WeightAnalyticsService.getWeightAnalytics'});
             return {
                 success: false,
                 code: 500,
