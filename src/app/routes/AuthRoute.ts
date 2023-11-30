@@ -4,7 +4,6 @@ import express from 'express';
 import auhtController from '../controllers/AuthController';
 
 import limiter from '../middleware/Limiter';
-import { performanceLogger } from '../middleware/Performance';
 
 // Import routes
 const router = express.Router();

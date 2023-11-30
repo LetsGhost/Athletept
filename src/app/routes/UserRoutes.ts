@@ -3,7 +3,6 @@ import express from 'express';
 // Import Middlewares
 import authenticateToken from "../middleware/AuthenticateToken";
 import limiter from '../middleware/Limiter';
-import { performanceLogger } from '../middleware/Performance';
 
 // Import Controllers
 import exercisePlanController from "../controllers/ExercisePlanController";

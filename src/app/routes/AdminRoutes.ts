@@ -8,7 +8,6 @@ import { upload } from '../../config/multerConfig';
 import authenticateRole from "../middleware/AuthenticateRole";
 import authenticateToken from "../middleware/AuthenticateToken";
 import limiter from '../middleware/Limiter';
-import { performanceLogger } from '../middleware/Performance';
 
 // Import Controllers
 import userController from "../controllers/UserController";
