@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import logger from '../../config/winstonLogger';
-import { redisClient } from '../../config/redis'; // import the Redis client from server.ts
+import logger from '../../config/winstonLogger.js';
+import { redisClient } from '../../config/redis.js'; // import the Redis client from server.ts
 
 export async function logResourceUsage(): Promise<void> {
   try{

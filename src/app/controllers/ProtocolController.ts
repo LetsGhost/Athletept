@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import protocolService from "../services/ProtocolService";
-import logger from "../../config/winstonLogger";
+import protocolService from "../services/ProtocolService.js";
+import logger from "../../config/winstonLogger.js";
 
 class ProtocolController{
     async createProtocol(req: Request, res: Response) {

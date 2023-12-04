@@ -1,7 +1,7 @@
-import {WeekDisplay} from '../models/WeekDisplayModel';
-import UserModel from '../models/UserModel';
-import timeUtils from '../utils/timeUtils';
-import logger from '../../config/winstonLogger';
+import {WeekDisplay} from '../models/WeekDisplayModel.js';
+import UserModel from '../models/UserModel.js';
+import timeUtils from '../utils/timeUtils.js';
+import logger from '../../config/winstonLogger.js';
 
 interface TrainingWeekDisplayModel extends Document {
     trainingDone: number[];

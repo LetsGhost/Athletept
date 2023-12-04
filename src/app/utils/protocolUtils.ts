@@ -1,5 +1,5 @@
 import {Document, Model} from "mongoose";
-import logger from "../../config/winstonLogger";
+import logger from "../../config/winstonLogger.js";
 
 interface ProtocolExercise {
     Exercises: string;

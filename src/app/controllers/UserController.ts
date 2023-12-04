@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import userService from "../services/UserService";
+import userService from "../services/UserService.js";
 import path from "path";
-import exercisePlanService from "../services/ExercisePlanService";
+import exercisePlanService from "../services/ExercisePlanService.js";
 import fs from "fs";
-import WeightAnalyticsService from "../services/WeightAnalyticsService";
-import TrainingDurationService from "../services/TrainingdurationService";
-import logger from "../../config/winstonLogger";
-import getClientIp from "../utils/ipUtils";
+import WeightAnalyticsService from "../services/WeightAnalyticsService.js";
+import TrainingDurationService from "../services/TrainingdurationService.js";
+import logger from "../../config/winstonLogger.js";
+import getClientIp from "../utils/ipUtils.js";
 
 class UserController{
     async registerUser(req: Request, res: Response) {

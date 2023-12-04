@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
-import UserModel, {User} from '../models/UserModel';
+import UserModel, {User} from '../models/UserModel.js';
 import {Document} from 'mongoose';
 import * as process from "process";
-import logger from '../../config/winstonLogger';
+import logger from '../../config/winstonLogger.js';
 
 
 class AuthService {

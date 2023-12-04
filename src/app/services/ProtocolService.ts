@@ -1,12 +1,12 @@
-import UserModel from "../models/UserModel";
-import {ProtocolExercisePlan} from "../models/ProtocolModel";
+import UserModel from "../models/UserModel.js";
+import {ProtocolExercisePlan} from "../models/ProtocolModel.js";
 import {Document, Model} from "mongoose";
-import {ExercisePlan} from "../models/ExercisePlanModel";
-import timeUtils from "../utils/timeUtils";
-import protocolUtils from "../utils/protocolUtils";
-import { WeekDisplay } from "../models/WeekDisplayModel";
-import templateUtils from "../utils/templateUtils";
-import logger from "../../config/winstonLogger";
+import {ExercisePlan} from "../models/ExercisePlanModel.js";
+import timeUtils from "../utils/timeUtils.js";
+import protocolUtils from "../utils/protocolUtils.js";
+import { WeekDisplay } from "../models/WeekDisplayModel.js";
+import templateUtils from "../utils/templateUtils.js";
+import logger from "../../config/winstonLogger.js";
 
 interface ProtocolExercise {
     Exercises: string;

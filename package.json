@@ -6,7 +6,7 @@
   "main": "server.ts",
   "scripts": {
     "watch": "tsc -w",
-    "start": "node --experimental-modules --es-module-specifier-resolution=node dist/server.js",
+    "start": "node dist/server.js",
     "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./src/server.ts",
     "copy-files": "ncp src/public dist/public",
     "build": "tsc && npm run copy-files",

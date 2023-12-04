@@ -1,6 +1,6 @@
 // utils.ts
 import { Request } from 'express';
-import logger from '../../config/winstonLogger';
+import logger from '../../config/winstonLogger.js';
 
 export function getClientIp(req: Request): string | undefined {
   try{

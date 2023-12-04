@@ -1,12 +1,12 @@
-import UserModel from '../models/UserModel';
-import {ExercisePlan} from "../models/ExercisePlanModel";
-import {MessageModel} from "../models/MessagModel";
-import {ProtocolExercisePlan} from "../models/ProtocolModel";
-import {TrainingDuration} from "../models/TrainingdurationModel";
-import {CheckIn} from "../models/CheckInModel";
-import templateUtils from '../utils/templateUtils';
+import UserModel from '../models/UserModel.js';
+import {ExercisePlan} from "../models/ExercisePlanModel.js";
+import {MessageModel} from "../models/MessagModel.js";
+import {ProtocolExercisePlan} from "../models/ProtocolModel.js";
+import {TrainingDuration} from "../models/TrainingdurationModel.js";
+import {CheckIn} from "../models/CheckInModel.js";
+import templateUtils from '../utils/templateUtils.js';
 import { Types } from 'mongoose';
-import logger from '../../config/winstonLogger';
+import logger from '../../config/winstonLogger.js';
 
 interface RegistrationData {
     email: string;

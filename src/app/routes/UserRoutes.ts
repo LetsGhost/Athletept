@@ -1,18 +1,17 @@
 import express from 'express';
 
 // Import Middlewares
-import authenticateToken from "../middleware/AuthenticateToken";
-import limiter from '../middleware/Limiter';
+import authenticateToken from "../middleware/AuthenticateToken.js";
 
 // Import Controllers
-import exercisePlanController from "../controllers/ExercisePlanController";
-import userController from "../controllers/UserController";
-import messageController from "../controllers/MessageController";
-import protocolController from "../controllers/ProtocolController";
-import checkInController from "../controllers/CheckInController";
-import weekDisplayController from '../controllers/WeekDisplayController';
-import weightAnalyticsController from '../controllers/WeightAnalyticsController';
-import trainingDurationController from '../controllers/TrainingDurationController';
+import exercisePlanController from "../controllers/ExercisePlanController.js";
+import userController from "../controllers/UserController.js";
+import messageController from "../controllers/MessageController.js";
+import protocolController from "../controllers/ProtocolController.js";
+import checkInController from "../controllers/CheckInController.js";
+import weekDisplayController from '../controllers/WeekDisplayController.js';
+import weightAnalyticsController from '../controllers/WeightAnalyticsController.js';
+import trainingDurationController from '../controllers/TrainingDurationController.js';
 
 // Import routes
 const router = express.Router();

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import messageService from '../services/MessageService';
-import logger from '../../config/winstonLogger';
+import messageService from '../services/MessageService.js';
+import logger from '../../config/winstonLogger.js';
 
 class MessageController {
     async createMessage(req: Request, res: Response)  {

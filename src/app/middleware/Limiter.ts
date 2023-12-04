@@ -1,7 +1,7 @@
 import rateLimit from 'express-rate-limit';
-import logger from '../../config/winstonLogger';
+import logger from '../../config/winstonLogger.js';
 import { Request, Response, NextFunction } from 'express';
-import getClientIp from '../utils/ipUtils';
+import getClientIp from '../utils/ipUtils.js';
 
 // Define the rate limit rule
 const limiter = rateLimit({

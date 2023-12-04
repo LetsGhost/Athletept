@@ -1,10 +1,10 @@
-import { CheckIn } from "../models/CheckInModel"
-import UserModel from "../models/UserModel";
+import { CheckIn } from "../models/CheckInModel.js"
+import UserModel from "../models/UserModel.js";
 import { Document, Model } from 'mongoose';
-import WeightAnalyticsService from "./WeightAnalyticsService";
-import timeUtils from "../utils/timeUtils";
-import logger from "../../config/winstonLogger";
-import templateUtils from "../utils/templateUtils";
+import WeightAnalyticsService from "./WeightAnalyticsService.js";
+import timeUtils from "../utils/timeUtils.js";
+import logger from "../../config/winstonLogger.js";
+import templateUtils from "../utils/templateUtils.js";
 
 interface currentGrowth {
     answer: string;

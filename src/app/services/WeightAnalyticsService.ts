@@ -1,8 +1,8 @@
-import { WeightAnalyticsModel } from "../models/WeightAnalyticsModel";
-import UserService from "./UserService";
-import UserModel  from "../models/UserModel";
+import { WeightAnalyticsModel } from "../models/WeightAnalyticsModel.js";
+import UserService from "./UserService.js";
+import UserModel  from "../models/UserModel.js";
 import { Schema, Model } from 'mongoose';
-import logger from "../../config/winstonLogger";
+import logger from "../../config/winstonLogger.js";
 
 interface bodyWeight {
     lastWeight: number;

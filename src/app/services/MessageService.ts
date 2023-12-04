@@ -1,7 +1,7 @@
-import {MessageModel} from "../models/MessagModel";
-import UserModel from "../models/UserModel";
+import {MessageModel} from "../models/MessagModel.js";
+import UserModel from "../models/UserModel.js";
 import mongoose from "mongoose";
-import logger from "../../config/winstonLogger";
+import logger from "../../config/winstonLogger.js";
 
 class MessageService{
     async createMessage( message: string, userId: string) {

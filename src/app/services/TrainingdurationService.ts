@@ -1,6 +1,6 @@
-import {TrainingDuration} from '../models/TrainingdurationModel';
-import UserModel from '../models/UserModel';
-import logger from '../../config/winstonLogger';
+import {TrainingDuration} from '../models/TrainingdurationModel.js';
+import UserModel from '../models/UserModel.js';
+import logger from '../../config/winstonLogger.js';
 
 interface Trainingduration {
     coachingStartDate: string,

@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
-import exercisePlanService from "../services/ExercisePlanService";
+import exercisePlanService from "../services/ExercisePlanService.js";
 import fs from "fs";
 import path from "path";
-import logger from "../../config/winstonLogger";
+import logger from "../../config/winstonLogger.js";
 
 class ExercisePlanController {
     async getExercisePlan(req: Request, res: Response) {

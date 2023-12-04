@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import logger from '../../config/winstonLogger';
+import logger from '../../config/winstonLogger.js';
 
 class AuthenticateToken{
     async authenticateToken(req: Request, res: Response, next: NextFunction) {

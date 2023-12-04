@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import CheckInService from '../services/CheckInService'; // May need to be changed to CheckInService because the renamed file doesn't get recognized
-import logger from '../../config/winstonLogger';
+import CheckInService from '../services/CheckInService.js'; // May need to be changed to CheckInService because the renamed file doesn't get recognized
+import logger from '../../config/winstonLogger.js';
 
 class CheckInController {
     async createCheckIn(req: Request, res: Response){

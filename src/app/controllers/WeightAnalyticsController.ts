@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import WeightAnalyticsService from '../services/WeightAnalyticsService';
-import logger from '../../config/winstonLogger';
+import WeightAnalyticsService from '../services/WeightAnalyticsService.js';
+import logger from '../../config/winstonLogger.js';
 
 class WeightAnalyticsController {
     async createWeightAnalytics(req: Request, res: Response) {

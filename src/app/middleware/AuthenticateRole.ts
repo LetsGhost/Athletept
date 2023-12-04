@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import jwt, {JwtPayload} from "jsonwebtoken";
-import logger from "../../config/winstonLogger";
-import getClientIp from "../utils/ipUtils";
+import logger from "../../config/winstonLogger.js";
+import getClientIp from "../utils/ipUtils.js";
 
 interface CustomJwtPayload extends JwtPayload{
     userId: string;

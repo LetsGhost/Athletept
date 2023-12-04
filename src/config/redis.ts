@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import logger from './winstonLogger';
+import logger from './winstonLogger.js';
 
 let redisClient: Redis | null = null;
 

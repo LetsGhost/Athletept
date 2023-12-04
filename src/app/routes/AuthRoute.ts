@@ -1,9 +1,7 @@
 import express from 'express';
 
 // Import Middlewares
-import auhtController from '../controllers/AuthController';
-
-import limiter from '../middleware/Limiter';
+import auhtController from '../controllers/AuthController.js';
 
 // Import routes
 const router = express.Router();

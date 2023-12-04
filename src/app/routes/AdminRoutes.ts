@@ -1,23 +1,22 @@
 import express from 'express';
 
 // Multer config
-import { upload } from '../../config/multerConfig';
+import { upload } from '../../config/multerConfig.js';
 
 // Import Middlewares
 // Disable authentication for now
-import authenticateRole from "../middleware/AuthenticateRole";
-import authenticateToken from "../middleware/AuthenticateToken";
-import limiter from '../middleware/Limiter';
+import authenticateRole from "../middleware/AuthenticateRole.js";
+import authenticateToken from "../middleware/AuthenticateToken.js";
 
 // Import Controllers
-import userController from "../controllers/UserController";
-import messageController from "../controllers/MessageController";
-import protocolController from "../controllers/ProtocolController";
-import exercisePlanController from "../controllers/ExercisePlanController";
-import weekDisplayController from '../controllers/WeekDisplayController';
-import checkInController from '../controllers/CheckInController';
-import WeightAnalyticsController from '../controllers/WeightAnalyticsController';
-import trainingDurationController from '../controllers/TrainingDurationController';
+import userController from "../controllers/UserController.js";
+import messageController from "../controllers/MessageController.js";
+import protocolController from "../controllers/ProtocolController.js";
+import exercisePlanController from "../controllers/ExercisePlanController.js";
+import weekDisplayController from '../controllers/WeekDisplayController.js';
+import checkInController from '../controllers/CheckInController.js';
+import WeightAnalyticsController from '../controllers/WeightAnalyticsController.js';
+import trainingDurationController from '../controllers/TrainingDurationController.js';
 
 // Import routes
 const router = express.Router();

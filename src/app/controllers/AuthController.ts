@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import authService from '../services/AuthService';
-import logger from '../../config/winstonLogger';
-import {getClientIp} from '../utils/ipUtils';
+import authService from '../services/AuthService.js';
+import logger from '../../config/winstonLogger.js';
+import {getClientIp} from '../utils/ipUtils.js';
 
 class AuthController {
     async login(req: Request, res: Response) {

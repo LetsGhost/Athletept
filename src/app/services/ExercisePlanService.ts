@@ -1,9 +1,9 @@
 import ExcelJS from "exceljs";
 import { Workbook, Worksheet, Row } from 'exceljs';
-import UserModel from "../models/UserModel";
-import {ExercisePlan} from "../models/ExercisePlanModel";
-import timeUtils from "../utils/timeUtils";
-import logger from "../../config/winstonLogger";
+import UserModel from "../models/UserModel.js";
+import {ExercisePlan} from "../models/ExercisePlanModel.js";
+import timeUtils from "../utils/timeUtils.js";
+import logger from "../../config/winstonLogger.js";
 
 interface Exercise {
     Exercises: string;

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import WeekDisplayService from '../services/WeekDisplayService';
-import logger from '../../config/winstonLogger';
+import WeekDisplayService from '../services/WeekDisplayService.js';
+import logger from '../../config/winstonLogger.js';
 
 class WeekDisplayController {
     async createWeekDisplay(req: Request, res: Response) {

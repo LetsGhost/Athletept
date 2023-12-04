@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import trainingDurationService from "../services/TrainingdurationService";
-import logger from "../../config/winstonLogger";
+import trainingDurationService from "../services/TrainingdurationService.js";
+import logger from "../../config/winstonLogger.js";
 
 class TrainingDurationController{
     async createTrainingDuration(req: Request, res: Response){
