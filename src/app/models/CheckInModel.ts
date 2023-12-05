@@ -2,7 +2,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 
 interface currentGrowth {
     answer: string;
-    boolean: boolean;
+    answer2: string;
 }
 
 interface problems{
@@ -41,7 +41,7 @@ interface CheckInModel extends Model<checkInDocument> {}
 
 const currentGrowthSchema = new Schema<currentGrowth>({
     answer: String,
-    boolean: Boolean,
+    answer2: String,
 });
 
 const problemsSchema = new Schema<problems>({
