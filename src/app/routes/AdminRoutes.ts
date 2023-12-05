@@ -22,7 +22,7 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 const router = express.Router();
 
 // User
-router.post('/register', upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), userController.registerUser); // Is Documented
+router.post('/register', userController.registerUser); // Is Documented
 router.get("/getUser/:userId", userController.getUserById) // Is Documented
 router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented

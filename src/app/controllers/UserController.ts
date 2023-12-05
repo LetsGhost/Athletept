@@ -12,50 +12,13 @@ class UserController{
     async registerUser(req: Request, res: Response) {
         try {
             const { email, password, userInfo, trainingduration } = req.body;
-
-            if (!req.files) {
-                return res.status(400).json({ success: false, message: 'No files were uploaded.' });
-            }
-
-            // I don´t know why this has to be here, but it works
-            const uploadedFilePath = path.join();
-
-            // Getting the files
-            const excelFiles = req.files as Express.Multer.File[]
-
-            // That`s very stupid I know but it works
-            const toString = JSON.stringify(excelFiles)
-            const toJSON = JSON.parse(toString)
-
-            const exerciseFilePath = toJSON["exerciseFile"][0].path
-            const warmupFilePath = toJSON["warmupFile"][0].path
-
+            
             // Register the user
             const {success, code, message, newUser} = await userService.registerUser({ email: email as string, password: password as string }, userInfo as object);
-
-            // Create exercise plan from Excel file
-            await exercisePlanService.createExercisePlanFromExcel(newUser?._id, exerciseFilePath, warmupFilePath);
 
             await WeightAnalyticsService.createWeightAnalytics(newUser?._id);
 
             await TrainingDurationService.createTrainingduration(newUser?._id, trainingduration);
-
-            // Deletes the files after the processing
-            if (exerciseFilePath) {
-                fs.unlink(exerciseFilePath, (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
-            }
-
-            if (warmupFilePath) {
-                fs.unlink(warmupFilePath, (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
-            }
 
             if(success){
                 logger.info('User registered: ' + newUser?._id, {service: 'UserController.registerUser'});
