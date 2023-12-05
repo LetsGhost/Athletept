@@ -1,6 +1,6 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
-import * as puppeteer from 'puppeteer';
+import * as puppeteer from 'puppeteer-core';
 import logger from '../../config/winstonLogger.js';
 
 class TemplateUtils {
@@ -18,7 +18,7 @@ class TemplateUtils {
         try{
             const startTime = new Date().getTime();
         
-            const browser = await puppeteer.launch({ headless: "new", executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+            const browser = await puppeteer.launch({ headless: "new", executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             await page.setContent(html);
             const pdfBuffer = await page.pdf({ format: 'A4' });
