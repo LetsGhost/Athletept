@@ -256,7 +256,7 @@ class CheckInService {
                 }
             }
 
-            const templatePath = "CheckIn.ejs";
+            const templatePath = "checkIn.ejs";
             const html = templateUtils.renderTemplateWithData(templatePath, { checkIn: userCheckIn?.checkIn });
             const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
 
