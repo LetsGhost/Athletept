@@ -1,4 +1,6 @@
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Import Middlewares
 import authenticateToken from "../middleware/AuthenticateToken.js";
@@ -15,6 +17,10 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 
 // Import routes
 const router = express.Router();
+
+if(process.env.ENV === "production"){
+    router.use(authenticateToken.authenticateToken);
+}
 
 // Exercise Plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented

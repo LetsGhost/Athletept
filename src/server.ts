@@ -26,7 +26,6 @@ if(process.env.ENV === "production"){
     server.use(limiter);
 }
 
-
 server.use(bodyParser.json());
 server.use(cookieParser());
 server.use(cors());

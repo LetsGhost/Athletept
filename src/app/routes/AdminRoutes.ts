@@ -1,4 +1,6 @@
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Multer config
 import { upload } from '../../config/multerConfig.js';
@@ -20,6 +22,11 @@ import trainingDurationController from '../controllers/TrainingDurationControlle
 
 // Import routes
 const router = express.Router();
+
+if(process.env.ENV === "production"){
+    router.use(authenticateToken.authenticateToken);
+    router.use(authenticateRole.authenticateRole);
+}
 
 // User
 router.post('/register', userController.registerUser); // Is Documented
