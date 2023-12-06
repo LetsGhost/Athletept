@@ -25,4 +25,16 @@ export async function logResourceUsage(): Promise<void> {
   }
 }
 
+export async function logRequestMethod(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const method = req.method;
+
+  if (redisClient) {
+    // Increment the count for the method in the Redis hash
+    await redisClient.hincrby('methodCounters', method, 1);
+    console.log('methodCounters', method);
+  }
+
+  next();
+}
+
 

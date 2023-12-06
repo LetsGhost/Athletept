@@ -10,7 +10,7 @@ dotenv.config();
 import connectToDatabase from './config/db.js';
 import { connectToRedis } from './config/redis.js';
 
-import { logResourceUsage } from './app/middleware/Performance.js';
+import { logResourceUsage, logRequestMethod } from './app/middleware/Performance.js';
 
 import userRoutes from "./app/routes/UserRoutes.js";
 import adminRoutes from "./app/routes/AdminRoutes.js";
@@ -47,6 +47,7 @@ connectToRedis();
 
 setInterval(logResourceUsage, 60 * 60 * 1000);
 logResourceUsage();
+server.use(logRequestMethod);
 
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
