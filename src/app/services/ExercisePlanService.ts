@@ -25,8 +25,6 @@ interface Warmup {
     };
     warmupMaterials: {
         Materials: string;
-        weight: number;
-        repetitions: number;
     };
 }
 
@@ -94,8 +92,6 @@ class ExercisePlanService {
                                 },
                                 warmupMaterials: {
                                     Materials: warmupRow.getCell(3).value as string,
-                                    weight: warmupRow.getCell(6).value as number,
-                                    repetitions: warmupRow.getCell(7).value as number,
                                 },
                             });
                         }
@@ -273,91 +269,78 @@ class ExercisePlanService {
         }
     }
 
-    // TODO: Needs to be fixed, pls use a completly new approache 
-    /*
-    async createWarmupSingle(userId: string,  warmupFile: any) {
-        // Find the user by ID and populate the exercisePlan
-        const user = await UserModel.findById(userId).populate('exercisePlan') as unknown as { exercisePlan: ExerciseDay[] };
-
-        // Check if the user and the exercisePlan exist
-        if (!user || !user.exercisePlan) {
-            console.log("User or exercise plan not found!");
-            return {
-                success: false,
-                code: 404,
-                message: "User or exercise plan not found!"
-            }
-        }
-
-        console.log(user?.exercisePlan)
-
-        const workbook = new ExcelJS.Workbook();
-        const warmupWorkbook = new ExcelJS.Workbook();
-        await warmupWorkbook.xlsx.readFile(warmupFile);
-
-        const worksheet = workbook.getWorksheet(1);
-        const warmupWorksheet = warmupWorkbook.getWorksheet(1);
-
-        let currentType: string | null = null;
-        let warmup: Warmup[] = [];
-
-        warmupWorksheet?.eachRow((warmupRow: Row) => {
-            if (warmupRow.getCell(1).value === 'Nummer') return; // Skip the first row
-
-            const warmupType = warmupRow.getCell(1).value as string;
-
-            if (warmupType !== currentType) {
-                if (warmup.length > 0) {
-                    // Push the current warmup to the corresponding day of the exercise plan
-                    const dayIndex = (user.exercisePlan as ExerciseDay[]).findIndex(day => day.type === currentType);
-                    if (dayIndex !== -1) {
-                        (user.exercisePlan as ExerciseDay[])[dayIndex].warmup = warmup;
-                    }
+    // TODO: Needs to be fixed, pls use a completely new approach 
+    async createWarmupSingle(userId: string, warmupFile: any) {
+        try {
+            const user = await UserModel.findById(userId).populate('exercisePlan');
+            
+            if (!user) {
+                return {
+                    success: false,
+                    code: 404,
+                    message: "User not found!"
                 }
-
-                // Start a new warmup with the current row
-                warmup = [];
-                currentType = warmupType;
             }
 
-            warmup.push({
-                warmupExercise: {
-                    Exercises: warmupRow.getCell(2).value as string,
-                },
-                warmupMaterials: {
-                    Materials: warmupRow.getCell(3).value as string,
-                },
-            });
-        });
+            if (user.exercisePlan) {
+                // Process the warmup Excel file here
+                // Set the warmup data into the corresponding day of the exercise plan
+    
+                // Example code to process the warmup Excel file
+                const workbook = new ExcelJS.Workbook();
+                await workbook.xlsx.readFile(warmupFile);
+                const worksheet = workbook.getWorksheet(1);
+    
+                // Iterate over the rows of the worksheet and extract the warmup data
+                worksheet?.eachRow((row: Row, rowNumber: number) => {
+                    // Extract the warmup data from the row and set it into the corresponding day of the exercise plan
+                    const dayNumber = row.getCell(1).value;
+                    const warmupExercise = row.getCell(2).value;
+                    const warmupMaterial = row.getCell(3).value;
+                    const warmupWeight = row.getCell(4).value;
+                    const repetitions = row.getCell(5).value;
+    
+                    // Find the corresponding day in the exercise plan
+                    const exerciseDay = (user.exercisePlan as any).exerciseDays.find((day: ExerciseDay) => day.dayNumber === dayNumber);
+                    if (exerciseDay) {
+                        // Set the warmup data into the exercise day
+                        exerciseDay.warmup.push({
+                            warmupExercise: {
+                                Exercises: warmupExercise,
+                                weight: warmupWeight,
+                                repetitions: repetitions
+                            },
+                            warmupMaterials: {
+                                Materials: warmupMaterial, // Set the materials value here
+                            }
+                        });
+                    }
+                    console.log(exerciseDay)
+                });
 
-        // Push the last warmup to the corresponding day of the exercise plan
-        const populatedUser = await UserModel.findById(userId).populate('exercisePlan');
-
-        if (!populatedUser || !Array.isArray(populatedUser.exercisePlan)) {
-            console.log("User or exercise plan not found or exercise plan is not an array!");
+                await (user.exercisePlan as any).save();
+    
+                return {
+                    success: true,
+                    code: 200,
+                    exercisePlan: user.exercisePlan
+                }
+            } else {
+                return {
+                    success: false,
+                    code: 404,
+                    message: "Exercise plan not found for the user"
+                }
+            }
+        } catch (error) {
+            logger.error(`Error processing the Excel file: ${error}`, { service: 'ExercisePlanService.createWarmupSingle' });
             return {
                 success: false,
-                code: 404,
-                message: "User or exercise plan not found or exercise plan is not an array!"
+                code: 500,
+                message: "Internal Server error"
             }
-        }
-
-        // Use populatedUser instead of user in the rest of your code
-        // Use populatedUser instead of user in the rest of your code
-        const dayIndex = populatedUser.exerciseDays.findIndex(day => day.type === currentType);
-        if (dayIndex !== -1) {
-            populatedUser.exerciseDays[dayIndex].warmup = warmup;
-        }
-
-        console.log(populatedUser?.exerciseDays)
-
-        return {
-            success: true,
-            code: 200,
-            exercisePlan: user.exercisePlan
         }
     }
-    */
 
     async getExercisePlan(userId: string) {
         try {
