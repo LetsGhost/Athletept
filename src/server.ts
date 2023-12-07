@@ -21,6 +21,8 @@ import logger from './config/winstonLogger.js';
 
 const server = express();
 
+server.set('trust proxy', true);
+
 // Activate for production
 if(process.env.ENV === "production"){
     server.use(limiter);
@@ -30,7 +32,12 @@ server.use(bodyParser.json());
 server.use(cookieParser());
 server.use(cors());
 server.use(helmet({
-    contentSecurityPolicy: false, // set to false if you have issues with your app
+    contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          // Define your CSP policy here
+        },
+      },
     dnsPrefetchControl: false, // controls browser DNS prefetching
     frameguard: { action: 'deny' }, // prevent clickjacking
     hidePoweredBy: true, // hide X-Powered-By header
