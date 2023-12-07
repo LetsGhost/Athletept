@@ -315,7 +315,6 @@ class ExercisePlanService {
                             }
                         });
                     }
-                    console.log(exerciseDay)
                 });
 
                 await (user.exercisePlan as any).save();

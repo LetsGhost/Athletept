@@ -183,7 +183,19 @@ class ExercisePlanController {
             service: "ExercisePlanController.createExercisePlanOnly",
           });
         }
-  
+        
+        fs.unlink(warmupFilePath, (err) => {
+          if (err) {
+            logger.error("Error deleting file:", err, {
+              service: "ExercisePlanController.createWarmupOnly",
+            });
+          } else {
+            logger.info("File deleted successfully", {
+              service: "ExercisePlanController.createWarmupOnly",
+            });
+          }
+        });
+
         res.status(code).json({ success, message, exercisePlan });
     } catch (error) {
       logger.error("Error creating exercise plan:", error, {
