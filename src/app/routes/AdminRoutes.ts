@@ -40,7 +40,7 @@ router.patch("/updateUserInfo/:userId", userController.updateUserInfo)
 
 // Exercise plan
 router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
-router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan)
+router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan) // Is Documented
 router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}]), exercisePlanController.createExercisePlanOnly) // Is Documented
 router.post("/createWarmupOnly/:userId", upload.fields([{name: "warmupFile", maxCount: 1}]), exercisePlanController.createWarmupOnly)
 
@@ -64,9 +64,5 @@ router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn) // Is 
 
 // TrainingDuration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) // Is Documented
-
-// Test will be deletet for production
-router.post("/analytic/:userId", WeightAnalyticsController.createWeightAnalytics) 
-router.post("/training/:userId", trainingDurationController.createTrainingDuration)
 
 export default router;
