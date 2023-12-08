@@ -40,27 +40,27 @@ interface checkInDocument extends Document {
 interface CheckInModel extends Model<checkInDocument> {}
 
 const currentGrowthSchema = new Schema<currentGrowth>({
-    answer: String,
-    answer2: String,
+    answer: {type: String, required: true},
+    answer2: {type: String, required: true},
 });
 
 const problemsSchema = new Schema<problems>({
-    answer: String,
-    boolean: Boolean,
+    answer: {type: String, required: true},
+    boolean: {type: Boolean, required: true},
 
 })
 
 const regenerationSchema = new Schema<regeneration>({
-    answer: String,
+    answer: {type: String, required: true},
 })
 
 const changeSchema = new Schema<change>({
-    answer: String,
-    boolean: Boolean,
+    answer: {type: String, required: true},
+    boolean: {type: Boolean, required: true},
 })
 
 const weightSchema = new Schema<weight>({
-    weight: Number,
+    weight: {type: Number, required: true},
 })
 
 const checkInSchema = new Schema<checkIn>({
