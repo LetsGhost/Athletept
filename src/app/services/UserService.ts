@@ -174,6 +174,16 @@ class UserService{
                 }
             }
 
+            const passwordLength: number = Number(process.env.PASSWORD_LENGTH);
+
+            if(newPassword.length < passwordLength){
+                return {
+                    success: false,
+                    code: 400,
+                    message: "Password must be at least 6 characters long!"
+                }	
+            }
+
             // Update the password
             user.password = newPassword;
             await user.save();
