@@ -3,6 +3,7 @@ import UserModel, {User} from '../models/UserModel.js';
 import {Document} from 'mongoose';
 import * as process from "process";
 import logger from '../../config/winstonLogger.js';
+import getClientIp from '../utils/ipUtils.js';
 
 
 class AuthService {

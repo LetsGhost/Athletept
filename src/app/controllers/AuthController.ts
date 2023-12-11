@@ -20,6 +20,18 @@ class AuthController {
             if(success){
                 logger.info('User logged in: ' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
             }
+            else{
+                switch(code)
+                {
+                    case 404:
+                        logger.warn('Invalid email: ' + getClientIp(req) , {service: 'AuthController.login'});
+                        break;
+                    case 401:
+                        logger.warn('Invalid password: ' + getClientIp(req), {service: 'AuthController.login'});
+                        break;
+
+                }
+            }
 
             return res.status(code).json({ success, message, userId: userId, role: role });
         } catch (error) {
