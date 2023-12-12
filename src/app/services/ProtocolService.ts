@@ -65,6 +65,7 @@ class ProtocolService{
                     if (exerciseDay) {
                         exerciseDay.trainingDone = true;
                         await exercisePlan?.save();
+                        console.log("exercisePlan saved");
                     }
 
                     // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
@@ -139,6 +140,7 @@ class ProtocolService{
             if (exerciseDay) {
                 exerciseDay.trainingDone = true;
                 await exercisePlan?.save();
+                console.log(await exerciseDay.trainingDone);
             }
 
             if (user) {

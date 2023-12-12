@@ -17,7 +17,7 @@ class TemplateUtils {
     async generatePdfFromTemplate(html: string): Promise<Buffer> {
         try{
             const startTime = new Date().getTime();
-        
+            
             const browser = await puppeteer.launch({ headless: "new", executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             await page.setContent(html);
