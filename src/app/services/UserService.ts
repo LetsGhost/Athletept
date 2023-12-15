@@ -125,6 +125,16 @@ class UserService{
             if(user?.weightAnalytics){
                 await WeightAnalyticsModel.findByIdAndDelete(user.weightAnalytics);
             }
+            if(user?.oldCheckIn){
+                for(const checkInId of user.oldCheckIn){
+                    await CheckIn.findByIdAndDelete(checkInId);
+                }
+            }
+            if(user?.oldProtocol){
+                for(const protocolId of user.oldProtocol){
+                    await ProtocolExercisePlan.findByIdAndDelete(protocolId);
+                }
+            }
             if (user){
                 await UserModel.findByIdAndDelete(userId);
             }
