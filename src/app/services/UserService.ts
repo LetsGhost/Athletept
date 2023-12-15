@@ -1,12 +1,15 @@
-import UserModel from '../models/UserModel.js';
+import templateUtils from '../utils/templateUtils.js';
+import { Types } from 'mongoose';
+import logger from '../../config/winstonLogger.js';
+
 import {ExercisePlan} from "../models/ExercisePlanModel.js";
 import {MessageModel} from "../models/MessagModel.js";
 import {ProtocolExercisePlan} from "../models/ProtocolModel.js";
 import {TrainingDuration} from "../models/TrainingdurationModel.js";
+import { WeekDisplay } from '../models/WeekDisplayModel.js';
 import {CheckIn} from "../models/CheckInModel.js";
-import templateUtils from '../utils/templateUtils.js';
-import { Types } from 'mongoose';
-import logger from '../../config/winstonLogger.js';
+import UserModel from '../models/UserModel.js';
+import { WeightAnalyticsModel } from '../models/WeightAnalyticsModel.js';
 
 interface RegistrationData {
     email: string;
@@ -97,6 +100,7 @@ class UserService{
             }
 
             // Delete all data from this user
+            // Delete ExercisePlan, ProtocolExercisePlan, Messages, TrainingDuration, CheckIn, WeekDisplay, WeightAnalytics
             if(user?.exercisePlan){
                 await ExercisePlan.findByIdAndDelete(user.exercisePlan);
             }
@@ -114,6 +118,12 @@ class UserService{
             }
             if(user?.checkIn){
                 await CheckIn.findByIdAndDelete(user.checkIn);
+            }
+            if(user?.weekDisplay){
+                await WeekDisplay.findByIdAndDelete(user.weekDisplay);
+            }
+            if(user?.weightAnalytics){
+                await WeightAnalyticsModel.findByIdAndDelete(user.weightAnalytics);
             }
             if (user){
                 await UserModel.findByIdAndDelete(userId);
