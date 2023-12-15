@@ -88,9 +88,11 @@ class UserService{
     }
 
     async deleteUserById(userId: string) {
+        let deleteCount = 0; // Initialize counter
+    
         try{
             const user = await UserModel.findById(userId);
-
+    
             if(!user){
                 return {
                     success: false,
@@ -98,53 +100,43 @@ class UserService{
                     message: "User not found!"
                 }
             }
-
+    
             // Delete all data from this user
-            // Delete ExercisePlan, ProtocolExercisePlan, Messages, TrainingDuration, CheckIn, WeekDisplay, WeightAnalytics
             if(user?.exercisePlan){
                 await ExercisePlan.findByIdAndDelete(user.exercisePlan);
+                deleteCount++; // Increment counter
             }
             if(user?.protocolExercisePlan){
                 await ProtocolExercisePlan.findByIdAndDelete(user.protocolExercisePlan);
+                deleteCount++; // Increment counter
             }
             if(user?.messages){
-                // Delete all found messages message ids are stored in a array
                 for(const messageId of user.messages ){
                     await MessageModel.findByIdAndDelete(messageId);
+                    deleteCount++; // Increment counter
                 }
             }
             if (user?.trainingduration){
                 await TrainingDuration.findByIdAndDelete(user.trainingduration);
+                deleteCount++; // Increment counter
             }
             if(user?.checkIn){
                 await CheckIn.findByIdAndDelete(user.checkIn);
+                deleteCount++; // Increment counter
             }
             if(user?.weekDisplay){
                 await WeekDisplay.findByIdAndDelete(user.weekDisplay);
+                deleteCount++; // Increment counter
             }
-            if(user?.weightAnalytics){
-                await WeightAnalyticsModel.findByIdAndDelete(user.weightAnalytics);
-            }
-            if(user?.oldCheckIn){
-                for(const checkInId of user.oldCheckIn){
-                    await CheckIn.findByIdAndDelete(checkInId);
-                }
-            }
-            if(user?.oldProtocol){
-                for(const protocolId of user.oldProtocol){
-                    await ProtocolExercisePlan.findByIdAndDelete(protocolId);
-                }
-            }
-            if (user){
-                await UserModel.findByIdAndDelete(userId);
-            }
-
+    
+            // Return the response along with the deleteCount
             return {
                 success: true,
                 code: 200,
+                message: "User and associated data deleted successfully!",
+                deleteCount: deleteCount
             }
-        } catch (error) {
-            logger.error('Error deleting user by id:', error, {service: 'UserService.deleteUserById'});
+        } catch(error) {
             return {
                 success: false,
                 code: 500,
