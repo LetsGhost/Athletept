@@ -10,8 +10,7 @@
     "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./src/server.ts",
     "copy-files": "ncp src/public dist/public",
     "build": "tsc && npm run copy-files",
-    "test": "jest",
-    "test:file": "jest"
+    "test": "jest"
   },
   "author": "Paul Ehrling",
   "license": "GNU",
