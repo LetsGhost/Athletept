@@ -7,8 +7,8 @@ let mongod: any;
 let NewUserId: string;
 
 const mockUser = {
-    "email": "user@example.com",
-    "password": "securepassword",
+  "email": "user@example.com",
+  "password": "securepassword",
 }
 
 const mockUserInfo = {
@@ -27,7 +27,7 @@ const mockUserInfo = {
     "frequency": "Daily",
     "cardio": "Yes",
     "issues": "None"
-},
+  },
 }
 
 
@@ -48,30 +48,30 @@ afterAll(async () => {
 });
 
 describe('MessageService', () => {
-    describe('createMessage', () => {
-        it('should return success: true', async () => {
-            // Arrange
-            const message = 'Hello, world!';
-            const userId = NewUserId;
+  describe('createMessage', () => {
+    it('should return success: true', async () => {
+      // Arrange
+      const message = 'Hello, world!';
+      const userId = NewUserId;
 
-            // Act
-            const result = await MessageService.createMessage(message, userId);
+      // Act
+      const result = await MessageService.createMessage(message, userId);
 
-            // Assert
-            expect(result.success).toBe(true);
-        });
+      // Assert
+      expect(result.success).toBe(true);
     });
-    describe("createMessage with userId = null", () => {
-      it("should return success: false", async () => {
-        // Arrange
-        const message = "Hello, world!";
-        const userId = "null";
+  });
+  describe("createMessage with userId = null", () => {
+    it("should return success: false", async () => {
+      // Arrange
+      const message = "Hello, world!";
+      const userId = "null";
 
-        // Act
-        const result = await MessageService.createMessage(message, userId);
+      // Act
+      const result = await MessageService.createMessage(message, userId);
 
-        // Assert
-        expect(result.success).toBe(false);
-      })
-    });
+      // Assert
+      expect(result.success).toBe(false);
+    })
+  });
 });
