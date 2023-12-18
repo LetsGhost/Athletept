@@ -35,10 +35,10 @@ class UserController{
         try {
             const { userId } = req.params;
 
-            const {success, code, message} = await userService.deleteUserById(userId);
+            const {success, code, message, deleteCount} = await userService.deleteUserById(userId);
 
             if(success){
-                logger.info('User deleted: ' + userId, {service: 'UserController.deleteUser'});
+                logger.info('User deleted: ' + userId + " " + deleteCount + " total documents", {service: 'UserController.deleteUser'});
             }
 
             res.status(code).json({ success, message });

@@ -35,12 +35,12 @@ class ProtocolService{
     async createProtocol (userId: string, protocol: Record<string, ProtocolExercise>, comment: Record<string, any>) {
         try {
 
-            const user = await UserModel.findById(userId);
+            const user = await UserModel.findById({ _id: { $eq: userId }});
 
             // Check if the user already has an protocol
             if (user?.protocolExercisePlan) {
 
-                const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
+                const user = await UserModel.findById({ _id: { $eq: userId } }).populate("protocolExercisePlan").exec();
                 const createdAt = (user?.protocolExercisePlan as any as ProtocolExercisePlanDocument).createdAt;
 
                 // Calculates the date that should be one week ago

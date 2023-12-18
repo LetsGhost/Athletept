@@ -1,12 +1,15 @@
-import UserModel from '../models/UserModel.js';
+import templateUtils from '../utils/templateUtils.js';
+import { Types } from 'mongoose';
+import logger from '../../config/winstonLogger.js';
+
 import {ExercisePlan} from "../models/ExercisePlanModel.js";
 import {MessageModel} from "../models/MessagModel.js";
 import {ProtocolExercisePlan} from "../models/ProtocolModel.js";
 import {TrainingDuration} from "../models/TrainingdurationModel.js";
+import { WeekDisplay } from '../models/WeekDisplayModel.js';
 import {CheckIn} from "../models/CheckInModel.js";
-import templateUtils from '../utils/templateUtils.js';
-import { Types } from 'mongoose';
-import logger from '../../config/winstonLogger.js';
+import UserModel from '../models/UserModel.js';
+import { WeightAnalyticsModel } from '../models/WeightAnalyticsModel.js';
 
 interface RegistrationData {
     email: string;
@@ -24,7 +27,7 @@ class UserService{
             const { email, password } = registrationData;
 
             // Check if the email is already registered
-            const existingUser = await UserModel.findOne({ email });
+            const existingUser = await UserModel.findOne({ email: { $eq: email } });
             if (existingUser) {
                 return {
                     success: false,
@@ -85,9 +88,11 @@ class UserService{
     }
 
     async deleteUserById(userId: string) {
+        let deleteCount = 0; // Initialize counter
+    
         try{
             const user = await UserModel.findById(userId);
-
+    
             if(!user){
                 return {
                     success: false,
@@ -95,36 +100,43 @@ class UserService{
                     message: "User not found!"
                 }
             }
-
+    
             // Delete all data from this user
             if(user?.exercisePlan){
                 await ExercisePlan.findByIdAndDelete(user.exercisePlan);
+                deleteCount++; // Increment counter
             }
             if(user?.protocolExercisePlan){
                 await ProtocolExercisePlan.findByIdAndDelete(user.protocolExercisePlan);
+                deleteCount++; // Increment counter
             }
             if(user?.messages){
-                // Delete all found messages message ids are stored in a array
                 for(const messageId of user.messages ){
                     await MessageModel.findByIdAndDelete(messageId);
+                    deleteCount++; // Increment counter
                 }
             }
             if (user?.trainingduration){
                 await TrainingDuration.findByIdAndDelete(user.trainingduration);
+                deleteCount++; // Increment counter
             }
             if(user?.checkIn){
                 await CheckIn.findByIdAndDelete(user.checkIn);
+                deleteCount++; // Increment counter
             }
-            if (user){
-                await UserModel.findByIdAndDelete(userId);
+            if(user?.weekDisplay){
+                await WeekDisplay.findByIdAndDelete(user.weekDisplay);
+                deleteCount++; // Increment counter
             }
-
+    
+            // Return the response along with the deleteCount
             return {
                 success: true,
                 code: 200,
+                message: "User and associated data deleted successfully!",
+                deleteCount: deleteCount
             }
-        } catch (error) {
-            logger.error('Error deleting user by id:', error, {service: 'UserService.deleteUserById'});
+        } catch(error) {
             return {
                 success: false,
                 code: 500,
