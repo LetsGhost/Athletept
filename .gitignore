@@ -699,7 +699,6 @@ uploads/
 dist/
 
 docker-compose.yml
-.dockerignore
 
 .idea/*
 

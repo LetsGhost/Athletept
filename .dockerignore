@@ -1,0 +1,8 @@
+.env
+.env.example
+node_modules
+LICENSE
+.gitignore
+jest.config.js
+src/
+Dockerfile
