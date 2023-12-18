@@ -10,7 +10,7 @@ const connectToDatabase = async () => {
         }
 
         await mongoose.connect(mongoURI);
-        logger.info('Connected to MongoDB.', { service: "connectToDatabase" });
+        logger.info('Connected to MongoDB at 27017.', { service: "connectToDatabase" });
     } catch (err) {
         logger.error('Failed to connect to MongoDB.', err, { service: "connectToDatabase" });
     }
