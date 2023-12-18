@@ -6,6 +6,7 @@ import UserService from '../app/services/UserService';
 let mongod: any;
 let NewUserId: string;
 
+// Mock user data
 const mockUser = {
   "email": "user@example.com",
   "password": "securepassword",
@@ -30,7 +31,7 @@ const mockUserInfo = {
   },
 }
 
-
+// Mock MongoDB in-memory server
 beforeAll(async () => {
   mongod = new MongoMemoryServer();
   await mongod.start();
