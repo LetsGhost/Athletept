@@ -1,8 +1,36 @@
+# Ignore everything
+**
+
+# Allow files and directories needed for the application
+!package.json
+!package-lock.json
+!yarn.lock
+!public/
+!build/
+!dist
+
+# Ignore unnecessary files and directories
 .env
 .env.example
 node_modules
 LICENSE
 .gitignore
 jest.config.js
-src/
 Dockerfile
+.dockerignore
+.npmignore
+.git
+.idea
+.vscode
+__tests__
+*.log
+*.csv
+*.lock
+*.yml
+*.yaml
+*.txt
+*.md
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
