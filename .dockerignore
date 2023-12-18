@@ -12,6 +12,7 @@
 # Ignore unnecessary files and directories
 .env
 .env.example
+docker-compose.example.yml
 node_modules
 LICENSE
 .gitignore
