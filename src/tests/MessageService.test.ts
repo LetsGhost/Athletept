@@ -1,13 +1,45 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import MessageService from '../../dist/app/services/MessageService';
+import MessageService from '../app/services/MessageService';
+import UserService from '../app/services/UserService';
 
 let mongod: any;
+let NewUserId: string;
+
+const mockUser = {
+    "email": "user@example.com",
+    "password": "securepassword",
+}
+
+const mockUserInfo = {
+  "userInfo": {
+    "name": "John Doe",
+    "goal": "Lose weight",
+    "focus": "Cardio",
+    "targetWeight": 70,
+    "currentWeight": 80,
+    "DOB": "1990-01-01",
+    "gender": "Male",
+    "sports": "Running",
+    "location": "New York",
+    "conditions": "None",
+    "times": "Morning",
+    "frequency": "Daily",
+    "cardio": "Yes",
+    "issues": "None"
+},
+}
+
 
 beforeAll(async () => {
   mongod = new MongoMemoryServer();
-  const mongoDBURL = await mongod?.getUri();
+  await mongod.start();
+  const mongoDBURL = await mongod.getUri();
   await mongoose.connect(mongoDBURL);
+
+  // Create a user
+  const user = await UserService.registerUser(mockUser, mockUserInfo.userInfo);
+  NewUserId = user.newUser?._id;
 });
 
 afterAll(async () => {
@@ -20,7 +52,7 @@ describe('MessageService', () => {
         it('should return success: true', async () => {
             // Arrange
             const message = 'Hello, world!';
-            const userId = '123456789';
+            const userId = NewUserId;
 
             // Act
             const result = await MessageService.createMessage(message, userId);
@@ -29,7 +61,17 @@ describe('MessageService', () => {
             expect(result.success).toBe(true);
         });
     });
+    describe("createMessage with userId = null", () => {
+      it("should return success: false", async () => {
+        // Arrange
+        const message = "Hello, world!";
+        const userId = "null";
+
+        // Act
+        const result = await MessageService.createMessage(message, userId);
+
+        // Assert
+        expect(result.success).toBe(false);
+      })
+    });
 });
-
-
-// Now you can write your tests here
