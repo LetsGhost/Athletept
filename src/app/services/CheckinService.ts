@@ -46,9 +46,9 @@ interface checkInDocument extends Document {
 interface CheckInModel extends Model<checkInDocument> {}
 
 interface request {
-    currentGrowth: { answer: string, boolean: boolean },
+    currentGrowth: { answer: string, answer2: string },
     problems: { answer: string, boolean: boolean },
-    regeneration: { boolean: boolean },
+    regeneration: { answer: string },
     change: { answer: string, boolean: boolean }
     weight: { weight: number }
     checkInStatus: boolean
