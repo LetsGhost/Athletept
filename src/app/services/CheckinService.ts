@@ -8,7 +8,7 @@ import templateUtils from "../utils/templateUtils.js";
 
 interface currentGrowth {
     answer: string;
-    boolean: boolean;
+    answer2: string
 }
 
 interface problems{
