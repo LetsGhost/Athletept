@@ -4,6 +4,7 @@ import UserModel from "../models/UserModel.js";
 import {ExercisePlan} from "../models/ExercisePlanModel.js";
 import timeUtils from "../utils/timeUtils.js";
 import logger from "../../config/winstonLogger.js";
+import { WeekDisplay } from "../models/WeekDisplayModel.js";
 
 interface Exercise {
     Exercises: string;
@@ -124,8 +125,6 @@ class ExercisePlanService {
                 }
             });
 
-
-            // Find the user and update the exercise plan
             const user = await UserModel.findById(userId);
 
             // Delete the previous exercise plan
@@ -142,6 +141,14 @@ class ExercisePlanService {
                 const createdExercisePlan = await ExercisePlan.create(exercisePlanDocument);
                 user.exercisePlan = createdExercisePlan._id;
                 await user.save();
+
+                // Reset the trainingDone array
+                const weekDisplay = await WeekDisplay.findById(user.weekDisplay);
+                if (weekDisplay) {
+                    weekDisplay.trainingDone = [];
+                    await weekDisplay.save();
+                }
+
 
                 return {
                     success: true,
