@@ -43,8 +43,6 @@ interface checkInDocument extends Document {
     checkIn: checkIn;
 }
 
-interface CheckInModel extends Model<checkInDocument> {}
-
 interface request {
     currentGrowth: { answer: string, answer2: string },
     problems: { answer: string, boolean: boolean },
