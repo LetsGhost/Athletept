@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
+import { Request } from 'express';
 dotenv.config();
 
 // Routes
@@ -21,36 +22,35 @@ import logger from './config/winstonLogger.js';
 
 const server = express();
 
-server.set('trust proxy', true);
-
 // Activate for production
 if(process.env.ENV === "production"){
     server.use(limiter);
 }
 
+server.use(cors({
+  origin: 'https://admin.athletept.de', // replace with the origin of your HTML file
+  credentials: true,
+}));
+server.options('*', cors()); // enable pre-flight request for all routes
+
 server.use(bodyParser.json());
 server.use(cookieParser());
-server.use(cors({
-  origin: "http://localhost:8080", // or wherever the request is coming from
-  credentials: true, // this allows cookies to be sent with the request
-}));
-
 server.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          // Define your CSP policy here
-        },
-      },
-    dnsPrefetchControl: false, // controls browser DNS prefetching
-    frameguard: { action: 'deny' }, // prevent clickjacking
-    hidePoweredBy: true, // hide X-Powered-By header
-    hsts: { maxAge: 60 }, // HTTP Strict Transport Security
-    ieNoOpen: true, // X-Download-Options for IE8+
-    noSniff: true, // X-Content-Type-Options
-    permittedCrossDomainPolicies: true, // restrict Adobe Flash and Acrobat
-    referrerPolicy: { policy: 'same-origin' }, // Referrer-Policy header
-    xssFilter: true, // X-XSS-Protection
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      // Define your CSP policy here
+    },
+  },
+  dnsPrefetchControl: false, // controls browser DNS prefetching
+  frameguard: { action: 'deny' }, // prevent clickjacking
+  hidePoweredBy: true, // hide X-Powered-By header
+  hsts: { maxAge: 60 }, // HTTP Strict Transport Security
+  ieNoOpen: true, // X-Download-Options for IE8+
+  noSniff: true, // X-Content-Type-Options
+  permittedCrossDomainPolicies: true, // restrict Adobe Flash and Acrobat
+  referrerPolicy: { policy: 'same-origin' }, // Referrer-Policy header
+  xssFilter: true, // X-XSS-Protection
 }));
 
 connectToDatabase()
