@@ -52,7 +52,7 @@ class ProtocolService{
 
                 // If the createdAt date is older than one week, move the protocol to the oldProtocol array and create a new one
                 if(createdAtWeekNumber < currentWeekNumber) {
-                    await UserModel.findByIdAndUpdate({userId: {$eq: userId}}, {
+                    await UserModel.findByIdAndUpdate(userId, {
                         $push: { oldProtocol: user?.protocolExercisePlan },
                         $unset: { protocolExercisePlan: "" }
                     });
