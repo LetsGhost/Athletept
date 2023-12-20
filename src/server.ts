@@ -30,7 +30,11 @@ if(process.env.ENV === "production"){
 
 server.use(bodyParser.json());
 server.use(cookieParser());
-server.use(cors());
+server.use(cors({
+  origin: "http://localhost:8080", // or wherever the request is coming from
+  credentials: true, // this allows cookies to be sent with the request
+}));
+
 server.use(helmet({
     contentSecurityPolicy: {
         directives: {
