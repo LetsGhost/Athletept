@@ -27,7 +27,7 @@ class UserService{
             const { email, password } = registrationData;
 
             // Check if the email is already registered
-            const existingUser = await UserModel.findOne({ email: { $eq: email } });
+            const existingUser = await UserModel.findOne({email});
             if (existingUser) {
                 return {
                     success: false,
@@ -220,7 +220,7 @@ class UserService{
             const { email, password } = registrationData;
 
             // Check if the email is already registered
-            const existingUser = await UserModel.findOne({ email: { $eq: email } });
+            const existingUser = await UserModel.findOne({email});
             if (existingUser) {
                 return {
                     success: false,

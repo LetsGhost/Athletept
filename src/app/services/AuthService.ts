@@ -9,7 +9,7 @@ import getClientIp from '../utils/ipUtils.js';
 class AuthService {
     async loginUser(email: string, password: string, alwaysLogedIn: boolean) {
         try {
-            const user: Document<User> | null = await UserModel.findOne({ email: {$eq: email} }).exec();
+            const user: Document<User> | null = await UserModel.findOne({email}).exec();
             const userRole = user as User;
 
             if (!user) {
