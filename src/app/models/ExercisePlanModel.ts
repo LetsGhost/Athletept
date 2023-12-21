@@ -2,8 +2,8 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 
 interface Exercise {
     Exercises: string;
-    Weight: number;
-    Sets: number;
+    Weight: string;
+    Sets: string;
     WarmUpSets: string;
     WarmupWeight: string;
     WarmupRepetitions: string;
@@ -14,14 +14,14 @@ interface Exercise {
 
 interface warmupExercise {
     Exercises: string;
-    weight: number;
-    repetitions: number;
+    weight: string;
+    repetitions: string;
 }
 
 interface warmupMaterials {
     Materials: string;
-    weight: number;
-    repetitions: number;
+    weight: string;
+    repetitions: string;
 }
 
 interface warmup {
@@ -48,9 +48,9 @@ interface ExercisePlanModel extends Model<ExercisePlanDocument> {}
 
 const exerciseSchema = new Schema<Exercise>({
     Exercises: String,
-    Weight: Number,
-    Sets: Number,
-    WarmUpSets: Number,
+    Weight: String,
+    Sets: String,
+    WarmUpSets: String,
     WarmupWeight: String,
     WarmupRepetitions: String,
     Repetitions: String,
@@ -60,14 +60,14 @@ const exerciseSchema = new Schema<Exercise>({
 
 const warmupExerciseSchema = new Schema<warmupExercise>({
     Exercises: String,
-    weight: Number,
-    repetitions: Number,
+    weight: String,
+    repetitions: String,
 });
 
 const warmupMaterialsSchema = new Schema<warmupMaterials>({
     Materials: String,
-    weight: Number,
-    repetitions: Number,
+    weight: String,
+    repetitions: String,
 })
 
 const warmupSchema = new Schema<warmup>({
