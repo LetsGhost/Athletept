@@ -382,6 +382,11 @@ class ExercisePlanService {
                 }
             }
 
+            return {
+                success: false,
+                code: 404,
+            }
+
         } catch (error) {
             logger.error(`Error getting the exercise plan: ${error}`, {service: 'ExercisePlanService.getExercisePlan'});
             return {

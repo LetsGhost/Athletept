@@ -10,19 +10,9 @@ class ExercisePlanController {
       const { userId } = req.params;
 
       // Get the exercise plan
-      const result = await exercisePlanService.getExercisePlan(userId);
+      const { success, code, message, exercisePlan } = await exercisePlanService.getExercisePlan(userId);
 
-      if (result && "success" in result) {
-        const { success, code, message, exercisePlan } = result;
-        return res.status(code).json({ success, message, exercisePlan });
-      } else {
-        console.log(
-          "Unexpected response from exercisePlanService.getExercisePlan"
-        );
-        throw new Error(
-          "Unexpected response from exercisePlanService.getExercisePlan"
-        );
-      }
+      return res.status(code).json({ success, message, exercisePlan });
     } catch (error) {
       logger.error("Error getting exercise plan:", error, {
         service: "ExercisePlanController.getExercisePlan",
