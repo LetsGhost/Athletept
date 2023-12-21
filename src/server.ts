@@ -22,6 +22,9 @@ import logger from './config/winstonLogger.js';
 
 const server = express();
 
+// Enable trust proxy
+server.set('trust proxy', 1);
+
 // Activate for production
 if(process.env.ENV === "production"){
     server.use(limiter);
