@@ -14,6 +14,7 @@ class AuthenticateRole {
             const token = req.cookies.token;
 
             if (!token) {
+                logger.warn('User tried to acces admin Endpoints: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 

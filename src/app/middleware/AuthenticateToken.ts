@@ -8,6 +8,7 @@ class AuthenticateToken{
             const token = req.cookies.token; // Assuming you set the token as 'token' cookie
 
             if (!token) {
+                logger.warn('User tried to access user Endpoints: ' + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 

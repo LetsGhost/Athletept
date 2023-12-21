@@ -11,11 +11,11 @@ class AuthController {
             const { success, code, message, token, userId, role } = await authService.loginUser(email, password, alwaysLogedIn);
 
             if (alwaysLogedIn){
-                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true });
+                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'lax', secure: true, path: "/"});
                 return res.status(code).json({ success, message, userId: userId, role: role });
             }
 
-            res.cookie('token', token, { httpOnly: true, maxAge: 3600000, sameSite: 'none', secure: true });
+            res.cookie('token', token, { httpOnly: true, maxAge: 3600000, sameSite: 'lax', secure: true, path: "/" });
 
             if(success){
                 logger.info('User logged in: ' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
