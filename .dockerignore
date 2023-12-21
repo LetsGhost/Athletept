@@ -23,6 +23,7 @@ Dockerfile
 .git
 .idea
 .vscode
+.github
 __tests__
 *.log
 *.csv
