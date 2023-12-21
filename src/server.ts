@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
-import { Request } from 'express';
+
 dotenv.config();
 
 // Routes
@@ -28,10 +28,15 @@ if(process.env.ENV === "production"){
 }
 
 server.use(cors({
-  origin: 'https://admin.athletept.de', // replace with the origin of your HTML file
+  origin: ['https://admin.athletept.de', 'https://athletept.de,'], // replace with your allowed origins
   credentials: true,
 }));
-server.options('*', cors()); // enable pre-flight request for all routes
+server.options('*', cors(
+  {
+    origin: ['https://admin.athletept.de', 'https://athletept.de'], // add your localhost to allowed origins
+    credentials: true,
+  }
+));
 
 server.use(bodyParser.json());
 server.use(cookieParser());
