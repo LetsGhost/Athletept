@@ -30,6 +30,7 @@ if(process.env.ENV === "production"){
     server.use(limiter);
 }
 
+// Cors configuration
 server.use(cors({
   origin: ['https://admin.athletept.de', 'https://athletept.de'], // replace with your allowed origins
   credentials: true,
