@@ -26,8 +26,8 @@ const server = express();
 server.set('trust proxy', 1);
 
 // Activate for production
-if(process.env.ENV === "production"){
-    server.use(limiter);
+if (process.env.ENV === "production") {
+  server.use(limiter);
 }
 
 // Cors configuration
@@ -76,5 +76,5 @@ server.use('/admin', adminRoutes);
 server.use('/auth', authRoutes);
 
 server.listen(process.env.PORT, () => {
-    logger.info(`Server is running on port ${process.env.PORT}`, { service: 'Server'});
+  logger.info(`Server is running on port ${process.env.PORT}`, { service: 'Server' });
 });
