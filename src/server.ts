@@ -27,7 +27,7 @@ server.set('trust proxy', 1);
 
 // Activate for production
 if (process.env.ENV === "production") {
-  server.use(limiter);
+  //server.use(limiter);
 }
 
 // Cors configuration
