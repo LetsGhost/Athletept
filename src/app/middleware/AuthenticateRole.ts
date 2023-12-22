@@ -14,14 +14,14 @@ class AuthenticateRole {
             const token = req.cookies.token;
 
             if (!token) {
-                logger.warn('User tried to acces admin Endpoints: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
+                logger.warn('User tried to access admin Endpoints: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
             const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as CustomJwtPayload;
 
             if(decodedToken.userRole !== 'admin') {
-                logger.warn('User tried to acces admin Endpoints: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
+                logger.warn('User tried to access admin Endpoints: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
