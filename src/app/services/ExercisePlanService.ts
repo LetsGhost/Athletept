@@ -39,6 +39,7 @@ interface ExerciseDay {
 
 class ExercisePlanService {
 
+    // TODO: Define some rules for the processed JSON
     async createExercisePlanFromExcel(userId: string, exerciseFile: any, warmupFile: any) {
         try {
             // ExerciseFile Workbook
