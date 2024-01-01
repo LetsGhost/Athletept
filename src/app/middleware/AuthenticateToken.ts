@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import logger from '../../config/winstonLogger.js';
+import getClientIp from '../utils/ipUtils.js';
 
 class AuthenticateToken{
     async authenticateToken(req: Request, res: Response, next: NextFunction) {
@@ -8,7 +9,7 @@ class AuthenticateToken{
             const token = req.cookies.token; // Assuming you set the token as 'token' cookie
 
             if (!token) {
-                logger.warn('User tried to access user Endpoints without an Token: ' + " at " + req.path, {service: 'AuthenticateRole.authenticateToken'});
+                logger.warn('User tried to access user Endpoints without an Token: ' + " at " + req.path + " " + getClientIp(req), {service: 'AuthenticateRole.authenticateToken'});
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
