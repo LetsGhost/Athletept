@@ -1,14 +1,11 @@
-import cron from 'node-cron';
-import logger from '../../config/winstonLogger';
+import logger from '../../config/winstonLogger.js';
 
 // Services
-import UserService from '../services/UserService';
+import UserService from '../services/UserService.js';
 
 // Models
-import { CheckIn } from '../models/CheckInModel';
-import { WeekDisplay } from '../models/WeekDisplayModel';
-import { ExercisePlan } from '../models/ExercisePlanModel';
-import UserModel from '../models/UserModel';
+import { WeekDisplay } from '../models/WeekDisplayModel.js';
+import UserModel from '../models/UserModel.js';
 
 async function dbSchedule() {
   const {success, code, message, filteredUsers} = await UserService.getAllUsers();
@@ -35,23 +32,64 @@ async function dbSchedule() {
       }
   }
 
+  let protocolCounter = 0;
+  let checkInCounter = 0;
+  let weekDisplayCounter = 0;
+  let exercisePlanCounter = 0;
+
   if(userIds){
     for(let id in userIds){
         const userId = userIds[id];
 
+        const user = await UserModel.findById(userId);
+        const protocolId = user?.protocolExercisePlan
+
+        if(protocolId){
+            user?.oldProtocol.push(protocolId.toString());
+            await user?.save();
+
+            protocolCounter++;
+        }
+
         // Set CheckInStatus to false and put the CheckIn id into the oldCheckIn array
-        const user = await UserModel.findById(userId).populate("checkIn")
-        const currentCheckIn = user?.checkIn as any;
+        const userCheckIn = await UserModel.findById(userId).populate("checkIn")
+        const currentCheckIn = userCheckIn?.checkIn as any;
         
         if(currentCheckIn){
             currentCheckIn.checkInStatus = false;
             await currentCheckIn.save();
 
-            user?.oldCheckIn.push(currentCheckIn._id);
-            await user?.save();
+            userCheckIn?.oldCheckIn.push(currentCheckIn._id);
+            await userCheckIn?.save();
+
+            checkInCounter++;
+        }
+
+        const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+
+        if(weekDisplay){
+            weekDisplay.trainingDone = [];
+            await weekDisplay.save();
+
+            weekDisplayCounter++;
+        }
+     
+        const userExercisePlan = await UserModel.findById(userId).populate("exercisePlan")
+        const currentExercisePlan = userExercisePlan?.exercisePlan as any;
+
+        if(currentExercisePlan){
+            currentExercisePlan.trainingDone = false
+            currentExercisePlan.trainingMissed = false
+            await currentExercisePlan.save();
+
+            exercisePlanCounter++;
         }
     }
+
+    logger.info(`Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans`, {service: 'dbSchedule'});
   }
 }
+
+
 
 export default dbSchedule;
