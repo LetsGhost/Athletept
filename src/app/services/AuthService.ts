@@ -3,7 +3,8 @@ import UserModel, {User} from '../models/UserModel.js';
 import {Document} from 'mongoose';
 import * as process from "process";
 import logger from '../../config/winstonLogger.js';
-import getClientIp from '../utils/ipUtils.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 class AuthService {
@@ -44,7 +45,7 @@ class AuthService {
                 }
             }
 
-            const token = jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: '3h'});
+            const token = jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: process.env.TOKEN_AGE });
             const userId = user._id;
 
             return {

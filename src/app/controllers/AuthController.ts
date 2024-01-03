@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import authService from '../services/AuthService.js';
 import logger from '../../config/winstonLogger.js';
 import {getClientIp} from '../utils/ipUtils.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 class AuthController {
     async login(req: Request, res: Response) {
@@ -12,10 +14,34 @@ class AuthController {
 
             if (alwaysLogedIn){
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true, path: "/", domain: "backend.athletept.de"});
+
+                if(success){
+                    logger.info('User logged in: ' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
+                }
+                else{
+                    switch(code)
+                    {
+                        case 404:
+                            logger.warn('Invalid email: ' + getClientIp(req) , {service: 'AuthController.login'});
+                            break;
+                        case 401:
+                            logger.warn('Invalid password: ' + getClientIp(req), {service: 'AuthController.login'});
+                            break;
+    
+                    }
+                }
+
                 return res.status(code).json({ success, message, userId: userId, role: role });
             }
 
-            res.cookie('token', token, { httpOnly: true, maxAge: 3600000, sameSite: 'none', secure: true, path: "/", domain: "backend.athletept.de" });
+            res.cookie('token', token, { 
+                httpOnly: true, 
+                maxAge: 18000000, 
+                sameSite: 'none', 
+                secure: true, 
+                path: "/", 
+                domain: "backend.athletept.de" 
+            });
 
             if(success){
                 logger.info('User logged in: ' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
