@@ -149,7 +149,6 @@ class ExercisePlanService {
                     await weekDisplay.save();
                 }
 
-
                 return {
                     success: true,
                     code: 200,

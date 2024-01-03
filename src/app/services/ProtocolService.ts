@@ -43,64 +43,6 @@ class ProtocolService{
                 const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
                 const createdAt = (user?.protocolExercisePlan as any as ProtocolExercisePlanDocument).createdAt;
 
-                // Calculates the date that should be one week ago
-                const currentDate = new Date();
-
-                const createdAtWeekNumber = timeUtils.getWeekNumber(createdAt);
-                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
-
-
-                // If the createdAt date is older than one week, move the protocol to the oldProtocol array and create a new one
-                if(createdAtWeekNumber < currentWeekNumber) {
-                    await UserModel.findByIdAndUpdate(userId, {
-                        $push: { oldProtocol: user?.protocolExercisePlan },
-                        $unset: { protocolExercisePlan: "" }
-                    });
-
-                    const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
-
-                    // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
-                    const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
-                    const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
-                    if (exerciseDay) {
-                        exerciseDay.trainingDone = true;
-                        await exercisePlan?.save();
-                        console.log("exercisePlan saved");
-                    }
-
-                    // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
-                    const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
-                    if(weekDisplay){
-                        weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
-                        await weekDisplay.save();
-                    }
-
-                    if (user) {
-                        const protocolExercisePlanDocument = new ProtocolExercisePlan({
-                            exerciseDays: protocolExerciseDays
-                        });
-
-                        // Create and save the exercise plan using the ExercisePlan model
-                        const createdExercisePlan = await ProtocolExercisePlan.create(protocolExercisePlanDocument);
-                        user.protocolExercisePlan = createdExercisePlan._id;
-
-                        await user.save();
-
-                        return {
-                            success: true,
-                            code: 201,
-                            newProtocol: createdExercisePlan,
-                        };
-                        
-                    }
-
-                    return {
-                        success: false,
-                        code: 500,
-                        message: "Internal Server error"
-                    }
-                }
-
                 const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
                 // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
