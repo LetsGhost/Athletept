@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
+import cron from 'node-cron';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ import connectToDatabase from './config/db.js';
 import { connectToRedis } from './config/redis.js';
 
 import { logResourceUsage, logRequestMethod } from './app/middleware/Performance.js';
+import dbSchedule from './app/utils/dbSchedule.js';
 
 import userRoutes from "./app/routes/UserRoutes.js";
 import adminRoutes from "./app/routes/AdminRoutes.js";
@@ -65,11 +67,13 @@ server.use(helmet({
 }));
 
 connectToDatabase()
-connectToRedis();
+//connectToRedis();
 
-setInterval(logResourceUsage, 60 * 60 * 1000);
-logResourceUsage();
-server.use(logRequestMethod);
+//setInterval(logResourceUsage, 60 * 60 * 1000);
+//logResourceUsage();
+//server.use(logRequestMethod);
+
+cron.schedule('0 0 * * 0', dbSchedule); // Run every Sunday at 00:00
 
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
