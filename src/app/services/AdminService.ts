@@ -1,5 +1,5 @@
-import dbSchedule from "../utils/dbSchedule";
-import logger from "../../config/winstonLogger";
+import dbSchedule from "../utils/dbSchedule.js";
+import logger from "../../config/winstonLogger.js";
 
 class AdminService {
     runDbSchedule(){

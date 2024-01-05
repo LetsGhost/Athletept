@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import AdminService from '../services/AdminService';
-import logger from '../../config/winstonLogger';
+import AdminService from '../services/AdminService.js';
+import logger from '../../config/winstonLogger.js';
 
 class AdminController {
     
