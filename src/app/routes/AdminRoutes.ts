@@ -17,8 +17,8 @@ import protocolController from "../controllers/ProtocolController.js";
 import exercisePlanController from "../controllers/ExercisePlanController.js";
 import weekDisplayController from '../controllers/WeekDisplayController.js';
 import checkInController from '../controllers/CheckInController.js';
-import WeightAnalyticsController from '../controllers/WeightAnalyticsController.js';
 import trainingDurationController from '../controllers/TrainingDurationController.js';
+import adminController from '../controllers/AdminController.js';
 
 // Import routes
 const router = express.Router();
@@ -64,5 +64,8 @@ router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn) // Is 
 
 // TrainingDuration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) // Is Documented
+
+// Admin
+router.get("/runDbSchedule", adminController.runDbSchedule)
 
 export default router;

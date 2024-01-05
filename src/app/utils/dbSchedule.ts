@@ -16,7 +16,9 @@ async function dbSchedule() {
       logger.error("Error getting all users:", message, {
         service: "dbSchedule",
       });
-      return;
+      return {
+        success: false
+      }
     }
 
     const users = filteredUsers;
@@ -98,14 +100,21 @@ async function dbSchedule() {
           exercisePlanCounter++;
         }
       }
+    }
 
-      logger.info(
-        `Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans`,
-        { service: "dbSchedule" }
-      );
+    logger.info(
+      `Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans`,
+      { service: "dbSchedule" }
+    );
+
+    return {
+      success: true,
     }
   } catch (error) {
     logger.error("Error running dbSchedule:", error, { service: "dbSchedule" });
+    return {
+      success: false,
+    }
   }
 }
 
