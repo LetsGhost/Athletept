@@ -2,7 +2,6 @@ import ExcelJS from "exceljs";
 import { Workbook, Worksheet, Row } from 'exceljs';
 import UserModel from "../models/UserModel.js";
 import {ExercisePlan} from "../models/ExercisePlanModel.js";
-import timeUtils from "../utils/timeUtils.js";
 import logger from "../../config/winstonLogger.js";
 import { WeekDisplay } from "../models/WeekDisplayModel.js";
 
@@ -359,21 +358,6 @@ class ExercisePlanService {
             }
 
             if (user && user.exercisePlan) {
-
-                const currentDate = new Date();
-                const createdAt = (user.exercisePlan as any).createdAt;
-                
-                const currentDayNumber = timeUtils.getWeekNumber(currentDate);
-                const createdAtWeekNumber = timeUtils.getWeekNumber(createdAt);
-
-                if(currentDayNumber > createdAtWeekNumber){
-                    // Set trainingDone to false for every day
-                    (user.exercisePlan as any).exerciseDays.forEach((day: any) => {
-                        day.trainingDone = false;
-                    });
-                    await (user.exercisePlan as any).save();
-                }
-
                 return {
                     success: true,
                     code: 200,

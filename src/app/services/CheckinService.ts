@@ -2,7 +2,6 @@ import { CheckIn } from "../models/CheckInModel.js"
 import UserModel from "../models/UserModel.js";
 import { Document, Model } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService.js";
-import timeUtils from "../utils/timeUtils.js";
 import logger from "../../config/winstonLogger.js";
 import templateUtils from "../utils/templateUtils.js";
 
