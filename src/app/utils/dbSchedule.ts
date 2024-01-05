@@ -1,17 +1,20 @@
-import logger from '../../config/winstonLogger.js';
+import logger from "../../config/winstonLogger.js";
 
 // Services
-import UserService from '../services/UserService.js';
+import UserService from "../services/UserService.js";
 
 // Models
-import { WeekDisplay } from '../models/WeekDisplayModel.js';
-import UserModel from '../models/UserModel.js';
+import { WeekDisplay } from "../models/WeekDisplayModel.js";
+import UserModel from "../models/UserModel.js";
 
 async function dbSchedule() {
-  const {success, code, message, filteredUsers} = await UserService.getAllUsers();
+  const { success, code, message, filteredUsers } =
+    await UserService.getAllUsers();
 
-  if(!success){
-    logger.error('Error getting all users:', message, {service: 'dbSchedule'});
+  if (!success) {
+    logger.error("Error getting all users:", message, {
+      service: "dbSchedule",
+    });
     return;
   }
 
@@ -20,16 +23,16 @@ async function dbSchedule() {
   const userIds = [];
 
   // Push all user ids into userIds array
-  if(users){
-    for(let i = 0; i < users.length; i++){
-        const user = users[i];
-        
-        if(user.role === 'admin'){
-            continue;
-        }
+  if (users) {
+    for (let i = 0; i < users.length; i++) {
+      const user = users[i];
 
-        userIds.push(user._id);
+      if (user.role === "admin") {
+        continue;
       }
+
+      userIds.push(user._id);
+    }
   }
 
   let protocolCounter = 0;
@@ -37,59 +40,67 @@ async function dbSchedule() {
   let weekDisplayCounter = 0;
   let exercisePlanCounter = 0;
 
-  if(userIds){
-    for(let id in userIds){
-        const userId = userIds[id];
+  if (userIds) {
+    for (let id in userIds) {
+      const userId = userIds[id];
 
-        const user = await UserModel.findById(userId);
-        const protocolId = user?.protocolExercisePlan
+      const user = await UserModel.findById(userId);
+      const protocolId = user?.protocolExercisePlan;
 
-        if(protocolId){
-            user?.oldProtocol.push(protocolId.toString());
-            await user?.save();
+      if (protocolId) {
+        user?.oldProtocol.push(protocolId.toString());
+        await user?.save();
 
-            protocolCounter++;
+        protocolCounter++;
+      }
+
+      // Set CheckInStatus to false and put the CheckIn id into the oldCheckIn array
+      const userCheckIn = await UserModel.findById(userId).populate("checkIn");
+      const currentCheckIn = userCheckIn?.checkIn as any;
+
+      if (currentCheckIn) {
+        currentCheckIn.checkInStatus = false;
+        await currentCheckIn.save();
+
+        userCheckIn?.oldCheckIn.push(currentCheckIn._id);
+        await userCheckIn?.save();
+
+        checkInCounter++;
+      }
+
+      const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+
+      if (weekDisplay) {
+        weekDisplay.trainingDone = [];
+        await weekDisplay.save();
+
+        weekDisplayCounter++;
+      }
+
+      const userExercisePlan = await UserModel.findById(userId).populate(
+        "exercisePlan"
+      );
+      const currentExercisePlan = userExercisePlan?.exercisePlan as any;
+
+      if (currentExercisePlan) {
+        // Iterate over each day in the exerciseDays array
+        for (let day of currentExercisePlan.exerciseDays) {
+          // Set trainingDone and trainingMissed to false
+          day.trainingDone = false;
+          day.trainingMissed = false;
         }
-
-        // Set CheckInStatus to false and put the CheckIn id into the oldCheckIn array
-        const userCheckIn = await UserModel.findById(userId).populate("checkIn")
-        const currentCheckIn = userCheckIn?.checkIn as any;
-        
-        if(currentCheckIn){
-            currentCheckIn.checkInStatus = false;
-            await currentCheckIn.save();
-
-            userCheckIn?.oldCheckIn.push(currentCheckIn._id);
-            await userCheckIn?.save();
-
-            checkInCounter++;
-        }
-
-        const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
-
-        if(weekDisplay){
-            weekDisplay.trainingDone = [];
-            await weekDisplay.save();
-
-            weekDisplayCounter++;
-        }
-     
-        const userExercisePlan = await UserModel.findById(userId).populate("exercisePlan")
-        const currentExercisePlan = userExercisePlan?.exercisePlan as any;
-
-        if(currentExercisePlan){
-            currentExercisePlan.trainingDone = false
-            currentExercisePlan.trainingMissed = false
-            await currentExercisePlan.save();
-
-            exercisePlanCounter++;
-        }
+      
+        await currentExercisePlan.save();
+      
+        exercisePlanCounter++;
+      }
     }
 
-    logger.info(`Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans`, {service: 'dbSchedule'});
+    logger.info(
+      `Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans`,
+      { service: "dbSchedule" }
+    );
   }
 }
-
-
 
 export default dbSchedule;
