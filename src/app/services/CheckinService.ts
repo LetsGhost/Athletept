@@ -2,7 +2,6 @@ import { CheckIn } from "../models/CheckInModel.js"
 import UserModel from "../models/UserModel.js";
 import { Document, Model } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService.js";
-import timeUtils from "../utils/timeUtils.js";
 import logger from "../../config/winstonLogger.js";
 import templateUtils from "../utils/templateUtils.js";
 
@@ -71,49 +70,6 @@ class CheckInService {
             if(userCheckIn?.checkIn){
                 // Cast userCheckIn to CheckInModel
                 const currentCheckIn = (userCheckIn?.checkIn as unknown) as checkInDocument;
-
-                // Calculates the date that should be one week ago
-                const currentDate = new Date();
-
-                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
-                const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
-
-                if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
-
-                    await UserModel.findByIdAndUpdate(userId, {
-                        $push: { oldCheckIn: user?.checkIn },
-                        $unset: { checkIn: "" }
-                    });
-                    
-                    const currentGrowth = checkIn.currentGrowth
-                    const problems = checkIn.problems
-                    const regeneration = checkIn.regeneration
-                    const change = checkIn.change
-                    const weight = checkIn.weight
-
-                    await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
-
-                    const newCheckIn = new CheckIn({
-                        checkIn: {
-                            currentGrowth: currentGrowth,
-                            problems: problems,
-                            regeneration: regeneration,
-                            change: change,
-                            weight: weight,
-                        },
-                        checkInStatus: true,
-                    })
-                    await newCheckIn.save()
-
-                    user.checkIn = newCheckIn._id
-                    await user.save()
-
-                    return {
-                        success: true,
-                        code: 201,
-                        checkIn: newCheckIn
-                    }
-                }
                 
                 if(currentCheckIn?.checkInStatus){
                     return {
@@ -297,22 +253,6 @@ class CheckInService {
                 }
             }
 
-            // Calculates the date that should be one week ago
-            const currentDate = new Date();
-
-            const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
-            const createdAtWeekNumber = timeUtils.getWeekNumber(currentCheckIn?.createdAt);
-
-            if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
-                currentCheckIn.checkInStatus = false;
-                await currentCheckIn.save();
-
-                return {
-                    success: true,
-                    code: 200,
-                    checkInStatus: false
-                }
-            }
 
             return {
                 success: true,

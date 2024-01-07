@@ -1,6 +1,5 @@
 import {WeekDisplay} from '../models/WeekDisplayModel.js';
 import UserModel from '../models/UserModel.js';
-import timeUtils from '../utils/timeUtils.js';
 import logger from '../../config/winstonLogger.js';
 
 interface TrainingWeekDisplayModel extends Document {
@@ -61,23 +60,6 @@ class WeekDisplayService {
                         success: false,
                         code: 404,
                         message: 'Week display not found'
-                    }
-                }
-                // Calculates the date that should be one week ago
-                const currentDate = new Date();
-
-                const currentWeekNumber = timeUtils.getWeekNumber(currentDate);
-                const createdAtWeekNumber = timeUtils.getWeekNumber(weekDisplay.lastUpdate);
-
-                if(createdAtWeekNumber < currentWeekNumber){ //<- When the createdAt is located last week it is set true
-                    weekDisplay.trainingDone = []
-                    weekDisplay.lastUpdate = new Date();
-                    weekDisplay.save();
-
-                    return {
-                        success: true,
-                        code: 200,
-                        weekDisplay
                     }
                 }
 
