@@ -1,4 +1,5 @@
 import logger from "../../config/winstonLogger.js";
+import { Types } from "mongoose";
 
 // Services
 import UserService from "../services/UserService.js";
@@ -52,6 +53,13 @@ async function dbSchedule() {
 
         if (protocolId) {
           user?.oldProtocol.push(protocolId.toString());
+
+          // Remove the protocolExercisePlan field from the user document
+          await UserModel.updateOne(
+            { _id: user._id },
+            { $unset: { checkIn: 1 } }
+          );
+
           await user?.save();
 
           protocolCounter++;
@@ -63,11 +71,18 @@ async function dbSchedule() {
         );
         const currentCheckIn = userCheckIn?.checkIn as any;
 
-        if (currentCheckIn) {
+        if (currentCheckIn && userCheckIn) {
           currentCheckIn.checkInStatus = false;
           await currentCheckIn.save();
 
           userCheckIn?.oldCheckIn.push(currentCheckIn._id);
+
+          // Remove the checkIn field from the user document
+          await UserModel.updateOne(
+            { _id: userCheckIn._id },
+            { $unset: { checkIn: 1 } }
+          );
+
           await userCheckIn?.save();
 
           checkInCounter++;
