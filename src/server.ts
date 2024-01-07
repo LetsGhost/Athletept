@@ -73,7 +73,7 @@ connectToDatabase()
 //logResourceUsage();
 //server.use(logRequestMethod);
 
-cron.schedule('0 0 * * 0', dbSchedule); // Run every Sunday at 00:00
+cron.schedule('0 0 * * 1', dbSchedule); // Run every Sunday at 00:00
 
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
