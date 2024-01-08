@@ -59,10 +59,10 @@
 </head>
 <body>
     <section>
-        <% protocolExercisePlan.exerciseDays.forEach(function(day) { %>
+        <% exerciseDays.forEach(function(day) { %>
             <h2>Day <%= day.dayNumber %>: <%= day.type %></h2>
-            <p>Comment: <%= day.comment.Notes %></p>
-            <p>Scale: <%= day.comment.Scale %></p>
+            <p>Comment: <%= day.comment && day.comment.Notes ? day.comment.Notes : 'No comment provided' %></p>
+            <p>Comment: <%= day.comment && day.comment.Scale ? day.comment.Scale : 'No scale provided' %></p>
             <table>
                 <thead>
                     <tr>
