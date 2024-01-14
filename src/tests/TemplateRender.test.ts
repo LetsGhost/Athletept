@@ -50,94 +50,118 @@ const mockCheckIn = {
 
 const mockProtocol = {
   _id: {
-    $oid: "655fa0f7725fe14433b88209",
+    $oid: "659d80a30a0859f7248aea28",
   },
   exerciseDays: [
     {
       dayNumber: 1,
-      type: "Oberkörper",
+      type: "Push",
       comment: {
-        Scale: 5,
-        Notes: "Bankdrücken war blöd",
+        Scale: 9,
+        Notes: "",
         _id: {
-          $oid: "655fa0f7725fe14433b8820b",
+          $oid: "659d80a30a0859f7248aea2a",
         },
       },
       exercises: [
         {
-          Exercises: "Flys",
-          Weight: "20/40/50",
-          Repetitions: "50/20/80",
-          _id: {
-            $oid: "655fa0f7725fe14433b8820c",
-          },
-        },
-        {
-          Exercises: "Squads",
-          Weight: "20/40/50",
-          Repetitions: "50/20/80",
-          _id: {
-            $oid: "655fa0f7725fe14433b8820d",
-          },
-        },
-        {
           Exercises: "Bankdrücken",
-          Weight: "20/40/50",
-          Repetitions: "50/20/80",
+          Weight: "12/12",
+          Repetitions: "12/12",
           _id: {
-            $oid: "655fa0f7725fe14433b8820e",
+            $oid: "659d80a30a0859f7248aea2b",
           },
         },
       ],
       _id: {
-        $oid: "655fa0f7725fe14433b8820a",
+        $oid: "659d80a30a0859f7248aea29",
       },
     },
     {
       dayNumber: 2,
-      type: "Oberkörper",
+      type: "Pull",
       comment: {
-        Scale: 5,
-        Notes: "Bankdrücken war blöd",
+        Scale: 9,
+        Notes: "",
         _id: {
-          $oid: "655fa0fb725fe14433b88234",
+          $oid: "659da1580a0859f7248aeae5",
         },
       },
       exercises: [
         {
-          Exercises: "Flys",
-          Weight: "20/40/50",
-          Repetitions: "50/20/80",
+          Exercises: "Klimmzug",
+          Weight: "12",
+          Repetitions: "12",
           _id: {
-            $oid: "655fa0fb725fe14433b88235",
-          },
-        },
-        {
-          Exercises: "Squads",
-          Weight: "20/40/50",
-          Repetitions: "50/20/80",
-          _id: {
-            $oid: "655fa0fb725fe14433b88236",
-          },
-        },
-        {
-          Exercises: "Bankdrücken",
-          Weight: "20/40/50",
-          Repetitions: "50/20/80",
-          _id: {
-            $oid: "655fa0fb725fe14433b88237",
+            $oid: "659da1580a0859f7248aeae6",
           },
         },
       ],
       _id: {
-        $oid: "655fa0fb725fe14433b88233",
+        $oid: "659da1580a0859f7248aeae4",
+      },
+    },
+    {
+      dayNumber: 3,
+      type: "Oberkörper",
+      comment: {
+        Scale: 8,
+        Notes: "",
+        _id: {
+          $oid: "65a177f30a0859f7248aed39",
+        },
+      },
+      exercises: [
+        {
+          Exercises: "Schrägbankdrücken",
+          Weight: "30/30/30",
+          Repetitions: "12/11/10",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3a",
+          },
+        },
+        {
+          Exercises: "Latzug",
+          Weight: "49.5/49.5/49.5",
+          Repetitions: "12/10/8",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3b",
+          },
+        },
+        {
+          Exercises: "PecFlys",
+          Weight: "18/22.5/22.5",
+          Repetitions: "12/12/10",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3c",
+          },
+        },
+        {
+          Exercises: "T-Bar Rudern",
+          Weight: "20/25/25",
+          Repetitions: "12/12/12",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3d",
+          },
+        },
+        {
+          Exercises: "Seitheben",
+          Weight: "7.5/10/10",
+          Repetitions: "12/12/12",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3e",
+          },
+        },
+      ],
+      _id: {
+        $oid: "65a177f30a0859f7248aed38",
       },
     },
   ],
   createdAt: {
-    $date: "2023-11-23T18:59:03.402Z",
+    $date: "2024-01-09T17:21:39.114Z",
   },
-  __v: 1,
+  __v: 2,
 };
 
 const mockBlankProtocol = {
