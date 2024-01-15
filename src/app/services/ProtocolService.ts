@@ -258,7 +258,7 @@ class ProtocolService{
                     code: 500,
                 }
             }
-
+            
             const templatePath = "protocol.ejs";
             const html = templateUtils.renderTemplateWithData(templatePath, { protocolExercisePlan: user?.protocolExercisePlan });
             const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
