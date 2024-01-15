@@ -15,10 +15,11 @@ class TemplateUtils {
     }
 
     async generatePdfFromTemplate(html: string): Promise<Buffer> {
+        let browser;
         try{
             const startTime = new Date().getTime();
             
-            const browser = await puppeteer.launch({ headless: "new", executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+            browser = await puppeteer.launch({ headless: "new", executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             await page.setContent(html);
             const pdfBuffer = await page.pdf({ format: 'A4' });
@@ -32,6 +33,11 @@ class TemplateUtils {
         } catch(error){
             logger.error('Error generating pdf from template:', error, {service: 'TemplateUtils.generatePdfFromTemplate'});
             return Buffer.from('');
+        }
+        finally {
+            if (browser) {
+                await browser.close();
+            }
         }
     }
 }
