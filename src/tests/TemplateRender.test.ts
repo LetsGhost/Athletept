@@ -185,7 +185,24 @@ const mockBlankProtocol = {
           $oid: "658b16273f7bd66c77c1f65f",
         },
       },
-      exercises: [],
+      exercises: [
+        {
+          Exercises: "Schrägbankdrücken",
+          Weight: "30/30/30",
+          Repetitions: "12/11/10",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3a",
+          },
+        },
+        {
+          Exercises: "Latzug",
+          Weight: "49.5/49.5/49.5",
+          Repetitions: "12/10/8",
+          _id: {
+            $oid: "65a177f30a0859f7248aed3b",
+          },
+        },
+      ],
       _id: {
         $oid: "658b16273f7bd66c77c1f65e",
       },
@@ -217,19 +234,20 @@ describe("TemplateUtils", () => {
     it("should return a rendered HTML", async () => {
       const template = TemplateUtils.renderTemplateWithData(
         "checkIn.ejs",
-        mockCheckIn
+        {checkIn: mockCheckIn}
       );
       expect(template).toBeDefined();
       expect(template).not.toBe(""); // Add this line
     });
   });
+  
   describe("render Template Protocol", () => {
     it("should return a rendered HTML", async () => {
       const template = TemplateUtils.renderTemplateWithData(
         "protocol.ejs",
-        mockProtocol
+        {protocolExercisePlan: mockProtocol}
       );
-      console.log(template);
+
       expect(template).toBeDefined();
       expect(template).not.toBe(""); // Add this line
     });
@@ -239,7 +257,7 @@ describe("TemplateUtils", () => {
     it("should return a rendered HTML", async () => {
       const template = TemplateUtils.renderTemplateWithData(
         "protocol.ejs",
-        mockBlankProtocol
+        {protocolExercisePlan: mockBlankProtocol}
       );
       expect(template).toBeDefined();
       expect(template).not.toBe(""); // Add this line

@@ -59,28 +59,32 @@
 </head>
 <body>
     <section>
-        <% exerciseDays.forEach(function(day) { %>
+        <% protocolExercisePlan.exerciseDays.forEach(function(day) { %>
             <h2>Day <%= day.dayNumber %>: <%= day.type %></h2>
             <p>Comment: <%= day.comment && day.comment.Notes ? day.comment.Notes : 'No comment provided' %></p>
             <p>Comment: <%= day.comment && day.comment.Scale ? day.comment.Scale : 'No scale provided' %></p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Exercise</th>
-                        <th>Weight</th>
-                        <th>Repetitions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% day.exercises.forEach(function(exercise) { %>
+            <% if (day.exercises && day.exercises.length > 0) { %>
+                <table>
+                    <thead>
                         <tr>
-                            <td><%= exercise.Exercises %></td>
-                            <td><%= exercise.Weight %></td>
-                            <td><%= exercise.Repetitions %></td>
+                            <th>Exercise</th>
+                            <th>Weight</th>
+                            <th>Repetitions</th>
                         </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% day.exercises.forEach(function(exercise) { %>
+                            <tr>
+                                <td><%= exercise.Exercises %></td>
+                                <td><%= exercise.Weight %></td>
+                                <td><%= exercise.Repetitions %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>No exercises for this day.</p>
+            <% } %>
         <% }); %>
     </section>
 

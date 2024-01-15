@@ -53,13 +53,14 @@
     </header>
 
     <section>
-        <h2>Check-In Status: <%= checkInStatus %></h2>
-        <h3>Current Growth: <%= checkIn.currentGrowth.answer %></h3>
-        <h3>Current Growth: <%= checkIn.currentGrowth.answer2 %></h3>
-        <h3>Problems: <%= checkIn.problems.answer %></h3>
-        <h3>Regeneration: <%= checkIn.regeneration.answer %></h3>
-        <h3>Change: <%= checkIn.change.answer %></h3>
-        <h3>Weight: <%= checkIn.weight.weight %>kg</h3>
+        <% const UserCheckIn = checkIn.checkIn %>
+        <h2>Check-In Status: <%= UserCheckIn.checkInStatus %></h2>
+        <h3>Current Growth: <%= UserCheckIn.currentGrowth.answer %></h3>
+        <h3>Current Growth: <%= UserCheckIn.currentGrowth.answer2 %></h3>
+        <h3>Problems: <%= UserCheckIn.problems.answer %></h3>
+        <h3>Regeneration: <%= UserCheckIn.regeneration.answer %></h3>
+        <h3>Change: <%= UserCheckIn.change.answer %></h3>
+        <h3>Weight: <%= UserCheckIn.weight.weight %>kg</h3>
     </section>
 
     <footer>
