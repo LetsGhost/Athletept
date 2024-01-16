@@ -57,7 +57,7 @@ async function dbSchedule() {
           // Remove the protocolExercisePlan field from the user document
           await UserModel.updateOne(
             { _id: user._id },
-            { $unset: { checkIn: 1 } }
+            { $unset: { protocolExercisePlan: 1 } }
           );
 
           await user?.save();
@@ -70,7 +70,6 @@ async function dbSchedule() {
           "checkIn"
         );
         const currentCheckIn = userCheckIn?.checkIn as any;
-
         if (currentCheckIn && userCheckIn) {
           currentCheckIn.checkInStatus = false;
           await currentCheckIn.save();
