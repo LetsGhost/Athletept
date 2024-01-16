@@ -67,13 +67,8 @@ server.use(helmet({
 }));
 
 connectToDatabase()
-//connectToRedis();
 
-//setInterval(logResourceUsage, 60 * 60 * 1000);
-//logResourceUsage();
-//server.use(logRequestMethod);
-
-cron.schedule('0 0 * * 1', dbSchedule); // Run every Sunday at 00:00
+cron.schedule('0 0 * * 1', dbSchedule); // Run every Monday at 00:00
 
 server.use('/user', userRoutes);
 server.use('/admin', adminRoutes);
