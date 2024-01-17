@@ -133,6 +133,19 @@ class ExercisePlanService {
                 await ExercisePlan.findByIdAndDelete(user.exercisePlan);
             }
 
+            // Define the rules to check if the excel is processed correctly
+            if(exercisePlan){
+                const exercisePlanDays = exercisePlan;
+                // 1. Check if the exercise plan has more than 7 days
+                if(exercisePlanDays.length > 7){
+                    return {
+                        success: false,
+                        code: 400,
+                        message: "The exercise plan has more than 7 days"
+                    }
+                }
+            }
+
             if (user) {
                 const exercisePlanDocument = new ExercisePlan({
                     exerciseDays: exercisePlan,
