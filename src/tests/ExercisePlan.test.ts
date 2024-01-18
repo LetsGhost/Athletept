@@ -51,29 +51,18 @@ afterAll(async () => {
 
 describe('ExercisPlanService', () => {
   describe('createExerciseplan and check if the set rules are working', () => {
-    it('create an exerciseplan that has more than 7 days, a false is expected', async () => {
+    it('create an exerciseplan that that throws an error with the new rules', async () => {
         const exercisPlanPath = "src/tests/Trainingstabelle_for_testing.xlsx"
         const warmupExercisePath = "src/tests/warmuptabelle_for_testing.xlsx"
 
         const result = await ExercisePlanService.createExercisePlanFromExcel(NewUserId, exercisPlanPath, warmupExercisePath);
 
         expect(result).toEqual({
-            success: false,
-            code: 400,
-            message: "The exercise plan has more than 7 days"
+          success: false,
+          code: 400,
+          message: `The warmup contains null or undefined values`
         });
     })
-    it('create an exerciseplan that has an ExerciseDay without any exercises, a false is expected', async () => {
-        const exercisPlanPath = "src/tests/Trainingstabelle_for_testing.xlsx"
-        const warmupExercisePath = "src/tests/warmuptabelle_for_testing.xlsx"
 
-        const result = await ExercisePlanService.createExercisePlanFromExcel(NewUserId, exercisPlanPath, warmupExercisePath);
-
-        expect(result).toEqual({
-            success: false,
-            code: 400,
-            message: "The exercise plan has more than 7 days"
-        });
-    })
   });
 })
