@@ -59,8 +59,8 @@ describe('ExercisPlanService', () => {
 
         expect(result).toEqual({
           success: false,
-          code: 400,
-          message: `The warmup contains null or undefined values`
+                                    code: 400,
+                                    message: `The warmup excel contains empty or undefined values/cells`
         });
     })
 
