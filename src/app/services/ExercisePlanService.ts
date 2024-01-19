@@ -342,6 +342,20 @@ class ExercisePlanService {
                             }
                         }
                     }
+
+                    // Check if the warmup has no null or undefined values
+                    for (const warmup of day.warmup) {
+                        for (const key in warmup) {
+                            const value = (warmup as { [key: string]: any })[key];
+                            if (value === null || value === undefined) {
+                                return {
+                                    success: false,
+                                    code: 400,
+                                    message: `The warmup contains null or undefined values`
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 // 3. Check if an exerciseDay has atleast one exercise
