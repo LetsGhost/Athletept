@@ -59,7 +59,7 @@ class ExercisePlanService {
             let previousType: string | null = null; // Store the previous type
 
             worksheet?.eachRow((row, rowNumber) => {
-                if (row.getCell(1).value === 'Nummer') return; // Skip the first row
+                if (row.getCell(1).value === 'Name') return; // Skip the first row
 
                 const currentType = row.getCell(1).value as string; // Is the nummer of the day
 
@@ -69,19 +69,19 @@ class ExercisePlanService {
                     const warmup: Warmup[] = [];
 
                     exercises.push({
-                        Exercises: row.getCell(4).value as string,
-                        Weight: row.getCell(5).value as number,
-                        Sets: row.getCell(6).value as number,
-                        WarmUpSets: row.getCell(7).value as number,
-                        WarmupWeight: row.getCell(8).value as number,
-                        WarmupRepetitions: row.getCell(9).value as number,
-                        Repetitions: row.getCell(10).value as string,
-                        Rest: row.getCell(11).value as string,
-                        Execution: row.getCell(12).value as string,
+                        Exercises: row.getCell(3).value as string,
+                        Weight: row.getCell(4).value as number,
+                        Sets: row.getCell(5).value as number,
+                        WarmUpSets: row.getCell(6).value as number,
+                        WarmupWeight: row.getCell(7).value as number,
+                        WarmupRepetitions: row.getCell(8).value as number,
+                        Repetitions: row.getCell(9).value as string,
+                        Rest: row.getCell(10).value as string,
+                        Execution: row.getCell(11).value as string,
                     });
 
                     warmupWorksheet?.eachRow((warmupRow, warmupRowNumber) => {
-                        if (warmupRow.getCell(1).value === 'Nummer') return; // Skip the first row
+                        if (warmupRow.getCell(1).value === 'Name') return; // Skip the first row
 
                         const warmupType = warmupRow.getCell(1).value as string;
 
@@ -101,8 +101,8 @@ class ExercisePlanService {
 
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
-                        weekDay: row.getCell(3).value as string,
-                        type: row.getCell(2).value as string,
+                        weekDay: row.getCell(2).value as string,
+                        type: row.getCell(1).value as string,
                         exercises: exercises,
                         warmup: warmup,
                     };
@@ -113,15 +113,15 @@ class ExercisePlanService {
                 } else {
                     // Append exercises to the current day
                     currentDay?.exercises.push({
-                        Exercises: row.getCell(4).value as string,
-                        Weight: row.getCell(5).value as number,
-                        Sets: row.getCell(6).value as number,
-                        WarmUpSets: row.getCell(7).value as number,
-                        WarmupWeight: row.getCell(8).value as number,
-                        WarmupRepetitions: row.getCell(9).value as number,
-                        Repetitions: row.getCell(10).value as string,
-                        Rest: row.getCell(11).value as string,
-                        Execution: row.getCell(12).value as string,
+                        Exercises: row.getCell(3).value as string,
+                        Weight: row.getCell(4).value as number,
+                        Sets: row.getCell(5).value as number,
+                        WarmUpSets: row.getCell(6).value as number,
+                        WarmupWeight: row.getCell(7).value as number,
+                        WarmupRepetitions: row.getCell(8).value as number,
+                        Repetitions: row.getCell(9).value as string,
+                        Rest: row.getCell(10).value as string,
+                        Execution: row.getCell(11).value as string,
                     });
                 }
             });
@@ -133,6 +133,73 @@ class ExercisePlanService {
                 await ExercisePlan.findByIdAndDelete(user.exercisePlan);
             }
 
+            // Define the rules to check if the excel is processed correctly
+            if(exercisePlan){
+                const exercisePlanDays = exercisePlan;
+                // 1. Check if the exercise plan has more than 7 days
+                if(exercisePlanDays.length > 7){
+                    return {
+                        success: false,
+                        code: 400,
+                        message: "The exercise plan has more than 7 days"
+                    }
+                }
+
+                // 2. Check if any value is null or undefined
+                for (const day of exercisePlanDays) {
+                    // Check if any property of day is null or undefined
+                    for (const key in day) {
+                        const value = (day as { [key: string]: any })[key];
+                        if (value === null || value === undefined) {
+                            return {
+                                success: false,
+                                code: 400,
+                                message: `The exercise plan contains null or undefined values`
+                            }
+                        }
+                    }
+
+                    // Check if any value in exercises is null or undefined
+                    for (const exercise of day.exercises) {
+                        for (const key in exercise) {
+                            const value = (exercise as { [key: string]: any })[key];
+                            if (value === null || value === undefined) {
+                                return {
+                                    success: false,
+                                    code: 400,
+                                    message: `The exercise plan contains null or undefined values`
+                                }
+                            }
+                        }
+                    }
+
+                    // Check if the warmup has no null or undefined values
+                    for (const warmup of day.warmup) {
+                        for (const key in warmup) {
+                            const value = (warmup as { [key: string]: any })[key];
+                            if (value === null || value === undefined) {
+                                return {
+                                    success: false,
+                                    code: 400,
+                                    message: `The warmup contains null or undefined values`
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // 3. Check if an exerciseDay has atleast one exercise
+                for (const day of exercisePlanDays) {
+                    if(day.exercises.length < 1){
+                        return {
+                            success: false,
+                            code: 400,
+                            message: `The exercise plan has a day without exercises`
+                        }
+                    }
+                }
+            }
+            console.log(JSON.stringify(exercisePlan, null, 2));
             if (user) {
                 const exercisePlanDocument = new ExercisePlan({
                     exerciseDays: exercisePlan,
@@ -235,6 +302,73 @@ class ExercisePlanService {
                 }
             });
 
+
+            // Define the rules to check if the excel is processed correctly
+            if(exercisePlan){
+                const exercisePlanDays = exercisePlan;
+                // 1. Check if the exercise plan has more than 7 days
+                if(exercisePlanDays.length > 7){
+                    return {
+                        success: false,
+                        code: 400,
+                        message: "The exercise plan has more than 7 days"
+                    }
+                }
+
+                // 2. Check if any value is null or undefined
+                for (const day of exercisePlanDays) {
+                    // Check if any property of day is null or undefined
+                    for (const key in day) {
+                        const value = (day as { [key: string]: any })[key];
+                        if (value === null || value === undefined) {
+                            return {
+                                success: false,
+                                code: 400,
+                                message: `The exercise plan contains null or undefined values`
+                            }
+                        }
+                    }
+
+                    // Check if any value in exercises is null or undefined
+                    for (const exercise of day.exercises) {
+                        for (const key in exercise) {
+                            const value = (exercise as { [key: string]: any })[key];
+                            if (value === null || value === undefined) {
+                                return {
+                                    success: false,
+                                    code: 400,
+                                    message: `The exercise plan contains null or undefined values`
+                                }
+                            }
+                        }
+                    }
+
+                    // Check if the warmup has no null or undefined values
+                    for (const warmup of day.warmup) {
+                        for (const key in warmup) {
+                            const value = (warmup as { [key: string]: any })[key];
+                            if (value === null || value === undefined) {
+                                return {
+                                    success: false,
+                                    code: 400,
+                                    message: `The warmup contains null or undefined values`
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // 3. Check if an exerciseDay has atleast one exercise
+                for (const day of exercisePlanDays) {
+                    if(day.exercises.length < 1){
+                        return {
+                            success: false,
+                            code: 400,
+                            message: `The exercise plan has a day without exercises`
+                        }
+                    }
+                }
+            }
 
             // Find the user and update the exercise plan
             const user = await UserModel.findById(userId);

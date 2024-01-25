@@ -704,4 +704,6 @@ docker-compose.yml
 
 settings.json
 
+*.xlsx
+
 # End of https://www.toptal.com/developers/gitignore/api/node,webstorm,visualstudiocode,visualstudio,dotenv,expressionengine,typings
