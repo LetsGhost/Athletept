@@ -47,7 +47,19 @@ if(process.env.ENV === "production") {
     }
   ));
 } else {
-  server.use(cors())
+  // Add localhost to the allowed origins for non-production environments
+  server.use(cors({
+    origin: ['http://localhost:5173'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
+  }));
+  server.options('*', cors(
+    {
+      origin: ['http://localhost:5173'],
+      credentials: true,
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
+    }
+  ));
 }
 
 server.use(bodyParser.json());
