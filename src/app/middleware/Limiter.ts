@@ -7,8 +7,10 @@ dotenv.config();
 
 // Define the rate limit rule
 const limiter = rateLimit({
-  windowMs: Number(process.env.LIMITER_WINDOW_MS) || 900000, // 15 minutes
+  windowMs: Number(process.env.LIMITER_WINDOW_MS) || 24 * 60 * 60 * 1000, // 15 minutes
   max: Number(process.env.LIMITER_MAX) || 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
   handler: (req: Request, res: Response, next: NextFunction) => {
     const ip = getClientIp(req);
     logger.warn(`Rate limit exceeded by IP: ${ip}`, {service: 'Limiter'});
