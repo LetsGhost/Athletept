@@ -8,18 +8,18 @@ import cron from 'node-cron';
 
 dotenv.config();
 
-// Routes
+// DB´s connections
 import connectToDatabase from './config/db.js';
-import { connectToRedis } from './config/redis.js';
 
-import { logResourceUsage, logRequestMethod } from './app/middleware/Performance.js';
+// Schedules
 import dbSchedule from './app/utils/dbSchedule.js';
 
+// Routes
 import userRoutes from "./app/routes/UserRoutes.js";
 import adminRoutes from "./app/routes/AdminRoutes.js";
 import authRoutes from "./app/routes/AuthRoute.js";
 
-import limiter from './app/middleware/Limiter.js';
+// Logger
 import logger from './config/winstonLogger.js';
 
 const server = express();
