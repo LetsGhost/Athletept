@@ -1,6 +1,6 @@
 import ExcelJS from "exceljs";
 import logger from "../../config/winstonLogger.js";
-import { Exercise, warmup, ExerciseDay, ExercisePlanDocument } from "../models/ExercisePlanModel.js";
+import { Exercise, warmup, ExerciseDay } from "../models/ExercisePlanModel.js";
 
 async function createExercisePlan(exerciseFile: any) {
  try{
