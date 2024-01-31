@@ -24,8 +24,8 @@ const trainingDurationPlanSchema = new Schema<TrainingdurationDocument>({
     createdAt: { type: Date, required: true, default: Date.now },
 })
 
-const TrainingDuration: TrainingDurationPlanModel = mongoose.model<TrainingdurationDocument, TrainingDurationPlanModel>('Trainingduration', trainingDurationPlanSchema);
+const TrainingDurationModel: TrainingDurationPlanModel = mongoose.model<TrainingdurationDocument, TrainingDurationPlanModel>('Trainingduration', trainingDurationPlanSchema);
 
-export {TrainingDuration};
+export default TrainingDurationModel;
 
 

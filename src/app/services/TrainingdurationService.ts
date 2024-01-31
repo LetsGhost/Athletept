@@ -1,4 +1,4 @@
-import {TrainingDuration} from '../models/TrainingdurationModel.js';
+import TrainingDurationModel from '../models/TrainingdurationModel.js';
 import UserModel from '../models/UserModel.js';
 import logger from '../../config/winstonLogger.js';
 
@@ -27,7 +27,7 @@ class TrainingdurationService{
                 }
             }
 
-            const newTrainingduration = new TrainingDuration({
+            const newTrainingduration = new TrainingDurationModel({
                 trainingduration: trainingduration
             })
 
