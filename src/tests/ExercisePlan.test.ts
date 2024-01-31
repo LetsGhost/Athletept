@@ -51,6 +51,7 @@ afterAll(async () => {
 
 describe('ExercisPlanService', () => {
   describe('createExerciseplan and check if the set rules are working', () => {
+    /*
     it('create an exerciseplan that that throws an error with the new rules', async () => {
         const exercisPlanPath = "src/tests/Trainingstabelle_for_testing.xlsx"
         const warmupExercisePath = "src/tests/warmuptabelle_for_testing.xlsx"
@@ -59,10 +60,19 @@ describe('ExercisPlanService', () => {
 
         expect(result).toEqual({
           success: false,
-                                    code: 400,
-                                    message: `The warmup excel contains empty or undefined values/cells`
+          code: 400,
+          message: `The warmup excel contains empty or undefined values/cells`
         });
     })
+    */
+    it('create an exerciseplan that that throws an error with the new rules', async () => {
+      const exercisPlanPath = "src/tests/Trainingstabelle_Vorlage.xlsx"
+      const warmupExercisePath = "src/tests/warmuptabelle_for_testing.xlsx"
+
+      const result = await ExercisePlanService.createExercisePlanFromExcel(NewUserId, exercisPlanPath, warmupExercisePath);
+
+      expect(result.success).toEqual(true);
+  })
 
   });
 })

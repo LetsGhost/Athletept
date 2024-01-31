@@ -1,39 +1,8 @@
 import ExcelJS, { Row } from "exceljs";
 import UserModel from "../models/UserModel.js";
-import ExercisePlanModel from "../models/ExercisePlanModel.js";
+import ExercisePlanModel, { Exercise, warmup, ExerciseDay } from "../models/ExercisePlanModel.js";
 import logger from "../../config/winstonLogger.js";
 import WeekDisplayModel from "../models/WeekDisplayModel.js";
-
-interface Exercise {
-    Exercises: string;
-    Weight: number;
-    Sets: number;
-    WarmUpSets: number;
-    WarmupWeight: number,
-    WarmupRepetitions: number,
-    Repetitions: string;
-    Rest: string;
-    Execution: string;
-}
-
-interface Warmup {
-    warmupExercise: {
-        Exercises: string;
-        weight: number;
-        repetitions: number;
-    };
-    warmupMaterials: {
-        Materials: string;
-    };
-}
-
-interface ExerciseDay {
-    dayNumber: number;
-    weekDay?: string;
-    type?: string;
-    exercises: Exercise[];
-    warmup: Warmup[];
-}
 
 class ExercisePlanService {
 
@@ -57,7 +26,7 @@ class ExercisePlanService {
             let currentDay: ExerciseDay | null = null;
             let previousType: string | null = null; // Store the previous type
 
-            worksheet?.eachRow((row, rowNumber) => {
+            worksheet?.eachRow((row) => {
                 if (row.getCell(1).value === 'Name') return; // Skip the first row
 
                 const currentType = row.getCell(1).value as string; // Is the nummer of the day
@@ -65,43 +34,51 @@ class ExercisePlanService {
                 if (currentType !== previousType) {
                     // If the training type in the first cell has changed, it's a new day
                     const exercises: Exercise[] = [];
-                    const warmup: Warmup[] = [];
+                    const warmup: warmup[] = [];
 
                     exercises.push({
                         Exercises: row.getCell(3).value as string,
-                        Weight: row.getCell(4).value as number,
+                        Weight: row.getCell(4).value as string,
                         Sets: row.getCell(5).value as number,
                         WarmUpSets: row.getCell(6).value as number,
-                        WarmupWeight: row.getCell(7).value as number,
-                        WarmupRepetitions: row.getCell(8).value as number,
+                        WarmupWeight: row.getCell(7).value as string,
+                        WarmupRepetitions: row.getCell(8).value as string,
                         Repetitions: row.getCell(9).value as string,
                         Rest: row.getCell(10).value as string,
                         Execution: row.getCell(11).value as string,
                     });
 
-                    warmupWorksheet?.eachRow((warmupRow, warmupRowNumber) => {
-                        if (warmupRow.getCell(1).value === 'Name') return; // Skip the first row
+                    warmupWorksheet?.eachRow((warmupRow) => {
+                        if (warmupRow.getCell(1).value === 'Nummer') return; // Skip the first row
 
                         const warmupType = warmupRow.getCell(1).value as string;
+                        console.log("WarmupType " + warmupType)
+                        console.log("CurrentType " + currentType)
 
                         if (warmupType === currentType) {
+                            console.log("hi")
                             warmup.push({
-                                warmupExercise: {
+                                warmupExercise: [{
                                     Exercises: warmupRow.getCell(2).value as string,
-                                    weight: warmupRow.getCell(4).value as number,
-                                    repetitions: warmupRow.getCell(5).value as number,
-                                },
-                                warmupMaterials: {
+                                    weight: warmupRow.getCell(4).value as string,
+                                    repetitions: warmupRow.getCell(5).value as string,
+                                }],
+                                warmupMaterials: [{
                                     Materials: warmupRow.getCell(3).value as string,
-                                },
+                                    weight: warmupRow.getCell(4).value as string,
+                                    repetitions: warmupRow.getCell(5).value as string,
+                                }],
                             });
                         }
+                        console.log(warmup)
                     });
 
                     currentDay = {
                         dayNumber: exercisePlan.length + 1,
                         weekDay: row.getCell(2).value as string,
                         type: row.getCell(1).value as string,
+                        trainingDone: false,
+                        trainingMissed: false,
                         exercises: exercises,
                         warmup: warmup,
                     };
@@ -113,11 +90,11 @@ class ExercisePlanService {
                     // Append exercises to the current day
                     currentDay?.exercises.push({
                         Exercises: row.getCell(3).value as string,
-                        Weight: row.getCell(4).value as number,
+                        Weight: row.getCell(4).value as string,
                         Sets: row.getCell(5).value as number,
                         WarmUpSets: row.getCell(6).value as number,
-                        WarmupWeight: row.getCell(7).value as number,
-                        WarmupRepetitions: row.getCell(8).value as number,
+                        WarmupWeight: row.getCell(7).value as string,
+                        WarmupRepetitions: row.getCell(8).value as string,
                         Repetitions: row.getCell(9).value as string,
                         Rest: row.getCell(10).value as string,
                         Execution: row.getCell(11).value as string,
@@ -260,15 +237,15 @@ class ExercisePlanService {
                 if (currentType !== previousType) {
                     // If the training type in the first cell has changed, it's a new day
                     const exercises: Exercise[] = [];
-                    const warmup: Warmup[] = [];
+                    const warmup: warmup[] = [];
 
                     exercises.push({
                         Exercises: row.getCell(4).value as string,
-                        Weight: row.getCell(5).value as number,
+                        Weight: row.getCell(5).value as string,
                         Sets: row.getCell(6).value as number,
                         WarmUpSets: row.getCell(7).value as number,
-                        WarmupWeight: row.getCell(8).value as number,
-                        WarmupRepetitions: row.getCell(9).value as number,
+                        WarmupWeight: row.getCell(8).value as string,
+                        WarmupRepetitions: row.getCell(9).value as string,
                         Repetitions: row.getCell(10).value as string,
                         Rest: row.getCell(11).value as string,
                         Execution: row.getCell(12).value as string,
@@ -278,6 +255,8 @@ class ExercisePlanService {
                         dayNumber: exercisePlan.length + 1,
                         weekDay: row.getCell(3).value as string,
                         type: row.getCell(2).value as string,
+                        trainingDone: false,
+                        trainingMissed: false,
                         exercises: exercises,
                         warmup: warmup,
                     };
@@ -289,11 +268,11 @@ class ExercisePlanService {
                     // Append exercises to the current day
                     currentDay?.exercises.push({
                         Exercises: row.getCell(4).value as string,
-                        Weight: row.getCell(5).value as number,
+                        Weight: row.getCell(5).value as string,
                         Sets: row.getCell(6).value as number,
                         WarmUpSets: row.getCell(7).value as number,
-                        WarmupWeight: row.getCell(8).value as number,
-                        WarmupRepetitions: row.getCell(9).value as number,
+                        WarmupWeight: row.getCell(8).value as string,
+                        WarmupRepetitions: row.getCell(9).value as string,
                         Repetitions: row.getCell(10).value as string,
                         Rest: row.getCell(11).value as string,
                         Execution: row.getCell(12).value as string,

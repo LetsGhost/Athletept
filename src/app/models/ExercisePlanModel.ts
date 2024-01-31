@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface Exercise {
+export interface Exercise {
     Exercises: string;
     Weight: string;
     Sets: number;
@@ -12,24 +12,24 @@ interface Exercise {
     Execution: string;
 }
 
-interface warmupExercise {
+export interface warmupExercise {
     Exercises: string;
     weight: string;
     repetitions: string;
 }
 
-interface warmupMaterials {
+export interface warmupMaterials {
     Materials: string;
     weight: string;
     repetitions: string;
 }
 
-interface warmup {
+export interface warmup {
     warmupExercise: warmupExercise[];
     warmupMaterials: warmupMaterials[];
 }
 
-interface ExerciseDay {
+export interface ExerciseDay {
     dayNumber: number;
     weekDay: string;
     type: string;
@@ -39,12 +39,12 @@ interface ExerciseDay {
     warmup: warmup[];
 }
 
-interface ExercisePlanDocument extends Document {
+export interface ExercisePlanDocument extends Document {
     createdAt: Date;
     exerciseDays: ExerciseDay[];
 }
 
-interface ExercisePlanModel extends Model<ExercisePlanDocument> {}
+export interface ExercisePlanModel extends Model<ExercisePlanDocument> {}
 
 const exerciseSchema = new Schema<Exercise>({
     Exercises: String,
