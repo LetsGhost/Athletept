@@ -1,17 +1,6 @@
-import TrainingDurationModel from '../models/TrainingdurationModel.js';
+import TrainingDurationModel, { Trainingduration } from '../models/TrainingdurationModel.js';
 import UserModel from '../models/UserModel.js';
 import logger from '../../config/winstonLogger.js';
-
-interface Trainingduration {
-    coachingStartDate: string,
-    coachingDurationMonths: string[],
-    coachingDuration: string[]
-}
-
-interface TrainingdurationDocument extends Document {
-    trainingduration: Trainingduration;
-    createdAt: Date;
-}
 
 class TrainingdurationService{
 
