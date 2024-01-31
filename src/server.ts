@@ -35,13 +35,13 @@ if (process.env.ENV === "production") {
 if(process.env.ENV === "production") {
   // Cors configuration
   server.use(cors({
-    origin: ['https://admin.athletept.de', 'https://athletept.de'], // replace with your allowed origins
+    origin: [String(process.env.ADDRESS1), String(process.env.ADDRESS2)], // replace with your allowed origins
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
   }));
   server.options('*', cors(
     {
-      origin: ['https://admin.athletept.de', 'https://athletept.de'], // add your localhost to allowed origins
+      origin: [String(process.env.ADDRESS1), String(process.env.ADDRESS2)], // add your localhost to allowed origins
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
     }
@@ -49,13 +49,13 @@ if(process.env.ENV === "production") {
 } else {
   // Add localhost to the allowed origins for non-production environments
   server.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: [String(process.env.DEV_ADDRESS)],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
   }));
   server.options('*', cors(
     {
-      origin: ['http://localhost:5173'],
+      origin: [String(process.env.DEV_ADDRESS)],
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
     }
