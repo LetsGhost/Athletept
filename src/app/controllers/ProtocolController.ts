@@ -18,7 +18,6 @@ class ProtocolController{
 
                 return res.status(code).json({ success, message, newProtocol });
             } else {
-                console.log('Unexpected response from protocolService.createProtocol');
                 throw new Error('Unexpected response from protocolService.createProtocol');
             }
         } catch (error) {
@@ -63,7 +62,7 @@ class ProtocolController{
 
                 return res.status(code).json({ success, message, newProtocol });
             } else {
-                console.log('Unexpected response from protocolService.createBlankProtocol');
+                logger.error('Unexpected response', {service: 'ProtocolController.createBlankProtocol'});
                 throw new Error('Unexpected response from protocolService.createBlankProtocol');
             }
         }

@@ -66,7 +66,7 @@ class UserController{
             const {success, code, message, filteredUsers} = await userService.getAllUsers();
             res.status(code).json({success, message, filteredUsers});
         } catch (error) {
-            console.log("Error while getting all users in Controller: ", error)
+            logger.error('Error getting all users:', error, {service: 'UserController.getAllUsers'});
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
