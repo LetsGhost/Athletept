@@ -131,6 +131,7 @@ async function createExercisePlan(exerciseFile: any) {
  }
 }
 
+// TODO: Define some rule for the warmup
 async function createWarmup(exercisePlan: any, warmupFile: any){
     try{
         if(!exercisePlan){
