@@ -77,6 +77,6 @@ const checkInDocumentSchema = new Schema<checkInDocument>({
     checkIn: checkInSchema,
 })
 
-const CheckIn = mongoose.model<checkInDocument>('CheckIn', checkInDocumentSchema);
+const CheckInModel = mongoose.model<checkInDocument>('CheckIn', checkInDocumentSchema);
 
-export {CheckIn}
+export default CheckInModel;

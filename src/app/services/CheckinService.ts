@@ -1,6 +1,6 @@
-import { CheckIn } from "../models/CheckInModel.js"
+import CheckInModel from "../models/CheckInModel.js"
 import UserModel from "../models/UserModel.js";
-import { Document, Model } from 'mongoose';
+import { Document } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService.js";
 import logger from "../../config/winstonLogger.js";
 import templateUtils from "../utils/templateUtils.js";
@@ -87,7 +87,7 @@ class CheckInService {
 
                 await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
 
-                const newCheckIn = new CheckIn({
+                const newCheckIn = new CheckInModel({
                     checkIn: {
                         currentGrowth: currentGrowth,
                         problems: problems,
@@ -117,7 +117,7 @@ class CheckInService {
 
             await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
 
-            const newCheckIn = new CheckIn({
+            const newCheckIn = new CheckInModel({
                 checkIn: {
                     currentGrowth: currentGrowth,
                     problems: problems,
