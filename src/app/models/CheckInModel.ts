@@ -1,29 +1,29 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface currentGrowth {
+export interface currentGrowth {
     answer: string;
     answer2: string;
 }
 
-interface problems{
+export interface problems{
     answer: string;
     boolean: boolean;
 }
 
-interface regeneration{
+export interface regeneration{
     answer: string;
 }
 
-interface change{
+export interface change{
     answer: string;
     boolean: boolean;
 }
 
-interface weight {
+export interface weight {
     weight: number;
 }
 
-interface checkIn {
+export interface checkIn {
     currentGrowth: currentGrowth;
     problems: problems;
     regeneration: regeneration;
@@ -31,13 +31,13 @@ interface checkIn {
     weight: weight;
 }
 
-interface checkInDocument extends Document {
+export interface checkInDocument extends Document {
     createdAt: Date;
     checkInStatus: boolean
     checkIn: checkIn;
 }
 
-interface CheckInModel extends Model<checkInDocument> {}
+export interface CheckInModel extends Model<checkInDocument> {}
 
 const currentGrowthSchema = new Schema<currentGrowth>({
     answer: {type: String, default: 'Nichts'},

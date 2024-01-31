@@ -1,58 +1,11 @@
-import CheckInModel from "../models/CheckInModel.js"
+import CheckInModel, { checkInDocument } from "../models/CheckInModel.js"
 import UserModel from "../models/UserModel.js";
-import { Document } from 'mongoose';
 import WeightAnalyticsService from "./WeightAnalyticsService.js";
 import logger from "../../config/winstonLogger.js";
 import templateUtils from "../utils/templateUtils.js";
 
-interface currentGrowth {
-    answer: string;
-    answer2: string
-}
-
-interface problems{
-    answer: string;
-    boolean: boolean;
-}
-
-interface regeneration{
-    boolean: boolean;
-}
-
-interface change{
-    answer: string;
-    boolean: boolean;
-}
-
-interface weight {
-    weight: number;
-}
-
-interface checkIn {
-    currentGrowth: currentGrowth;
-    problems: problems;
-    regeneration: regeneration;
-    change: change;
-    weight: weight;
-}
-
-interface checkInDocument extends Document {
-    createdAt: Date;
-    checkInStatus: boolean
-    checkIn: checkIn;
-}
-
-interface request {
-    currentGrowth: { answer: string, answer2: string },
-    problems: { answer: string, boolean: boolean },
-    regeneration: { answer: string },
-    change: { answer: string, boolean: boolean }
-    weight: { weight: number }
-    checkInStatus: boolean
-}
-
 class CheckInService {
-    async createCheckIn(userId: string, checkIn: request){
+    async createCheckIn(userId: string, checkIn: any){
         try{
             const user = await UserModel.findById(userId)
             
