@@ -1,4 +1,4 @@
-import {WeekDisplay} from '../models/WeekDisplayModel.js';
+import WeekDisplayModel from '../models/WeekDisplayModel.js';
 import UserModel from '../models/UserModel.js';
 import logger from '../../config/winstonLogger.js';
 
@@ -15,13 +15,13 @@ class WeekDisplayService {
             const user = await UserModel.findById(userId);
 
             if(user){
-                const trainingsWeekDisplay = new WeekDisplay({
+                const trainingsWeekDisplay = new WeekDisplayModel({
                     trainingsWeek
                 });
         
                 const weekDisplay = await trainingsWeekDisplay.save();
 
-                const createdWeekDisplay = await WeekDisplay.create(weekDisplay);
+                const createdWeekDisplay = await WeekDisplayModel.create(weekDisplay);
                 user.weekDisplay = createdWeekDisplay._id;
                 await user.save();
                 
@@ -52,7 +52,7 @@ class WeekDisplayService {
             const user = await UserModel.findById(userId).populate('weekDisplay');
 
             if(user){
-                const weekDisplay = await WeekDisplay.findById(user.weekDisplay);
+                const weekDisplay = await WeekDisplayModel.findById(user.weekDisplay);
 
                 if(!weekDisplay){
 
@@ -97,7 +97,7 @@ class WeekDisplayService {
                 }
             }
 
-            const weekDisplay = await WeekDisplay.findById(user.weekDisplay);
+            const weekDisplay = await WeekDisplayModel.findById(user.weekDisplay);
 
             if(!weekDisplay){
                 return {
