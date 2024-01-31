@@ -51,6 +51,6 @@ const protocolExercisePlanSchema = new Schema<ProtocolExercisePlanDocument>({
     }
 });
 
-const ProtocolExercisePlan: ProtocolExercisePlanModel = mongoose.model<ProtocolExercisePlanDocument, ProtocolExercisePlanModel>('ProtocolExercisePlan', protocolExercisePlanSchema);
+const ProtocolExercisePlanModel: ProtocolExercisePlanModel = mongoose.model<ProtocolExercisePlanDocument, ProtocolExercisePlanModel>('ProtocolExercisePlan', protocolExercisePlanSchema);
 
-export { ProtocolExercisePlan };
+export default ProtocolExercisePlanModel;

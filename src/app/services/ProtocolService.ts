@@ -1,9 +1,9 @@
 import UserModel from "../models/UserModel.js";
-import {ProtocolExercisePlan} from "../models/ProtocolModel.js";
-import {Document, Model} from "mongoose";
-import {ExercisePlan} from "../models/ExercisePlanModel.js";
+import ProtocolExercisePlanModel from "../models/ProtocolModel.js";
+import { Document } from "mongoose";
+import ExercisePlanModel from "../models/ExercisePlanModel.js";
 import protocolUtils from "../utils/protocolUtils.js";
-import { WeekDisplay } from "../models/WeekDisplayModel.js";
+import WeekDisplayModel from "../models/WeekDisplayModel.js";
 import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
 
@@ -45,7 +45,7 @@ class ProtocolService{
                 const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
                 // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
-                const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
+                const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
                 const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
                 if (exerciseDay) {
                     exerciseDay.trainingDone = true;
@@ -53,14 +53,14 @@ class ProtocolService{
                 }
 
                 // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
-                const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+                const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
                 if(weekDisplay){
                     weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
                     await weekDisplay.save();
                 }
 
                 // Append the new protocol to the existing one
-                const existingProtocol = await ProtocolExercisePlan.findById(user?.protocolExercisePlan);
+                const existingProtocol = await ProtocolExercisePlanModel.findById(user?.protocolExercisePlan);
                 if (existingProtocol) {
                     existingProtocol.exerciseDays = existingProtocol.exerciseDays.concat(protocolExerciseDays);
                     await existingProtocol.save();
@@ -76,7 +76,7 @@ class ProtocolService{
             const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
             // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
-            const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
+            const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
             const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
             if (exerciseDay) {
                 exerciseDay.trainingDone = true;
@@ -85,18 +85,18 @@ class ProtocolService{
             }
 
             if (user) {
-                const protocolExercisePlanDocument = new ProtocolExercisePlan({
+                const protocolExercisePlanDocument = new ProtocolExercisePlanModel({
                     exerciseDays: protocolExerciseDays
                 });
 
                 // Create and save the exercise plan using the ExercisePlan model
-                const createdExercisePlan = await ProtocolExercisePlan.create(protocolExercisePlanDocument);
+                const createdExercisePlan = await ProtocolExercisePlanModel.create(protocolExercisePlanDocument);
                 user.protocolExercisePlan = createdExercisePlan._id;
 
                 await user.save();
 
                 // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
-                const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+                const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
 
                 if(weekDisplay){
                     weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
@@ -148,7 +148,7 @@ class ProtocolService{
 
                 const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
 
-                const protocolExerciseDays = new ProtocolExercisePlan({
+                const protocolExerciseDays = new ProtocolExercisePlanModel({
                     exerciseDays: [{
                         dayNumber: day,
                         type: type,
@@ -162,7 +162,7 @@ class ProtocolService{
                             
 
                 // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
-                const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
+                const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
                 const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays.exerciseDays[0].dayNumber);
                 if (exerciseDay) {
                     exerciseDay.trainingDone = true;
@@ -170,14 +170,14 @@ class ProtocolService{
                 }
 
                 // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
-                const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+                const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
                 if(weekDisplay){
                     weekDisplay.trainingDone.push(day);
                     await weekDisplay.save();
                 }
 
                 // Append the new protocol to the existing one
-                const existingProtocol = await ProtocolExercisePlan.findById(user?.protocolExercisePlan);
+                const existingProtocol = await ProtocolExercisePlanModel.findById(user?.protocolExercisePlan);
                 if (existingProtocol) {
                     existingProtocol.exerciseDays = existingProtocol.exerciseDays.concat(protocolExerciseDays.exerciseDays);
                     await existingProtocol.save();
@@ -190,7 +190,7 @@ class ProtocolService{
                 }
             }
 
-            const protocolExerciseDays = new ProtocolExercisePlan({
+            const protocolExerciseDays = new ProtocolExercisePlanModel({
                 exerciseDays: [{
                     dayNumber: day,
                     type: type,
@@ -203,7 +203,7 @@ class ProtocolService{
             })
 
             // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
-            const exercisePlan = await ExercisePlan.findById(user?.exercisePlan);
+            const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
             const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays.exerciseDays[0].dayNumber);
             if (exerciseDay) {
                 exerciseDay.trainingDone = true;
@@ -211,18 +211,18 @@ class ProtocolService{
             }
 
             if (user) {
-                const protocolExercisePlanDocument = new ProtocolExercisePlan({
+                const protocolExercisePlanDocument = new ProtocolExercisePlanModel({
                     exerciseDays: protocolExerciseDays
                 });
 
                 // Create and save the exercise plan using the ExercisePlan model
-                const createdExercisePlan = await ProtocolExercisePlan.create(protocolExercisePlanDocument);
+                const createdExercisePlan = await ProtocolExercisePlanModel.create(protocolExercisePlanDocument);
                 user.protocolExercisePlan = createdExercisePlan._id;
 
                 await user.save();
 
                 // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
-                const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+                const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
 
                 if(weekDisplay){
                     weekDisplay.trainingDone.push(day);
