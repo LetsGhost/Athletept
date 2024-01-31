@@ -1,4 +1,4 @@
-import { WeightAnalyticsModel } from "../models/WeightAnalyticsModel.js";
+import WeightAnalyticsModel from "../models/WeightAnalyticsModel.js";
 import UserService from "./UserService.js";
 import UserModel  from "../models/UserModel.js";
 import { Schema, Model } from 'mongoose';
