@@ -14,6 +14,6 @@ const trainingsWeekDisplaySchema = new Schema<TrainingWeekDisplayModel>({
     lastUpdate: {type: Date, default: Date.now}
 });
 
-const WeekDisplay: Model<TrainingWeekDisplayModel> = mongoose.model<TrainingWeekDisplayModel>('WeekDisplay', trainingsWeekDisplaySchema);
+const WeekDisplayModel: Model<TrainingWeekDisplayModel> = mongoose.model<TrainingWeekDisplayModel>('WeekDisplay', trainingsWeekDisplaySchema);
 
-export {WeekDisplay}
+export default WeekDisplayModel

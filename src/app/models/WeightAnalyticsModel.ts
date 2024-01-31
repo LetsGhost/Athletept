@@ -38,4 +38,4 @@ const weightAnalyticsSchema = new Schema<weightAnalyticsModel>({
 
 const WeightAnalyticsModel = mongoose.model<weightAnalyticsModel, WeightAnalyticsPlanModel>('WeightAnalytics', weightAnalyticsSchema);
 
-export { WeightAnalyticsModel };
+export default WeightAnalyticsModel;
