@@ -1,11 +1,10 @@
 import logger from "../../config/winstonLogger.js";
-import { Types } from "mongoose";
 
 // Services
 import UserService from "../services/UserService.js";
 
 // Models
-import { WeekDisplay } from "../models/WeekDisplayModel.js";
+import WeekDisplayModel from "../models/WeekDisplayModel.js";
 import UserModel from "../models/UserModel.js";
 
 async function dbSchedule() {
@@ -87,7 +86,7 @@ async function dbSchedule() {
           checkInCounter++;
         }
 
-        const weekDisplay = await WeekDisplay.findById(user?.weekDisplay);
+        const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
 
         if (weekDisplay) {
           weekDisplay.trainingDone = [];
