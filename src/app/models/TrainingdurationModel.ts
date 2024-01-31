@@ -1,17 +1,17 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface Trainingduration {
+export interface Trainingduration {
     coachingStartDate: Date,
     coachingDurationMonths: string[],
     coachingDuration: string[]
 }
 
-interface TrainingdurationDocument extends Document {
+export interface TrainingdurationDocument extends Document {
     trainingduration: Trainingduration;
     createdAt: Date;
 }
 
-interface TrainingDurationPlanModel extends Model<TrainingdurationDocument> {}
+export interface TrainingDurationPlanModel extends Model<TrainingdurationDocument> {}
 
 const trainingdurationSchema = new Schema<Trainingduration>({
     coachingStartDate: { type: Date, required: true, default: Date.now },

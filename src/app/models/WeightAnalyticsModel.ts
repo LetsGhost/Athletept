@@ -1,23 +1,23 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema } from 'mongoose';
 
-interface bodyWeight {
+export interface bodyWeight {
     lastWeight: number;
     actualWeight: number;
     weightGoal: number;
     weightStart: number;
 }
 
-interface bodyWeightGraphSixteenWeeks {
+export interface bodyWeightGraphSixteenWeeks {
     weight: number[];
 }
 
-interface weightAnalyticsModel {
+export interface weightAnalyticsModel {
     createdAt: Date;
     bodyWeight: bodyWeight;
     bodyWeightGraphSixteenWeeks: bodyWeightGraphSixteenWeeks[];
 }
 
-interface WeightAnalyticsPlanModel extends Model<weightAnalyticsModel> {}
+export interface WeightAnalyticsPlanModel extends Model<weightAnalyticsModel> {}
 
 const bodyWeightSchema = new Schema<bodyWeight>({
     lastWeight: Number,

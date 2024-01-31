@@ -2,13 +2,6 @@ import WeekDisplayModel from '../models/WeekDisplayModel.js';
 import UserModel from '../models/UserModel.js';
 import logger from '../../config/winstonLogger.js';
 
-interface TrainingWeekDisplayModel extends Document {
-    trainingDone: number[];
-    trainingsWeek: string[];
-    createdAt: Date;
-    lastUpdate: Date;
-}
-
 class WeekDisplayService {
     async createWeekDisplay(userId: string, trainingsWeek: Array<string>) {
         try{
