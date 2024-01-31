@@ -1,4 +1,4 @@
-import {MessageModel} from "../models/MessagModel.js";
+import MessageModel from "../models/MessagModel.js";
 import UserModel from "../models/UserModel.js";
 import mongoose from "mongoose";
 import logger from "../../config/winstonLogger.js";
