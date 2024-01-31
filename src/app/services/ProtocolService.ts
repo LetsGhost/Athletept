@@ -81,7 +81,6 @@ class ProtocolService{
             if (exerciseDay) {
                 exerciseDay.trainingDone = true;
                 await exercisePlan?.save();
-                console.log(await exerciseDay.trainingDone);
             }
 
             if (user) {

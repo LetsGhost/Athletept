@@ -78,7 +78,6 @@ describe('MessageService', () => {
 
       // Act
       const result = await CheckInService.createCheckIn(NewUserId, checkIn);
-      console.log(result.checkIn);
 
       // Assert
       expect(result.success).toBe(true);
