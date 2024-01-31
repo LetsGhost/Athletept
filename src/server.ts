@@ -27,27 +27,21 @@ const server = express();
 // Enable trust proxy
 server.set('trust proxy', 1);
 
-// Activate for production
-if (process.env.ENV === "production") {
-  //server.use(limiter);
-}
-
+// Cors configuration
 if(process.env.ENV === "production") {
-  // Cors configuration
   server.use(cors({
-    origin: [String(process.env.ADDRESS1), String(process.env.ADDRESS2)], // replace with your allowed origins
+    origin: [String(process.env.ADDRESS1), String(process.env.ADDRESS2)],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
   }));
   server.options('*', cors(
     {
-      origin: [String(process.env.ADDRESS1), String(process.env.ADDRESS2)], // add your localhost to allowed origins
+      origin: [String(process.env.ADDRESS1), String(process.env.ADDRESS2)],
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', "Set-Cookie"],
     }
   ));
 } else {
-  // Add localhost to the allowed origins for non-production environments
   server.use(cors({
     origin: [String(process.env.DEV_ADDRESS)],
     credentials: true,
@@ -68,7 +62,6 @@ server.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      // Define your CSP policy here
     },
   },
   dnsPrefetchControl: false, // controls browser DNS prefetching
