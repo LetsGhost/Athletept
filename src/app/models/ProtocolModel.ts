@@ -1,29 +1,29 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface ProtocolExercise {
+export interface ProtocolExercise {
     Exercises: string;
     Weight: string;
     Repetitions: string;
 }
 
-interface Comment{
+export interface Comment{
     Scale: number;
     Notes: string
 }
 
-interface ProtocolExerciseDay {
+export interface ProtocolExerciseDay {
     dayNumber: number;
     type: string;
     comment: Comment;
     exercises: ProtocolExercise[];
 }
 
-interface ProtocolExercisePlanDocument extends Document {
+export interface ProtocolExercisePlanDocument extends Document {
     exerciseDays: ProtocolExerciseDay[];
     createdAt: Date;
 }
 
-interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> {}
+export interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> {}
 
 const protocolExerciseSchema = new Schema<ProtocolExercise>({
     Exercises: String,

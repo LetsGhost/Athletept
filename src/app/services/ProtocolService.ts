@@ -1,34 +1,10 @@
 import UserModel from "../models/UserModel.js";
-import ProtocolExercisePlanModel from "../models/ProtocolModel.js";
-import { Document } from "mongoose";
+import ProtocolExercisePlanModel, { ProtocolExercise } from "../models/ProtocolModel.js";
 import ExercisePlanModel from "../models/ExercisePlanModel.js";
 import protocolUtils from "../utils/protocolUtils.js";
 import WeekDisplayModel from "../models/WeekDisplayModel.js";
 import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
-
-interface ProtocolExercise {
-    Exercises: string;
-    Weight: string;
-    Repetitions: string;
-}
-
-interface Comment{
-    Scale: number;
-    Notes: string;
-}
-
-interface ProtocolExerciseDay {
-    dayNumber: number;
-    type: string;
-    comment: Comment;
-    exercises: ProtocolExercise[];
-}
-
-interface ProtocolExercisePlanDocument extends Document {
-    exerciseDays: ProtocolExerciseDay[];
-    createdAt: Date;
-}
 
 class ProtocolService{
     async createProtocol (userId: string, protocol: Record<string, ProtocolExercise>, comment: Record<string, any>) {
@@ -40,11 +16,10 @@ class ProtocolService{
             if (user?.protocolExercisePlan) {
 
                 const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
-                const createdAt = (user?.protocolExercisePlan as any as ProtocolExercisePlanDocument).createdAt;
 
                 const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
 
-                // Set the trainingDone property in the exerciseplan to true for the specific day of the protocol
+                // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
                 const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
                 const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
                 if (exerciseDay) {
