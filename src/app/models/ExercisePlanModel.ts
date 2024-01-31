@@ -20,8 +20,6 @@ export interface warmupExercise {
 
 export interface warmupMaterials {
     Materials: string;
-    weight: string;
-    repetitions: string;
 }
 
 export interface warmup {
@@ -66,8 +64,6 @@ const warmupExerciseSchema = new Schema<warmupExercise>({
 
 const warmupMaterialsSchema = new Schema<warmupMaterials>({
     Materials: String,
-    weight: String,
-    repetitions: String,
 })
 
 const warmupSchema = new Schema<warmup>({

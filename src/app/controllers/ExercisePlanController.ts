@@ -96,9 +96,6 @@ class ExercisePlanController {
           .json({ success: false, message: "No files were uploaded." });
       }
 
-      // I don´t know why this has to be here, but it works
-      const uploadedFilePath = path.join();
-
       // Getting the files
       const excelFiles = req.files as Express.Multer.File[];
 
@@ -124,7 +121,7 @@ class ExercisePlanController {
       if (exerciseFilePath) {
         fs.unlink(exerciseFilePath, (err) => {
           if (err) {
-            console.error(err);
+            logger.error("Error deleting file:", err, {service: "ExercisePlanController.createExercisePlanOnly"});
           }
         });
       }
@@ -150,9 +147,6 @@ class ExercisePlanController {
             .json({ success: false, message: "No files were uploaded." });
         }
   
-        // I don´t know why this has to be here, but it works
-        const uploadedFilePath = path.join();
-  
         // Getting the files
         const warmupFile = req.files as Express.Multer.File[];
   
@@ -170,17 +164,13 @@ class ExercisePlanController {
   
         if (success) {
           logger.info("Exercise plan created", {
-            service: "ExercisePlanController.createExercisePlanOnly",
+            service: "ExercisePlanController.createWarmupOnly",
           });
         }
         
         fs.unlink(warmupFilePath, (err) => {
           if (err) {
             logger.error("Error deleting file:", err, {
-              service: "ExercisePlanController.createWarmupOnly",
-            });
-          } else {
-            logger.info("File deleted successfully", {
               service: "ExercisePlanController.createWarmupOnly",
             });
           }
