@@ -90,6 +90,6 @@ const exercisePlanSchema = new Schema<ExercisePlanDocument>({
     exerciseDays: [exerciseDaySchema],
 });
 
-const ExercisePlan: ExercisePlanModel = mongoose.model<ExercisePlanDocument, ExercisePlanModel>('ExercisePlan', exercisePlanSchema);
+const ExercisePlanModel: ExercisePlanModel = mongoose.model<ExercisePlanDocument, ExercisePlanModel>('ExercisePlan', exercisePlanSchema);
 
-export {ExercisePlan};
+export default ExercisePlanModel;

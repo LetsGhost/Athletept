@@ -1,9 +1,8 @@
-import ExcelJS from "exceljs";
-import { Workbook, Worksheet, Row } from 'exceljs';
+import ExcelJS, { Row } from "exceljs";
 import UserModel from "../models/UserModel.js";
-import {ExercisePlan} from "../models/ExercisePlanModel.js";
+import ExercisePlanModel from "../models/ExercisePlanModel.js";
 import logger from "../../config/winstonLogger.js";
-import { WeekDisplay } from "../models/WeekDisplayModel.js";
+import WeekDisplayModel from "../models/WeekDisplayModel.js";
 
 interface Exercise {
     Exercises: string;
@@ -130,7 +129,7 @@ class ExercisePlanService {
 
             // Delete the previous exercise plan
             if (user?.exercisePlan) {
-                await ExercisePlan.findByIdAndDelete(user.exercisePlan);
+                await ExercisePlanModel.findByIdAndDelete(user.exercisePlan);
             }
 
             // Define the rules to check if the excel is processed correctly
@@ -201,17 +200,17 @@ class ExercisePlanService {
             }
             console.log(JSON.stringify(exercisePlan, null, 2));
             if (user) {
-                const exercisePlanDocument = new ExercisePlan({
+                const exercisePlanDocument = new ExercisePlanModel({
                     exerciseDays: exercisePlan,
                 });
 
                 // Create and save the exercise plan using the ExercisePlan model
-                const createdExercisePlan = await ExercisePlan.create(exercisePlanDocument);
+                const createdExercisePlan = await ExercisePlanModel.create(exercisePlanDocument);
                 user.exercisePlan = createdExercisePlan._id;
                 await user.save();
 
                 // Reset the trainingDone array
-                const weekDisplay = await WeekDisplay.findById(user.weekDisplay);
+                const weekDisplay = await WeekDisplayModel.findById(user.weekDisplay);
                 if (weekDisplay) {
                     weekDisplay.trainingDone = [];
                     await weekDisplay.save();
@@ -375,16 +374,16 @@ class ExercisePlanService {
 
             // Delete the previous exercise plan
             if (user?.exercisePlan) {
-                await ExercisePlan.findByIdAndDelete(user.exercisePlan);
+                await ExercisePlanModel.findByIdAndDelete(user.exercisePlan);
             }
 
             if (user) {
-                const exercisePlanDocument = new ExercisePlan({
+                const exercisePlanDocument = new ExercisePlanModel({
                     exerciseDays: exercisePlan,
                 });
 
                 // Create and save the exercise plan using the ExercisePlan model
-                const createdExercisePlan = await ExercisePlan.create(exercisePlanDocument);
+                const createdExercisePlan = await ExercisePlanModel.create(exercisePlanDocument);
                 user.exercisePlan = createdExercisePlan._id;
                 await user.save();
 
