@@ -2,14 +2,15 @@ import templateUtils from '../utils/templateUtils.js';
 import { Types } from 'mongoose';
 import logger from '../../config/winstonLogger.js';
 
-import {ExercisePlan} from "../models/ExercisePlanModel.js";
-import {MessageModel} from "../models/MessagModel.js";
-import {ProtocolExercisePlan} from "../models/ProtocolModel.js";
-import {TrainingDuration} from "../models/TrainingdurationModel.js";
-import { WeekDisplay } from '../models/WeekDisplayModel.js';
-import {CheckIn} from "../models/CheckInModel.js";
+// Models
+import ExercisePlanModel from "../models/ExercisePlanModel.js";
+import MessageModel from "../models/MessagModel.js";
+import ProtocolExercisePlanModel from "../models/ProtocolModel.js";
+import TrainingDurationModel from "../models/TrainingdurationModel.js";
+import WeekDisplayModel from '../models/WeekDisplayModel.js';
+import CheckInModel from "../models/CheckInModel.js";
 import UserModel from '../models/UserModel.js';
-import { WeightAnalyticsModel } from '../models/WeightAnalyticsModel.js';
+import WeightAnalyticsModel from '../models/WeightAnalyticsModel.js';
 
 interface RegistrationData {
     email: string;
@@ -103,11 +104,11 @@ class UserService{
     
             // Delete all data from this user
             if(user?.exercisePlan){
-                await ExercisePlan.findByIdAndDelete(user.exercisePlan);
+                await ExercisePlanModel.findByIdAndDelete(user.exercisePlan);
                 deleteCount++; // Increment counter
             }
             if(user?.protocolExercisePlan){
-                await ProtocolExercisePlan.findByIdAndDelete(user.protocolExercisePlan);
+                await ProtocolExercisePlanModel.findByIdAndDelete(user.protocolExercisePlan);
                 deleteCount++; // Increment counter
             }
             if(user?.messages){
@@ -117,15 +118,15 @@ class UserService{
                 }
             }
             if (user?.trainingduration){
-                await TrainingDuration.findByIdAndDelete(user.trainingduration);
+                await TrainingDurationModel.findByIdAndDelete(user.trainingduration);
                 deleteCount++; // Increment counter
             }
             if(user?.checkIn){
-                await CheckIn.findByIdAndDelete(user.checkIn);
+                await CheckInModel.findByIdAndDelete(user.checkIn);
                 deleteCount++; // Increment counter
             }
             if(user?.weekDisplay){
-                await WeekDisplay.findByIdAndDelete(user.weekDisplay);
+                await WeekDisplayModel.findByIdAndDelete(user.weekDisplay);
                 deleteCount++; // Increment counter
             }
     
