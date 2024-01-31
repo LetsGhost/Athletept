@@ -1,27 +1,8 @@
 import WeightAnalyticsModel from "../models/WeightAnalyticsModel.js";
 import UserService from "./UserService.js";
 import UserModel  from "../models/UserModel.js";
-import { Schema, Model } from 'mongoose';
+import { Schema } from 'mongoose';
 import logger from "../../config/winstonLogger.js";
-
-interface bodyWeight {
-    lastWeight: number;
-    actualWeight: number;
-    weightGoal: number;
-    weightStart: number;
-}
-
-interface bodyWeightGraphSixteenWeeks {
-    weight: number[];
-}
-
-interface weightAnalyticsModel {
-    createdAt: Date;
-    bodyWeight: bodyWeight;
-    bodyWeightGraphSixteenWeeks: bodyWeightGraphSixteenWeeks[];
-}
-
-interface WeightAnalyticsPlanModel extends Model<weightAnalyticsModel> {}
 
 class WeightAnalyticsService {
     async createWeightAnalytics(userId: string) {
