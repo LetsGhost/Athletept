@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 class AuthController {
+
+    // TODO: maby use the TLD "athletept.de" to authenticate for multiple services
     async login(req: Request, res: Response) {
         try {
             const { email, password, alwaysLogedIn } = req.body;
