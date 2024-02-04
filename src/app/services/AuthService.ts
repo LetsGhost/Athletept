@@ -65,6 +65,7 @@ class AuthService {
         }
     }
 
+    // Maby remove this because it's not used (Ask first)
     async getUserFromToken(token: string) {
         try {
             const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as {userId: string, userRole: string};
