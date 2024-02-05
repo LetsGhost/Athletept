@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Define the rate limit rule
-const limiter = rateLimit({
+const rateLimiter = rateLimit({
   windowMs: Number(process.env.LIMITER_WINDOW_MS) || 24 * 60 * 60 * 1000, // 15 minutes
   max: Number(process.env.LIMITER_MAX) || 100, // limit each IP to 100 requests per windowMs
   standardHeaders: true,
@@ -18,4 +18,4 @@ const limiter = rateLimit({
   }
 });
 
-export default limiter;
+export default rateLimiter;
