@@ -11,10 +11,16 @@ export interface bodyWeightGraphSixteenWeeks {
     weight: number[];
 }
 
+export interface bodyWeightGraphs {
+    weekWeights: object[];
+    allWeights: object[];
+}
+
 export interface weightAnalyticsModel {
     createdAt: Date;
     bodyWeight: bodyWeight;
     bodyWeightGraphSixteenWeeks: bodyWeightGraphSixteenWeeks[];
+    bodyWeightGraphs: bodyWeightGraphs;
 }
 
 export interface WeightAnalyticsPlanModel extends Model<weightAnalyticsModel> {}
@@ -30,10 +36,16 @@ const bodyWeightGraphSixteenWeeksSchema = new Schema<bodyWeightGraphSixteenWeeks
     weight: [Number],
 });
 
+const bodyWeightGraphsSchema = new Schema<bodyWeightGraphs>({
+    weekWeights: [Object],
+    allWeights: [Object],
+});
+
 const weightAnalyticsSchema = new Schema<weightAnalyticsModel>({
     createdAt: { type: Date, required: true, default: Date.now },
     bodyWeight: bodyWeightSchema,
     bodyWeightGraphSixteenWeeks: [bodyWeightGraphSixteenWeeksSchema],
+    bodyWeightGraphs: bodyWeightGraphsSchema,
 });
 
 const WeightAnalyticsModel = mongoose.model<weightAnalyticsModel, WeightAnalyticsPlanModel>('WeightAnalytics', weightAnalyticsSchema);
