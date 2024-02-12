@@ -1,4 +1,4 @@
-import WeightAnalyticsModel from "../models/WeightAnalyticsModel.js";
+import WeightAnalyticsModel, { weightAnalyticsModel, weightAnalyticsDocument } from "../models/WeightAnalyticsModel.js";
 import UserService from "./UserService.js";
 import UserModel  from "../models/UserModel.js";
 import { Schema } from 'mongoose';
@@ -33,6 +33,10 @@ class WeightAnalyticsService {
                 },
                 bodyWeightGraphSixteenWeeks: {
                     weight: weightGraph
+                },
+                bodyWeightGraphs: {
+                    weekWeights: [],
+                    allWeights: []
                 }
             })
             
@@ -93,6 +97,90 @@ class WeightAnalyticsService {
             }
         } catch(error){
             logger.error('Error updating weight analytics:', error, {service: 'WeightAnalyticsService.updateWeightAnalytics'});
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error"
+            }
+        }
+    }
+
+    // TODO: Implement system that checks if the weight number is way bigger than the last one if yes reject it
+    async updateBodyWeightArray(userId: string, weight: number) {
+        try{
+            // Get the user from the DB
+            const user = await UserModel.findById(userId)
+
+            // If the user doesn´t exists throw an error
+            if(!user) {
+                return {
+                    success: false,
+                    code: 404
+                }
+            }
+
+            const WeightAnalytics: weightAnalyticsDocument | null = await WeightAnalyticsModel.findById(user?.weightAnalytics);
+
+            // If the user doesn´t have a weight analytics throw an error
+            if(!WeightAnalytics) {
+                return {
+                    success: false,
+                    code: 404
+                }
+            }
+            // If the bodyWeightGraphs not exists create it
+            if(!WeightAnalytics.bodyWeightGraphs) {
+                WeightAnalytics.bodyWeightGraphs = {
+                    weekWeights: [],
+                    allWeights: []
+                };
+            }
+
+            // Check if the weekWeight has any value
+            if(WeightAnalytics.bodyWeightGraphs.weekWeights.length === 0) {
+                WeightAnalytics.bodyWeightGraphs.weekWeights.push({
+                    weight: weight,
+                    date: new Date()
+                });
+
+                WeightAnalytics.bodyWeightGraphs.allWeights.push({
+                    weight: weight,
+                    date: new Date()
+                });
+            }
+            else {
+                const numbers = []
+   
+                for(let key in WeightAnalytics.bodyWeightGraphs.weekWeights) {
+                    numbers.push(WeightAnalytics.bodyWeightGraphs.weekWeights[key].weight);
+                }
+                numbers.push(weight);
+
+                const sum = numbers.reduce((a, b) => a + b, 0);
+                const avg = sum / numbers.length;
+
+                WeightAnalytics.bodyWeightGraphs.allWeights.push({
+                    weight: avg,
+                    date: new Date()
+                });
+
+                WeightAnalytics.bodyWeightGraphs.weekWeights.push({
+                    weight: weight,
+                    date: new Date()
+                });
+            }
+
+            if (WeightAnalytics) {
+                await WeightAnalytics.save();
+            }
+
+            return {
+                success: true,
+                code: 200,
+                weightAnalytics: WeightAnalytics
+            }
+        } catch(error){
+            logger.error('Error updating body weight array:', error, {service: 'WeightAnalyticsService.updateBodyWeightArray'});
             return {
                 success: false,
                 code: 500,
