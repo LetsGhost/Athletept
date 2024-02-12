@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import userService from "../services/UserService.js";
-import path from "path";
-import exercisePlanService from "../services/ExercisePlanService.js";
-import fs from "fs";
+
 import WeightAnalyticsService from "../services/WeightAnalyticsService.js";
 import TrainingDurationService from "../services/TrainingdurationService.js";
+import ExerciseAnalyticsService from "../services/ExerciseAnalyticsService.js";
+
 import logger from "../../config/winstonLogger.js";
 import getClientIp from "../utils/ipUtils.js";
 
@@ -19,6 +19,8 @@ class UserController{
             await WeightAnalyticsService.createWeightAnalytics(newUser?._id);
 
             await TrainingDurationService.createTrainingduration(newUser?._id, trainingduration);
+
+            await ExerciseAnalyticsService.createExerciseAnalytics(newUser?._id);
 
             if(success){
                 logger.info('User registered: ' + newUser?._id, {service: 'UserController.registerUser'});
