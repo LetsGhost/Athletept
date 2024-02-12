@@ -1,30 +1,6 @@
-import {Document, Model} from "mongoose";
+import { ProtocolExercise, ProtocolExerciseDay  } from "../models/ProtocolModel.js";
 import logger from "../../config/winstonLogger.js";
 
-interface ProtocolExercise {
-    Exercises: string;
-    Weight: string;
-    Repetitions: string;
-}
-
-interface Comment{
-    Scale: number;
-    Notes: string
-}
-
-interface ProtocolExerciseDay {
-    dayNumber: number;
-    type: string;
-    comment: Comment;
-    exercises: ProtocolExercise[];
-}
-
-interface ProtocolExercisePlanDocument extends Document {
-    exerciseDays: ProtocolExerciseDay[];
-    createdAt: Date;
-}
-
-interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDocument> {}
 
 class ProtocolUtils {
     processRequest(protocol: Record<string, any>, comment: Record<string, any>){
