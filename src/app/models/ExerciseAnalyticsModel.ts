@@ -3,7 +3,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 export interface exercise{
   name: string;
   topWeight: number;
-  lastWeight: number;
+  lastWeights: number[];
   date: Date
 }
 
@@ -26,7 +26,7 @@ export interface exerciseAnalyticsModel extends Model<exerciseAnalyticsDocument>
 const exerciseSchema = new Schema<exercise>({
   name: {type: String, required: true},
   topWeight: {type: Number, required: true},
-  lastWeight: {type: Number, required: true},
+  lastWeights: {type: [Number], required: true},
   date: {type: Date, required: true}
 });
 
