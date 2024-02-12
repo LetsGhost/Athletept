@@ -46,6 +46,7 @@ router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // I
 
 // Week Analytics
 router.get("/getWeightAnalytics/:userId", weightAnalyticsController.getWeightAnalytics)
+router.patch("/updateBodyWeightArray/:userId", weightAnalyticsController.updateBodyWeightArray)
 
 // Training Duration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 
