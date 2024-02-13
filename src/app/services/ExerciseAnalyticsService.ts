@@ -1,6 +1,6 @@
 import logger from '../../config/winstonLogger';
-import UserModel, { User } from '../models/UserModel';
-import { ProtocolExercisePlanModel, ProtocolExercisePlanDocument } from '../models/ProtocolModel';
+import UserModel from '../models/UserModel';
+import { ProtocolExercisePlanDocument } from '../models/ProtocolModel';
 import ExerciseAnalyticsModel, { exerciseAnalyticsDocument } from '../models/ExerciseAnalyticsModel';
 
 class ExerciseAnalyticsService {
@@ -52,28 +52,32 @@ class ExerciseAnalyticsService {
         };
       }
 
-      const exerciseAnalytics = await UserModel.findById(userId).populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>("exerciseAnalytics");
+      let exerciseAnalytics = await UserModel.findById(userId).populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>("exerciseAnalytics");
 
-      if (!exerciseAnalytics) {
-        await this.createExerciseAnalytics(userId);
+      if (!exerciseAnalytics?.exerciseAnalytics) {
+        await this.createExerciseAnalytics(userId).then(async (response) =>  {
+          if (response.success) {
+            exerciseAnalytics = await UserModel.findById(userId).populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>("exerciseAnalytics");
+          }
+        });
       }
 
       // THIS IS THE RIGHT WAY TO DO IT Link: https://mongoosejs.com/docs/typescript/populate.html
-      const protocol = await UserModel.findById(userId).populate<{ protocol: ProtocolExercisePlanDocument }>("protocol")
+      const protocol = await UserModel.findById(userId).populate<{ protocolExercisePlan: ProtocolExercisePlanDocument }>("protocolExercisePlan")
 
       if (!protocol) {
         return {
           success: false,
           code: 404,
         };
-      }
+      }      
 
       let exercises = exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises || [];
-      let topExercises = exercises.slice(0, 4);
+      let topExercises = [];
 
       if (exercises.length === 0) {
         // If exercises array is empty, create new exercise entries based on the protocol
-        for(let day of protocol.protocol.exerciseDays){
+        for(let day of protocol.protocolExercisePlan.exerciseDays){
           for(let protocolExercise of day.exercises){
             exercises.push({
               name: protocolExercise.Exercises,
@@ -85,7 +89,7 @@ class ExerciseAnalyticsService {
         }
       } else {
         for(let exercise of exercises){
-          const protocolExercise = protocol.protocol.exerciseDays.flatMap(day => day.exercises).find(e => e.Exercises === exercise.name);
+          const protocolExercise = protocol.protocolExercisePlan.exerciseDays.flatMap(day => day.exercises).find(e => e.Exercises === exercise.name);
         
           if (protocolExercise) {
             for(let weight of protocolExercise.Weight){
@@ -105,6 +109,7 @@ class ExerciseAnalyticsService {
       exercises.sort((a, b) => b.topWeight - a.topWeight);
 
       if (exerciseAnalytics) {
+        topExercises = exercises.slice(0, 4);
         exerciseAnalytics.exerciseAnalytics.topExercises = { exercises: topExercises };
         exerciseAnalytics.exerciseAnalytics.exerciseRanking = { exercises: exercises };
 
@@ -124,6 +129,84 @@ class ExerciseAnalyticsService {
 
     } catch (error) {
       logger.error("Internal Server Error: ", error, {service: "ExerciseAnalyticsService.updateExerciseAnalytics"});
+      return {
+        success: false,
+        code: 500
+      };
+    }
+  }
+
+  async getTopExercises(userId: string) {
+    try{
+      const user = await UserModel.findById(userId).populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>("exerciseAnalytics");
+
+      if (!user) {
+        return {
+          success: false,
+          code: 404,
+        };
+      }
+
+      if (!user.exerciseAnalytics) {
+        return {
+          success: false,
+          code: 404,
+        };
+      }
+
+      return {
+        success: true,
+        code: 200,
+        topExercises: user.exerciseAnalytics.topExercises
+      }
+    } catch(error) {
+      logger.error("Internal Server Error: ", error, {service: "ExerciseAnalyticsService.getTopExercises"});
+      return {
+        success: false,
+        code: 500
+      };
+    }
+  }
+
+  async getExerciseRanking(userId: string, page: number, limit: number) {
+    try{
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return {
+          success: false,
+          code: 404,
+          message: 'User not found',
+        };
+      }
+  
+      const skip = (page - 1) * limit;
+  
+      const populatedUser = await UserModel.populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>(user, {
+        path: "exerciseAnalytics",
+        populate: {
+          path: "exerciseRanking.exercises",
+          options: {
+            skip: skip,
+            limit: limit
+          }
+        }
+      });
+  
+      if (!populatedUser.exerciseAnalytics) {
+        return {
+          success: false,
+          code: 404,
+          message: 'Exercise Analytics not found',
+        };
+      }
+
+      return {
+        success: true,
+        code: 200,
+        exerciseRanking: populatedUser.exerciseAnalytics.exerciseRanking
+      };
+    } catch(error) {
+      logger.error("Internal Server Error: ", error, {service: "ExerciseAnalyticsService.getExerciseRanking"});
       return {
         success: false,
         code: 500
