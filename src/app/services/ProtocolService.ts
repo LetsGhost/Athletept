@@ -1,5 +1,5 @@
 import UserModel from "../models/UserModel.js";
-import ProtocolExercisePlanModel, { ProtocolExercise } from "../models/ProtocolModel.js";
+import ProtocolExercisePlanModel, { ProtocolExerciseDay } from "../models/ProtocolModel.js";
 import ExercisePlanModel from "../models/ExercisePlanModel.js";
 import protocolUtils from "../utils/protocolUtils.js";
 import WeekDisplayModel from "../models/WeekDisplayModel.js";
@@ -7,9 +7,8 @@ import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
 
 class ProtocolService{
-    async createProtocol (userId: string, protocol: Record<string, ProtocolExercise>, comment: Record<string, any>) {
+    async createProtocol (userId: string, protocol: Record<string, ProtocolExerciseDay>, comment: Record<string, any>) {
         try {
-
             const user = await UserModel.findById(userId);
 
             // Check if the user already has an protocol

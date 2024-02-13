@@ -1,4 +1,4 @@
-import { ProtocolExercise, ProtocolExerciseDay  } from "../models/ProtocolModel.js";
+import { ProtocolExercise, ProtocolExerciseDay } from "../models/ProtocolModel.js";
 import logger from "../../config/winstonLogger.js";
 
 
@@ -42,7 +42,7 @@ class ProtocolUtils {
                     }
                 }
             }
-    
+
             return protocolExerciseDays;
         } catch (error) {
             logger.error('Error processing protocol request:', error, {service: 'ProtocolUtils.processRequest'});
