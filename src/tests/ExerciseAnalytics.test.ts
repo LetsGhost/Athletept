@@ -4,9 +4,8 @@ import mongoose from 'mongoose';
 import UserService from '../app/services/UserService';
 import ExerciseAnalyticsService from '../app/services/ExerciseAnalyticsService';
 import ProtocolService from '../app/services/ProtocolService';
-import exp from 'constants';
 
-let mongod: any;
+let mongoServer: MongoMemoryServer;
 let NewUserId: string;
 
 // Mock user data
@@ -35,32 +34,31 @@ const mockUserInfo = {
 }
 
 const mockProtocol = {
-  "Flys": {
-    "Exercises": "Flys",
-    "Weight": [10, 20, 30],
-    "Repetitions": [50, 60,70]
-  },
-  "Squads": {
-    "Exercises": "Squads",
-    "Weight": [20, 30, 40],
-    "Repetitions": [50, 60,70]
-  },
-  "Bankdrücken": {
-    "Exercises": "Bankdrücken",
-    "Weight": [10, 20, 70],
-    "Repetitions": [50, 60,70]
-  },
-  "Deadlifts": {
-    "Exercises": "Deadlifts",
-    "Weight": [20, 30, 40],
-    "Repetitions": [50, 60,70]
-  },
-  "Pushups": {
-    "Exercises": "Pushups",
-    "Weight": [20, 30, 40],
-    "Repetitions": [50, 60,70]
-  },
-}
+    dayNumber: 1,
+    dayType: "Oberkörper",
+    exercises: {
+      "Flys": {
+        Weight: [50, 60, 90],
+        Repetitions: [50, 60, 70]
+      },
+      "Squads": {
+        Weight: [50, 60, 10],
+        Repetitions: [50, 60, 70]
+      },
+      "Bankdrücken": {
+        Weight: [50, 60, 70],
+        Repetitions: [50, 60, 70]
+      },
+      "Pushups": {
+        Weight: [50, 60, 70],
+        Repetitions: [50, 60, 70]
+      },
+      "Deadlifts": {
+        Weight: [50, 60, 70],
+        Repetitions: [50, 60, 70]
+      }
+  }
+};
 
 const mockComment = {  
   "comment": {
@@ -69,25 +67,23 @@ const mockComment = {
   }
 }
 
-
-
 // Mock MongoDB in-memory server
 beforeAll(async () => {
-  mongod = new MongoMemoryServer();
-  await mongod.start();
-  const mongoDBURL = await mongod.getUri();
-  await mongoose.connect(mongoDBURL);
+  mongoServer = await MongoMemoryServer.create();
+  await mongoose.connect(mongoServer.getUri(), {});
 
   // Create a user
   const user = await UserService.registerUser(mockUser, mockUserInfo.userInfo);
   NewUserId = user.newUser?._id;
+  
+  // @ts-ignore
   await ProtocolService.createProtocol(NewUserId, mockProtocol, mockComment);
 });
 
 // Close the in-memory server
 afterAll(async () => {
   await mongoose.connection.close();
-  await mongod.stop();
+  await mongoServer.stop();
 });
 
 describe('WeightAnalytics', () => {
@@ -96,9 +92,9 @@ describe('WeightAnalytics', () => {
       const { success, code, exerciseAnalytics } = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
 
       expect(success).toBe(true);
-      expect(exerciseAnalytics?.exerciseAnalytics.topExercises).toHaveLength(4);
-      expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking).toHaveLength(5);
-      expect(exerciseAnalytics?.exerciseAnalytics.topExercises[0].name).toBe("Bankdrücken");
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
+      expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(5);
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Flys");
     });
   });
 });
