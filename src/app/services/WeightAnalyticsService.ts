@@ -36,7 +36,7 @@ class WeightAnalyticsService {
                 },
                 bodyWeightGraphs: {
                     weekWeights: [],
-                    allWeights: []
+                    allWeights: [userInfo?.currentWeight]
                 }
             })
             
@@ -106,6 +106,7 @@ class WeightAnalyticsService {
     }
 
     // TODO: Implement system that checks if the weight number is way bigger than the last one if yes reject it
+    // TODO: Update the last value from allWeight in the week
     async updateBodyWeightArray(userId: string, weight: number) {
         try{
             // Get the user from the DB
