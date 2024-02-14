@@ -72,31 +72,41 @@ class ExerciseAnalyticsService {
         };
       }      
 
+      // Get the last day from the protocol
+      let lastDay = protocol.protocolExercisePlan.exerciseDays[protocol.protocolExercisePlan.exerciseDays.length - 1];
+
       let exercises = exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises || [];
       let topExercises = [];
 
       if (exercises.length === 0) {
         // If exercises array is empty, create new exercise entries based on the protocol
-        for(let day of protocol.protocolExercisePlan.exerciseDays){
-          for(let protocolExercise of day.exercises){
-            exercises.push({
-              name: protocolExercise.Exercises,
-              topWeight: Math.max(...protocolExercise.Weight),
-              lastWeights: protocolExercise.Weight.slice(-16),
-              date: new Date()
-            });
-          }
+        for(let protocolExercise of lastDay.exercises){
+        exercises.push({
+          name: protocolExercise.Exercises,
+          topWeight: Math.max(...protocolExercise.Weight),
+          lastWeights: protocolExercise.Weight.slice(-16),
+          date: new Date()
+        });
         }
       } else {
+        // Iterate over each exercise in the exercises array
         for(let exercise of exercises){
-          const protocolExercise = protocol.protocolExercisePlan.exerciseDays.flatMap(day => day.exercises).find(e => e.Exercises === exercise.name);
-        
+          // Find the corresponding exercise in the protocol's exercise plan
+          const protocolExercise = lastDay.exercises.find(e => e.Exercises === exercise.name);
+
+          // If a corresponding exercise was found in the protocol's exercise plan
           if (protocolExercise) {
+            // Iterate over each weight in the protocol exercise's Weight array
             for(let weight of protocolExercise.Weight){
+              // If the current weight is greater than the exercise's topWeight
               if (weight > exercise.topWeight) {
+                // Update the exercise's topWeight to the current weight
                 exercise.topWeight = weight;
+                // Add the current weight to the exercise's lastWeights array
                 exercise.lastWeights.push(weight);
+                // If the exercise's lastWeights array has more than 16 elements
                 if (exercise.lastWeights.length > 16) {
+                  // Remove the first element from the exercise's lastWeights array
                   exercise.lastWeights.shift();
                 }
               }
