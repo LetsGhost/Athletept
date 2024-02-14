@@ -7,20 +7,15 @@ import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
 
 class ProtocolService{
-    async createProtocol (userId: string, protocol: Record<string, ProtocolExerciseDay>, comment: Record<string, any>) {
+    async createProtocol (userId: string, protocol: ProtocolExerciseDay) {
         try {
             const user = await UserModel.findById(userId);
 
-            // Check if the user already has an protocol
-            if (user?.protocolExercisePlan) {
-
-                const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
-
-                const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
-
+            // Mark the training day as done
+            async function markTrainingDayAsDone(){
                 // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
                 const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
-                const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
+                const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocol.dayNumber);
                 if (exerciseDay) {
                     exerciseDay.trainingDone = true;
                     await exercisePlan?.save();
@@ -29,14 +24,23 @@ class ProtocolService{
                 // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
                 const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
                 if(weekDisplay){
-                    weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
+                    weekDisplay.trainingDone.push(protocol.dayNumber);
                     await weekDisplay.save();
                 }
+            }
+
+            // Check if the user already has an protocol
+            // If yes then append the new protocol to the existing one
+            if (user?.protocolExercisePlan) {
+
+                const user = await UserModel.findById(userId).populate("protocolExercisePlan").exec();
+
+                await markTrainingDayAsDone();
 
                 // Append the new protocol to the existing one
                 const existingProtocol = await ProtocolExercisePlanModel.findById(user?.protocolExercisePlan);
                 if (existingProtocol) {
-                    existingProtocol.exerciseDays = existingProtocol.exerciseDays.concat(protocolExerciseDays);
+                    existingProtocol.exerciseDays = existingProtocol.exerciseDays.concat(protocol);
                     await existingProtocol.save();
                 }
 
@@ -47,19 +51,11 @@ class ProtocolService{
                 }
             }
 
-            const protocolExerciseDays = protocolUtils.processRequest(protocol, comment);
-
-            // Set the trainingDone property in the exercisePlan to true for the specific day of the protocol
-            const exercisePlan = await ExercisePlanModel.findById(user?.exercisePlan);
-            const exerciseDay = exercisePlan?.exerciseDays.find((day) => day.dayNumber === protocolExerciseDays[0].dayNumber);
-            if (exerciseDay) {
-                exerciseDay.trainingDone = true;
-                await exercisePlan?.save();
-            }
-
             if (user) {
+                await markTrainingDayAsDone();
+
                 const protocolExercisePlanDocument = new ProtocolExercisePlanModel({
-                    exerciseDays: protocolExerciseDays
+                    exerciseDays: protocol
                 });
 
                 // Create and save the exercise plan using the ExercisePlan model
@@ -68,20 +64,18 @@ class ProtocolService{
 
                 await user.save();
 
-                // Pushes the dayNumber of the protocol to the trainingDone array in the weekDisplay
-                const weekDisplay = await WeekDisplayModel.findById(user?.weekDisplay);
-
-                if(weekDisplay){
-                    weekDisplay.trainingDone.push(protocolExerciseDays[0].dayNumber);
-                    await weekDisplay.save();
-                }
-
                 return {
                     success: true,
                     code: 201,
                     newProtocol: createdExercisePlan,
                 };
                 
+            }
+
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error',
             }
         } catch (error) {
             logger.error('Error creating ProtocolExercisePlan:', error, {service: 'ProtocolService.createProtocol'});
@@ -116,6 +110,7 @@ class ProtocolService{
     async createBlankProtocol (userId: string, day: number, type: string) {
         try{
             const user = await UserModel.findById(userId);
+            
             // Check if the user already has an protocol
             if (user?.protocolExercisePlan) {
 
