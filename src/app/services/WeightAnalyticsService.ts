@@ -36,7 +36,7 @@ class WeightAnalyticsService {
                 },
                 bodyWeightGraphs: {
                     weekWeights: [],
-                    allWeights: [userInfo?.currentWeight]
+                    allWeights: [{weight: userInfo?.currentWeight, date: new Date()}]
                 }
             })
             
@@ -106,7 +106,6 @@ class WeightAnalyticsService {
     }
 
     // TODO: Implement system that checks if the weight number is way bigger than the last one if yes reject it
-    // TODO: Update the last value from allWeight in the week
     async updateBodyWeightArray(userId: string, weight: number) {
         try{
             // Get the user from the DB
@@ -160,6 +159,7 @@ class WeightAnalyticsService {
                 const sum = numbers.reduce((a, b) => a + b, 0);
                 const avg = sum / numbers.length;
 
+                WeightAnalytics.bodyWeightGraphs.allWeights.pop();
                 WeightAnalytics.bodyWeightGraphs.allWeights.push({
                     weight: avg,
                     date: new Date()
