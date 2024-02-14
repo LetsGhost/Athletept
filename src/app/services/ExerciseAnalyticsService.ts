@@ -1,7 +1,7 @@
-import logger from '../../config/winstonLogger';
-import UserModel from '../models/UserModel';
-import { ProtocolExercisePlanDocument } from '../models/ProtocolModel';
-import ExerciseAnalyticsModel, { exerciseAnalyticsDocument } from '../models/ExerciseAnalyticsModel';
+import logger from '../../config/winstonLogger.js';
+import UserModel from '../models/UserModel.js';
+import { ProtocolExercisePlanDocument } from '../models/ProtocolModel.js';
+import ExerciseAnalyticsModel, { exerciseAnalyticsDocument } from '../models/ExerciseAnalyticsModel.js';
 
 class ExerciseAnalyticsService {
   async createExerciseAnalytics(userId: string) {
