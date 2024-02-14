@@ -34,50 +34,89 @@ const mockUserInfo = {
 }
 
 const mockProtocol = {
-    dayNumber: 1,
-    dayType: "Oberkörper",
-    exercises: {
-      "Flys": {
-        Weight: [50, 60, 90],
-        Repetitions: [50, 60, 70]
-      },
-      "Squads": {
-        Weight: [50, 60, 10],
-        Repetitions: [50, 60, 70]
-      },
-      "Bankdrücken": {
-        Weight: [50, 60, 70],
-        Repetitions: [50, 60, 70]
-      },
-      "Pushups": {
-        Weight: [50, 60, 70],
-        Repetitions: [50, 60, 70]
-      },
-      "Deadlifts": {
-        Weight: [50, 60, 70],
-        Repetitions: [50, 60, 70]
-      }
-  }
-};
-
-const mockComment = {  
+  "dayNumber": 1,
+  "type": "Oberkörper",
+  "exercises": [
+    {
+      "Exercises": "Bankdrücken",
+      "Weight": [50, 60, 90],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Flys",
+      "Weight": [50, 60, 80],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Pushups",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Deadlifts",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Squats",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
+    }
+  ],
   "comment": {
     "Scale": 5,
     "Notes": "Bankdrücken war blöd"
   }
-}
+};
+
+const mockProtocol2 = {
+  "dayNumber": 2,
+  "type": "Oberkörper",
+  "exercises": [
+    {
+      "Exercises": "Bankdrücken",
+      "Weight": [50, 60, 90],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Flys",
+      "Weight": [50, 60, 100],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Pushups",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Deadlifts",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Squats",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
+    }
+  ],
+  "comment": {
+    "Scale": 5,
+    "Notes": "Bankdrücken war blöd"
+  }
+};
 
 // Mock MongoDB in-memory server
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri(), {});
-
-  // Create a user
-  const user = await UserService.registerUser(mockUser, mockUserInfo.userInfo);
-  NewUserId = user.newUser?._id;
-  
-  // @ts-ignore
-  await ProtocolService.createProtocol(NewUserId, mockProtocol, mockComment);
+  try {
+    mongoServer = await MongoMemoryServer.create();
+    await mongoose.connect(mongoServer.getUri(), {});
+    
+    const user = await UserService.registerUser(mockUser, mockUserInfo.userInfo);
+    NewUserId = user.newUser?._id;
+    await ProtocolService.createProtocol(NewUserId, mockProtocol);
+  } catch (error) {
+    console.error('Failed to connect to MongoDB', error);
+  }
 });
 
 // Close the in-memory server
@@ -86,9 +125,21 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe('WeightAnalytics', () => {
-  describe('updateWeightGraphs', () => {
-    it('Should create weight graphs and set in the weight', async () => {
+describe('ExerciseAnalytics', () => {
+  describe('updateExerciseAnalytics', () => {
+    it('Should update ExerciseAnalytics with the right analytics', async () => {
+
+      const { success, code, exerciseAnalytics } = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
+
+      expect(success).toBe(true);
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
+      expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(5);
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Bankdrücken");
+    });
+    it('Should update ExerciseAnalytics and Flys now should be the top exercise', async () => {
+      await ProtocolService.createProtocol(NewUserId, mockProtocol2);
+      const result = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
+      
       const { success, code, exerciseAnalytics } = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
 
       expect(success).toBe(true);
