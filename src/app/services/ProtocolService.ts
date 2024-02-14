@@ -4,6 +4,7 @@ import ExercisePlanModel from "../models/ExercisePlanModel.js";
 import WeekDisplayModel from "../models/WeekDisplayModel.js";
 import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
+import ExerciseAnalyticsService from "./ExerciseAnalyticsService.js";
 
 class ProtocolService{
     async createProtocol (userId: string, protocol: ProtocolExerciseDay) {
