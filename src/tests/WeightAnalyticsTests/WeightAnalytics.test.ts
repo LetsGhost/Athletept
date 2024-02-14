@@ -57,19 +57,25 @@ describe('WeightAnalytics', () => {
       const { success, code, weightAnalytics } = await WeightAnalyticsService.updateBodyWeightArray(NewUserId, 50);
 
       expect(success).toBe(true);
+
       expect(weightAnalytics?.bodyWeightGraphs.weekWeights).toHaveLength(1);
-      expect(weightAnalytics?.bodyWeightGraphs.weekWeights[0].weight).toBe(50);
-      expect(weightAnalytics?.bodyWeightGraphs.allWeights).toHaveLength(1);
-      expect(weightAnalytics?.bodyWeightGraphs.allWeights[0].weight).toBe(50);
+      expect(weightAnalytics?.bodyWeightGraphs.weekWeights[0].weight).toBe(50)
+
+      expect(weightAnalytics?.bodyWeightGraphs.allWeights).toHaveLength(2);
+      expect(weightAnalytics?.bodyWeightGraphs.allWeights[1].weight).toBe(50);
+      expect(weightAnalytics?.bodyWeightGraphs.allWeights[0].weight).toBe(80);
     });
     it("Should calculate the avg and set it in all the graphs", async () => {
       const { success, code, weightAnalytics } = await WeightAnalyticsService.updateBodyWeightArray(NewUserId, 70);
 
       expect(success).toBe(true);
+
       expect(weightAnalytics?.bodyWeightGraphs.weekWeights).toHaveLength(2);
       expect(weightAnalytics?.bodyWeightGraphs.weekWeights[1].weight).toBe(70);
+
       expect(weightAnalytics?.bodyWeightGraphs.allWeights).toHaveLength(2);
       expect(weightAnalytics?.bodyWeightGraphs.allWeights[1].weight).toBe(60);
+      expect(weightAnalytics?.bodyWeightGraphs.allWeights[0].weight).toBe(80);
     })
   });
 });
