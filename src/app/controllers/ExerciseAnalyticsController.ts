@@ -1,8 +1,34 @@
 import { Request, Response } from 'express';
-import ExerciseAnalyticsService from '../services/ExerciseAnalyticsService';
+import ExerciseAnalyticsService from '../services/ExerciseAnalyticsService.js';
+import logger from '../../config/winstonLogger.js';
 
 class ExerciseAnalyticsController {
+  async getTopExercises(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
 
+      const { success, code, topExercises } = await ExerciseAnalyticsService.getTopExercises(userId);
+
+      res.status(code).json({ success, topExercises });
+    } catch (error) {
+      logger.error('Error getting top exercises:', error, { service: 'ExerciseAnalyticsController.getTopExercises' });
+      res.status(500).json({ success: false, message: "Internal Server error" });
+    }
+  }
+
+  async getExerciseRanking(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+      const { page, limit } = req.query;
+
+      const { success, code, message, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(userId, Number(page), Number(limit));
+
+      res.status(code).json({ success, message, exerciseRanking });
+    } catch (error) {
+      logger.error('Error getting exercise ranking:', error, { service: 'ExerciseAnalyticsController.getExerciseRanking' });
+      res.status(500).json({ success: false, message: "Internal Server error" });
+    }
+  }
 }
 
 export default new ExerciseAnalyticsController();
