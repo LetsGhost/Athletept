@@ -7,23 +7,19 @@ export interface bodyWeight {
     weightStart: number;
 }
 
+// TODO: Remove this graph
 export interface bodyWeightGraphSixteenWeeks {
     weight: number[];
 }
 
 export interface bodyWeightGraphs {
-    weekWeights: weekWeight[];
-    allWeights: allWeight[];
+    weekWeights: weight[];
+    allWeights: weight[];
 }
 
-export interface weekWeight {
-    weight: number,
-    date: Date
-}
-
-export interface allWeight {
-    weight: number,
-    date: Date
+export interface weight{
+    weight: number;
+    date: Date;
 }
 
 export interface weightAnalyticsModel {
@@ -48,19 +44,14 @@ const bodyWeightGraphSixteenWeeksSchema = new Schema<bodyWeightGraphSixteenWeeks
     weight: [Number],
 });
 
-const bodyWeightWeekWeight = new Schema<weekWeight>({
+const bodyWeight = new Schema<weight>({
     weight: Number,
-    date: { type: Date, default: Date.now }
-})
-
-const bodyWeightAllWeight = new Schema<allWeight>({
-    weight: Number,
-    date: { type: Date, default: Date.now }
-})
+    date: Date,
+});
 
 const bodyWeightGraphsSchema = new Schema<bodyWeightGraphs>({
-    weekWeights: [bodyWeightWeekWeight],
-    allWeights: [bodyWeightAllWeight],
+    weekWeights: [bodyWeight],
+    allWeights: [bodyWeight],
 });
 
 const weightAnalyticsSchema = new Schema<weightAnalyticsDocument>({
