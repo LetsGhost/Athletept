@@ -97,7 +97,7 @@ class ExerciseAnalyticsService {
                 exercise.topWeight = weight;
                 exercise.lastWeights.push(weight);
                 if (exercise.lastWeights.length > 16) {
-                  exercise.lastWeights.shift(); // Remove the oldest weight
+                  exercise.lastWeights.shift();
                 }
               }
             }
