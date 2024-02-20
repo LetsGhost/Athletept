@@ -35,7 +35,7 @@ router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
 router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
-router.post("/createProtocol", protocolController.createProtocol)
+router.post("/createProtocol/:userId", protocolController.createProtocol)
 router.post("/createBlankProtocol/:userId", protocolController.createBlankProtocol)
 
 // Check-in
