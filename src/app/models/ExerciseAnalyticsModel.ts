@@ -1,18 +1,20 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export interface exercise{
+export interface exercise extends Document {
   name: string;
   topWeight: number;
   lastWeights: number[];
   date: Date
 }
 
+export interface exerciseModel extends Model<exercise> {}
+
 export interface topExercises {
-  exercises: exercise[];
+  exercises: mongoose.Schema.Types.ObjectId[];
 }
 
 export interface exerciseRanking {
-  exercises: exercise[];
+  exercises: mongoose.Schema.Types.ObjectId[];
 }
 
 export interface exerciseAnalyticsDocument extends Document{
@@ -31,11 +33,17 @@ const exerciseSchema = new Schema<exercise>({
 });
 
 const topExercisesSchema = new Schema<topExercises>({
-  exercises: [exerciseSchema]
+  exercises: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Exercise' 
+  }]
 });
 
 const exerciseRankingSchema = new Schema<exerciseRanking>({
-  exercises: [exerciseSchema]
+  exercises: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Exercise'
+  }]
 });
 
 const exerciseAnalyticsSchema = new Schema<exerciseAnalyticsDocument>({
@@ -44,6 +52,8 @@ const exerciseAnalyticsSchema = new Schema<exerciseAnalyticsDocument>({
   createdAt: {type: Date, default: Date.now}
 });
 
+const ExerciseModel = mongoose.model<exercise, exerciseModel>('Exercise', exerciseSchema);
 const ExerciseAnalyticsModel = mongoose.model<exerciseAnalyticsDocument, exerciseAnalyticsModel>('ExerciseAnalytics', exerciseAnalyticsSchema);
 
 export default ExerciseAnalyticsModel;
+export { ExerciseModel };
