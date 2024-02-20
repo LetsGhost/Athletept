@@ -6,7 +6,8 @@ import ExerciseAnalyticsService from "../services/ExerciseAnalyticsService.js";
 class ProtocolController{
     async createProtocol(req: Request, res: Response) {
         try {
-            const { userId, protocol } = req.body;
+            const { protocol } = req.body;
+            const { userId } = req.params;
 
             const { success, code, message, newProtocol } = await protocolService.createProtocol(userId, protocol);
 
