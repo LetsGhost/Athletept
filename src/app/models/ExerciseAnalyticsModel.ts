@@ -46,8 +46,6 @@ const exerciseAnalyticsSchema = new Schema<exerciseAnalyticsDocument>({
   createdAt: {type: Date, default: Date.now}
 });
 
-const ExerciseModel = mongoose.model<exercise, exerciseModel>('Exercise', exerciseSchema);
 const ExerciseAnalyticsModel = mongoose.model<exerciseAnalyticsDocument, exerciseAnalyticsModel>('ExerciseAnalytics', exerciseAnalyticsSchema);
 
 export default ExerciseAnalyticsModel;
-export { ExerciseModel };
