@@ -1,9 +1,7 @@
 import logger from '../../config/winstonLogger.js';
 import UserModel from '../models/UserModel.js';
 import { ProtocolExercisePlanDocument } from '../models/ProtocolModel.js';
-import ExerciseAnalyticsModel, { exerciseAnalyticsDocument, ExerciseModel, exercise } from '../models/ExerciseAnalyticsModel.js';
-import { Schema } from 'mongoose';
-import { chownSync } from 'fs';
+import ExerciseAnalyticsModel, { exerciseAnalyticsDocument } from '../models/ExerciseAnalyticsModel.js';
 
 class ExerciseAnalyticsService {
   async createExerciseAnalytics(userId: string) {
@@ -76,7 +74,7 @@ class ExerciseAnalyticsService {
       // Get the last day from the protocol
       let lastDay = protocol.protocolExercisePlan.exerciseDays[protocol.protocolExercisePlan.exerciseDays.length - 1];
 
-      let exercises = await ExerciseAnalyticsModel.findById(exerciseAnalytics?.exerciseAnalytics._id).populate<{ exercise: exercise[] }>("exerciseRanking.exercises");
+      let exercises = exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises || [];
 
       if (!exercises) {
         return {
@@ -87,27 +85,19 @@ class ExerciseAnalyticsService {
 
       let topExercises = [];
 
-      if (exercises?.exercise === undefined) {
-        console.log("No exercises found, creating new exercises");
+      if (exercises.length === 0) {
         // If exercises array is empty, create new exercise entries based on the protocol
         for(let protocolExercise of lastDay.exercises){
-          const exercise = await ExerciseModel.create({
+          exercises.push({
             name: protocolExercise.Exercises,
             topWeight: Math.max(...protocolExercise.Weight),
             lastWeights: protocolExercise.Weight.slice(-16),
             date: new Date()
           });
-
-          exercises.exerciseRanking.exercises.push(exercise._id);
         }
-
-        // Get the updated exercises
-        exercises = await ExerciseAnalyticsModel.findById(exerciseAnalytics?.exerciseAnalytics._id).populate<{ exercise: exercise[] }>("exerciseRanking.exercises");
-        await exercises?.save();
-        console.log(exercises); 
       } else {
         // Iterate over each exercise in the exercises array
-        for(let exercise of exercises?.exercise){
+        for(let exercise of exercises){
           // Find the corresponding exercise in the protocol's exercise plan
           const protocolExercise = lastDay.exercises.find(e => e.Exercises === exercise.name);
 
@@ -133,22 +123,12 @@ class ExerciseAnalyticsService {
       }
       console.log(exercises)
       // Sort the exercises by topWeight in descending order
-      exercises?.exercise.sort((a, b) => b.topWeight - a.topWeight);
+      exercises.sort((a, b) => b.topWeight - a.topWeight);
 
       if (exerciseAnalytics) {
-        if (exercises?.exercise) {
-          topExercises = exercises.exercise.slice(0, 4);
-          
-          for (let exercise of topExercises) {
-            exerciseAnalytics.exerciseAnalytics.topExercises.exercises.push(exercise._id);
-          }
-          
-          for(let exercise of exercises.exercise){
-            exerciseAnalytics.exerciseAnalytics.exerciseRanking.exercises.push(exercise._id);
-          }
-        } else {
-          console.log(`No exercises found for ID ${exerciseAnalytics?.exerciseAnalytics._id}`);
-        }
+        topExercises = exercises.slice(0, 4);
+        exerciseAnalytics.exerciseAnalytics.topExercises = { exercises: topExercises };
+        exerciseAnalytics.exerciseAnalytics.exerciseRanking = { exercises: exercises };
 
         exerciseAnalytics.exerciseAnalytics.save();
 
