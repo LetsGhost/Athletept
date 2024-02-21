@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export interface exercise extends Document {
+export interface exercise {
   name: string;
   topWeight: number;
   lastWeights: number[];
@@ -10,11 +10,11 @@ export interface exercise extends Document {
 export interface exerciseModel extends Model<exercise> {}
 
 export interface topExercises {
-  exercises: mongoose.Schema.Types.ObjectId[];
+  exercises: exercise[];
 }
 
 export interface exerciseRanking {
-  exercises: mongoose.Schema.Types.ObjectId[];
+  exercises: exercise[];
 }
 
 export interface exerciseAnalyticsDocument extends Document{
@@ -33,17 +33,11 @@ const exerciseSchema = new Schema<exercise>({
 });
 
 const topExercisesSchema = new Schema<topExercises>({
-  exercises: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Exercise' 
-  }]
+  exercises: [exerciseSchema]
 });
 
 const exerciseRankingSchema = new Schema<exerciseRanking>({
-  exercises: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Exercise'
-  }]
+  exercises: [exerciseSchema]
 });
 
 const exerciseAnalyticsSchema = new Schema<exerciseAnalyticsDocument>({
