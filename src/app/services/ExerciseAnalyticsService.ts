@@ -1,7 +1,9 @@
 import logger from '../../config/winstonLogger.js';
 import UserModel from '../models/UserModel.js';
 import { ProtocolExercisePlanDocument } from '../models/ProtocolModel.js';
-import ExerciseAnalyticsModel, { exerciseAnalyticsDocument } from '../models/ExerciseAnalyticsModel.js';
+import ExerciseAnalyticsModel, { exerciseAnalyticsDocument, ExerciseModel, exercise } from '../models/ExerciseAnalyticsModel.js';
+import { Schema } from 'mongoose';
+import { chownSync } from 'fs';
 
 class ExerciseAnalyticsService {
   async createExerciseAnalytics(userId: string) {
@@ -53,7 +55,6 @@ class ExerciseAnalyticsService {
       }
 
       let exerciseAnalytics = await UserModel.findById(userId).populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>("exerciseAnalytics");
-
       if (!exerciseAnalytics?.exerciseAnalytics) {
         await this.createExerciseAnalytics(userId).then(async (response) =>  {
           if (response.success) {
@@ -75,22 +76,38 @@ class ExerciseAnalyticsService {
       // Get the last day from the protocol
       let lastDay = protocol.protocolExercisePlan.exerciseDays[protocol.protocolExercisePlan.exerciseDays.length - 1];
 
-      let exercises = exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises || [];
+      let exercises = await ExerciseAnalyticsModel.findById(exerciseAnalytics?.exerciseAnalytics._id).populate<{ exercise: exercise[] }>("exerciseRanking.exercises");
+
+      if (!exercises) {
+        return {
+          success: false,
+          code: 404,
+        };
+      }
+
       let topExercises = [];
 
-      if (exercises.length === 0) {
+      if (exercises?.exercise === undefined) {
+        console.log("No exercises found, creating new exercises");
         // If exercises array is empty, create new exercise entries based on the protocol
         for(let protocolExercise of lastDay.exercises){
-        exercises.push({
-          name: protocolExercise.Exercises,
-          topWeight: Math.max(...protocolExercise.Weight),
-          lastWeights: protocolExercise.Weight.slice(-16),
-          date: new Date()
-        });
+          const exercise = await ExerciseModel.create({
+            name: protocolExercise.Exercises,
+            topWeight: Math.max(...protocolExercise.Weight),
+            lastWeights: protocolExercise.Weight.slice(-16),
+            date: new Date()
+          });
+
+          exercises.exerciseRanking.exercises.push(exercise._id);
         }
+
+        // Get the updated exercises
+        exercises = await ExerciseAnalyticsModel.findById(exerciseAnalytics?.exerciseAnalytics._id).populate<{ exercise: exercise[] }>("exerciseRanking.exercises");
+        await exercises?.save();
+        console.log(exercises); 
       } else {
         // Iterate over each exercise in the exercises array
-        for(let exercise of exercises){
+        for(let exercise of exercises?.exercise){
           // Find the corresponding exercise in the protocol's exercise plan
           const protocolExercise = lastDay.exercises.find(e => e.Exercises === exercise.name);
 
@@ -114,14 +131,24 @@ class ExerciseAnalyticsService {
           }
         }
       }
-
+      console.log(exercises)
       // Sort the exercises by topWeight in descending order
-      exercises.sort((a, b) => b.topWeight - a.topWeight);
+      exercises?.exercise.sort((a, b) => b.topWeight - a.topWeight);
 
       if (exerciseAnalytics) {
-        topExercises = exercises.slice(0, 4);
-        exerciseAnalytics.exerciseAnalytics.topExercises = { exercises: topExercises };
-        exerciseAnalytics.exerciseAnalytics.exerciseRanking = { exercises: exercises };
+        if (exercises?.exercise) {
+          topExercises = exercises.exercise.slice(0, 4);
+          
+          for (let exercise of topExercises) {
+            exerciseAnalytics.exerciseAnalytics.topExercises.exercises.push(exercise._id);
+          }
+          
+          for(let exercise of exercises.exercise){
+            exerciseAnalytics.exerciseAnalytics.exerciseRanking.exercises.push(exercise._id);
+          }
+        } else {
+          console.log(`No exercises found for ID ${exerciseAnalytics?.exerciseAnalytics._id}`);
+        }
 
         exerciseAnalytics.exerciseAnalytics.save();
 
@@ -201,6 +228,7 @@ class ExerciseAnalyticsService {
           }
         }
       });
+      console.log(populatedUser.exerciseAnalytics.exerciseRanking.exercises);
   
       if (!populatedUser.exerciseAnalytics) {
         return {
