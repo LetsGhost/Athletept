@@ -185,7 +185,7 @@ class ExerciseAnalyticsService {
     }
   }
 
-  async getExerciseRanking(userId: string, page: number, limit: number) {
+  async getExerciseRanking(userId: string) {
     try{
       const user = await UserModel.findById(userId);
       if (!user) {
@@ -196,16 +196,10 @@ class ExerciseAnalyticsService {
         };
       }
   
-      const skip = (page - 1) * limit;
-  
       const populatedUser = await UserModel.populate<{ exerciseAnalytics: exerciseAnalyticsDocument }>(user, {
         path: "exerciseAnalytics",
         populate: {
-          path: "exerciseRanking.exercises",
-          options: {
-            skip: skip,
-            limit: limit
-          }
+          path: "exerciseRanking.exercises"
         }
       });
 
