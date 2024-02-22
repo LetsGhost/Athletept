@@ -19,9 +19,8 @@ class ExerciseAnalyticsController {
   async getExerciseRanking(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-      const { page, limit } = req.query;
 
-      const { success, code, message, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(userId, Number(page), Number(limit));
+      const { success, code, message, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(userId);
 
       res.status(code).json({ success, message, exerciseRanking });
     } catch (error) {
