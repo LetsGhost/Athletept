@@ -121,7 +121,7 @@ class ExerciseAnalyticsService {
           }
         }
       }
-      console.log(exercises)
+
       // Sort the exercises by topWeight in descending order
       exercises.sort((a, b) => b.topWeight - a.topWeight);
 
@@ -208,7 +208,7 @@ class ExerciseAnalyticsService {
           }
         }
       });
-      console.log(populatedUser.exerciseAnalytics.exerciseRanking.exercises);
+
   
       if (!populatedUser.exerciseAnalytics) {
         return {
