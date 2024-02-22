@@ -58,6 +58,9 @@ describe('WeightAnalytics', () => {
 
       expect(success).toBe(true);
 
+      expect(weightAnalytics?.bodyWeight.actualWeight).toBe(50);
+      expect(weightAnalytics?.bodyWeight.lastWeight).toBe(80);
+
       expect(weightAnalytics?.bodyWeightGraphs.weekWeights).toHaveLength(1);
       expect(weightAnalytics?.bodyWeightGraphs.weekWeights[0].weight).toBe(50)
 
@@ -76,6 +79,11 @@ describe('WeightAnalytics', () => {
       expect(weightAnalytics?.bodyWeightGraphs.allWeights).toHaveLength(2);
       expect(weightAnalytics?.bodyWeightGraphs.allWeights[1].weight).toBe(60);
       expect(weightAnalytics?.bodyWeightGraphs.allWeights[0].weight).toBe(80);
+    })
+    it("Should get the correct Weight Analytics", async () => {
+      const { success, code, weightAnalytics } = await WeightAnalyticsService.getWeightAnalytics(NewUserId);
+      console.log(weightAnalytics)
+      expect(success).toBe(true);
     })
   });
 });
