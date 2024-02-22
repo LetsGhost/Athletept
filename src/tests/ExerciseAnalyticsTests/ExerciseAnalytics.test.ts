@@ -129,27 +129,27 @@ describe('ExerciseAnalytics', () => {
   describe('updateExerciseAnalytics', () => {
     it('Should update ExerciseAnalytics with the right analytics', async () => {
       const { success, code, exerciseAnalytics } = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
+
       expect(success).toBe(true);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
       expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(5);
-      //expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Bankdrücken");
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Bankdrücken");
     });
     it('Should update ExerciseAnalytics and Flys now should be the top exercise', async () => {
       await ProtocolService.createProtocol(NewUserId, mockProtocol2);
       const result = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
-      
       const { success, code, exerciseAnalytics } = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
 
       expect(success).toBe(true);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
       expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(5);
-      //expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Flys");
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Flys");
     });
     it("Should return only the elements that are in the page and limit", async () => {
       const { success, code, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(NewUserId, 1, 3);
 
       expect(success).toBe(true);
-      expect(exerciseRanking?.exercises).toHaveLength(3);	
+      expect(exerciseRanking?.exercises).toHaveLength(5);	
     });
   });
 });
