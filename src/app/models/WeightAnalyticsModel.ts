@@ -7,11 +7,6 @@ export interface bodyWeight {
     weightStart: number;
 }
 
-// TODO: Remove this graph
-export interface bodyWeightGraphSixteenWeeks {
-    weight: number[];
-}
-
 export interface bodyWeightGraphs {
     weekWeights: weight[];
     allWeights: weight[];
@@ -25,7 +20,6 @@ export interface weight{
 export interface weightAnalyticsModel {
     createdAt: Date;
     bodyWeight: bodyWeight;
-    bodyWeightGraphSixteenWeeks: bodyWeightGraphSixteenWeeks[];
     bodyWeightGraphs: bodyWeightGraphs;
 }
 
@@ -38,10 +32,6 @@ const bodyWeightSchema = new Schema<bodyWeight>({
     actualWeight: Number,
     weightGoal: Number,
     weightStart: Number,
-});
-
-const bodyWeightGraphSixteenWeeksSchema = new Schema<bodyWeightGraphSixteenWeeks>({
-    weight: [Number],
 });
 
 const bodyWeight = new Schema<weight>({
@@ -57,7 +47,6 @@ const bodyWeightGraphsSchema = new Schema<bodyWeightGraphs>({
 const weightAnalyticsSchema = new Schema<weightAnalyticsDocument>({
     createdAt: { type: Date, required: true, default: Date.now },
     bodyWeight: bodyWeightSchema,
-    bodyWeightGraphSixteenWeeks: [bodyWeightGraphSixteenWeeksSchema],
     bodyWeightGraphs: bodyWeightGraphsSchema,
 });
 
