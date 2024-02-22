@@ -82,8 +82,9 @@ describe('WeightAnalytics', () => {
     })
     it("Should get the correct Weight Analytics", async () => {
       const { success, code, weightAnalytics } = await WeightAnalyticsService.getWeightAnalytics(NewUserId);
-      console.log(weightAnalytics)
+
       expect(success).toBe(true);
     })
+    // TODO: Test the delete function
   });
 });
