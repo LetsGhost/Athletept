@@ -18,21 +18,12 @@ class WeightAnalyticsService {
                 }
             }
 
-            let weightGraph = [];
-
-            for(let i = 0; i < 16; i++){
-                weightGraph.push(userInfo?.currentWeight);
-            }
-
             const weightAnalytics = new WeightAnalyticsModel({
                 bodyWeight: {
                     lastWeight: userInfo?.currentWeight,
                     actualWeight: userInfo?.currentWeight,
                     weightGoal: userInfo?.targetWeight,
                     weightStart: userInfo?.currentWeight
-                },
-                bodyWeightGraphSixteenWeeks: {
-                    weight: weightGraph
                 },
                 bodyWeightGraphs: {
                     weekWeights: [],
@@ -64,47 +55,6 @@ class WeightAnalyticsService {
         }        
     }
 
-    async updateWeightAnalytics(userId: string, weight: number, oldWeight: number) {
-        try {
-            // Find the user and update the weight analytics
-            const user = await UserModel.findById(userId);
-
-            if(user){
-                const weightAnalytics = await WeightAnalyticsModel.findById(user?.weightAnalytics);
-
-                if(weightAnalytics){
-                    weightAnalytics.bodyWeight.lastWeight = oldWeight;
-                    weightAnalytics.bodyWeight.actualWeight = weight;
-
-                    const weightGraph = weightAnalytics.bodyWeightGraphSixteenWeeks[0].weight;
-                    weightGraph.splice(0, 1);
-                    weightGraph.splice(15, 0, weight);
-
-                    await weightAnalytics?.save();
-
-                    return {
-                        success: true,
-                        code: 200,
-                        weightAnalytics
-                    }
-                }
-            }
-
-            return {
-                success: false,
-                code: 404,
-                message: "User not found"
-            }
-        } catch(error){
-            logger.error('Error updating weight analytics:', error, {service: 'WeightAnalyticsService.updateWeightAnalytics'});
-            return {
-                success: false,
-                code: 500,
-                message: "Internal server error"
-            }
-        }
-    }
-
     // TODO: Implement system that checks if the weight number is way bigger than the last one if yes reject it
     async updateBodyWeightArray(userId: string, weight: number) {
         try{
@@ -119,31 +69,36 @@ class WeightAnalyticsService {
                 }
             }
 
-            const WeightAnalytics: weightAnalyticsDocument | null = await WeightAnalyticsModel.findById(user?.weightAnalytics);
+            const weightAnalytics = await UserModel.findById(userId).populate<{ weightAnalytics: weightAnalyticsDocument }>('weightAnalytics');
 
             // If the user doesn´t have a weight analytics throw an error
-            if(!WeightAnalytics) {
+            if(!weightAnalytics?.weightAnalytics) {
                 return {
                     success: false,
                     code: 404
                 }
             }
+
+            // Update lastWeight and actualWeight
+            weightAnalytics.weightAnalytics.bodyWeight.lastWeight = weightAnalytics.weightAnalytics.bodyWeight.actualWeight;
+            weightAnalytics.weightAnalytics.bodyWeight.actualWeight = weight
+
             // If the bodyWeightGraphs not exists create it
-            if(!WeightAnalytics.bodyWeightGraphs) {
-                WeightAnalytics.bodyWeightGraphs = {
+            if(!weightAnalytics.weightAnalytics.bodyWeightGraphs) {
+                weightAnalytics.weightAnalytics.bodyWeightGraphs = {
                     weekWeights: [],
                     allWeights: []
                 };
             }
 
             // Check if the weekWeight has any value
-            if(WeightAnalytics.bodyWeightGraphs.weekWeights.length === 0) {
-                WeightAnalytics.bodyWeightGraphs.weekWeights.push({
+            if(weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights.length === 0) {
+                weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights.push({
                     weight: weight,
                     date: new Date()
                 });
 
-                WeightAnalytics.bodyWeightGraphs.allWeights.push({
+                weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.push({
                     weight: weight,
                     date: new Date()
                 });
@@ -151,37 +106,48 @@ class WeightAnalyticsService {
             else {
                 const numbers = []
    
-                for(let key in WeightAnalytics.bodyWeightGraphs.weekWeights) {
-                    numbers.push(WeightAnalytics.bodyWeightGraphs.weekWeights[key].weight);
+                for(let key in weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights) {
+                    numbers.push(weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights[key].weight);
                 }
                 numbers.push(weight);
 
                 const sum = numbers.reduce((a, b) => a + b, 0);
                 const avg = sum / numbers.length;
 
-                WeightAnalytics.bodyWeightGraphs.allWeights.pop();
-                WeightAnalytics.bodyWeightGraphs.allWeights.push({
+                weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.pop();
+                weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.push({
                     weight: avg,
                     date: new Date()
                 });
 
-                WeightAnalytics.bodyWeightGraphs.weekWeights.push({
+                weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights.push({
                     weight: weight,
                     date: new Date()
                 });
             }
 
-            if (WeightAnalytics) {
-                await WeightAnalytics.save();
-            }
+            await weightAnalytics.weightAnalytics.save();
 
             return {
                 success: true,
                 code: 200,
-                weightAnalytics: WeightAnalytics
+                weightAnalytics: weightAnalytics.weightAnalytics
             }
         } catch(error){
             logger.error('Error updating body weight array:', error, {service: 'WeightAnalyticsService.updateBodyWeightArray'});
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error"
+            }
+        }
+    }
+
+    async deleteWeight(userId: string, weightIndex: number){
+        try{
+
+        } catch(error){
+            logger.error('Error deleting weight:', error, {service: 'WeightAnalyticsService.deleteWeight'});
             return {
                 success: false,
                 code: 500,
