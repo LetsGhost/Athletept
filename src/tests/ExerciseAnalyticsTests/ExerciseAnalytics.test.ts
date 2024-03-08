@@ -146,7 +146,7 @@ describe('ExerciseAnalytics', () => {
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Flys");
     });
     it("Should return only the elements that are in the page and limit", async () => {
-      const { success, code, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(NewUserId, 1, 3);
+      const { success, code, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(NewUserId);
 
       expect(success).toBe(true);
       expect(exerciseRanking?.exercises).toHaveLength(5);	
