@@ -75,5 +75,6 @@ describe('Protocol', () => {
       expect(newProtocol?.exerciseDays).toHaveLength(1);
       expect(newProtocol?.exerciseDays[0].exercises[0].Exercises).toBe('Bankdrücken');
     });
+    
   });
 });
