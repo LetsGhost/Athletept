@@ -6,10 +6,9 @@ import ExerciseAnalyticsService from "../services/ExerciseAnalyticsService.js";
 class ProtocolController{
     async createProtocol(req: Request, res: Response) {
         try {
-            const { protocol } = req.body;
             const { userId } = req.params;
 
-            const { success, code, message, newProtocol } = await protocolService.createProtocol(userId, protocol);
+            const { success, code, message, newProtocol } = await protocolService.createProtocol(userId, req.body);
 
             await ExerciseAnalyticsService.updateExerciseAnalytics(userId).then((response) => {
                 if(!response.success) logger.error('Error updating ExerciseAnalytics:', response, {service: 'ProtocolService.createProtocol'});
