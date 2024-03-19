@@ -23,7 +23,7 @@ class TemplateUtils {
 
             const startTime = new Date().getTime();
             
-            browser = await puppeteer.launch({ headless: "new", executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+            browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             await page.setContent(html);
             const pdfBuffer = await page.pdf({ format: 'A4' });
