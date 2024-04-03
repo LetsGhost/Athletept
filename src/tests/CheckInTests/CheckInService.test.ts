@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import UserService from '../../app/services/UserService';
 
 import CheckInService from '../../app/services/CheckInService';
-import { check } from 'express-validator';
 
 let mongod: any;
 let NewUserId: string;
