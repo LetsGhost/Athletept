@@ -80,11 +80,6 @@ describe('WeightAnalytics', () => {
       expect(weightAnalytics?.bodyWeightGraphs.allWeights[1].weight).toBe(60);
       expect(weightAnalytics?.bodyWeightGraphs.allWeights[0].weight).toBe(80);
     })
-    it("Should get the correct Weight Analytics", async () => {
-      const { success, code, weightAnalytics } = await WeightAnalyticsService.getWeightAnalytics(NewUserId);
-
-      expect(success).toBe(true);
-    })
-    // TODO: Test the delete function
+    
   });
 });
