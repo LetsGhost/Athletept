@@ -48,10 +48,11 @@ router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
 // Weight Analytics
 router.patch("/updateBodyWeightArray/:userId", weightAnalyticsController.updateBodyWeightArray)
 router.get("/getWeightAnalytics/:userId", weightAnalyticsController.getWeightAnalytics)
+router.patch("/deleteWeight/:userId/:index", weightAnalyticsController.deleteWeight)
 
 // Exercise Analytics
 router.get("/getTopExercises/:userId", exerciseAnalyticsController.getTopExercises)
-router.get("/getExerciseRanking/:userId", exerciseAnalyticsController.getExerciseRanking) // GET /getExerciseRanking/123?limit=2&page=2
+router.get("/getExerciseRanking/:userId", exerciseAnalyticsController.getExerciseRanking) 
 
 // Training Duration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 
