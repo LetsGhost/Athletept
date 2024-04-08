@@ -1,6 +1,6 @@
-import Redis from 'ioredis';
-import logger from './winstonLogger.js';
 
+import logger from './winstonLogger.js';
+/*
 let redisClient: Redis | null = null;
 
 const connectToRedis = async (): Promise<Redis | null> => {
@@ -26,3 +26,4 @@ const connectToRedis = async (): Promise<Redis | null> => {
 };
 
 export { connectToRedis, redisClient };
+*/
