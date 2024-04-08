@@ -145,6 +145,50 @@ class WeightAnalyticsService {
 
     async deleteWeight(userId: string, weightIndex: number){
         try{
+            const weightAnalytics = await UserModel.findById(userId).populate<{ weightAnalytics: weightAnalyticsDocument }>('weightAnalytics');
+
+            if(!weightAnalytics?.weightAnalytics){
+                return {
+                    success: false,
+                    code: 404,
+                    message: "Weight analytics not found"
+                }
+            }
+            
+            if(!weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights[weightIndex]){
+                return {
+                    success: false,
+                    code: 404,
+                    message: "Weight not found"
+                }
+            }
+
+            weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights.splice(weightIndex, 1);
+            weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.pop();
+
+            const numbers = []
+
+            for(let key in weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights) {
+                numbers.push(weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights[key].weight);
+            }
+
+            const sum = numbers.reduce((a, b) => a + b, 0);
+
+            const avg = sum / numbers.length;
+
+            weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.pop();
+            weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.push({
+                weight: avg,
+                date: new Date()
+            });
+
+            await weightAnalytics.weightAnalytics.save();
+
+            return {
+                success: true,
+                code: 200,
+                weightAnalytics: weightAnalytics.weightAnalytics
+            }
 
         } catch(error){
             logger.error('Error deleting weight:', error, {service: 'WeightAnalyticsService.deleteWeight'});
