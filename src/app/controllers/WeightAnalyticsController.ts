@@ -50,6 +50,24 @@ class WeightAnalyticsController {
             res.status(500).json({success: false, message: 'Internal Server Error'});
         }
     }
+
+    async deleteWeight(req: Request, res: Response) {
+        try{
+            const userId = req.params.userId;
+            const index = req.params.index;
+
+            const {success, code, message, weightAnalytics} = await WeightAnalyticsService.deleteWeight(userId, Number(index));
+
+            if(success){
+                logger.info('Weight deleted', {service: 'WeightAnalyticsController.deleteWeight'});
+            }
+    
+            return res.status(code).json({ success, message, weightAnalytics });
+        } catch(error) {
+            logger.error('Error deleting weight:', error, {service: 'WeightAnalyticsController.deleteWeight'});
+            res.status(500).json({success: false, message: 'Internal Server Error'});
+        }
+    }
 }
 
 export default new WeightAnalyticsController();
