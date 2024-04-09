@@ -164,7 +164,6 @@ class WeightAnalyticsService {
             }
 
             weightAnalytics.weightAnalytics.bodyWeightGraphs.weekWeights.splice(weightIndex, 1);
-            weightAnalytics.weightAnalytics.bodyWeightGraphs.allWeights.pop();
 
             const numbers = []
 
