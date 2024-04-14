@@ -4,7 +4,7 @@ import logger from '../../config/winstonLogger.js';
 import getClientIp from '../utils/ipUtils.js';
 
 class AuthenticateToken{
-    async authenticateToken(req: Request, res: Response, next: NextFunction) {
+    authenticateToken(req: Request, res: Response, next: NextFunction) {
         try {
             const token = req.cookies.token; // Assuming you set the token as 'token' cookie
 
@@ -15,8 +15,10 @@ class AuthenticateToken{
 
             const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as { userId: string, userRole: string };
 
-            req.params.userId = decodedToken.userId;
-            req.params.userRole = decodedToken.userRole;
+            if(!decodedToken) {
+                logger.warn('User tried to access user Endpoints with an invalid Token: ' + " at " + req.path + " " + getClientIp(req), {service: 'AuthenticateRole.authenticateToken'});
+                return res.status(401).json({success: false, message: 'Unauthorized' });
+            }
 
             next();
         } catch (error) {

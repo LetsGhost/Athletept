@@ -42,6 +42,7 @@ async function dbSchedule() {
     let checkInCounter = 0;
     let weekDisplayCounter = 0;
     let exercisePlanCounter = 0;
+    let weightAnalyticsCounter = 0;
 
     if (userIds) {
       for (let id in userIds) {
@@ -112,11 +113,26 @@ async function dbSchedule() {
 
           exercisePlanCounter++;
         }
+
+        const userWeightAnalytics = await UserModel.findById(userId).populate(
+          "weightAnalytics"
+        );
+        const currentWeightAnalytics = userWeightAnalytics?.weightAnalytics as any;
+
+        if (currentWeightAnalytics) {
+
+          if(currentWeightAnalytics.bodyWeightGraphs){
+            currentWeightAnalytics.bodyWeightGraphs.weekWeights = [];
+            await currentWeightAnalytics.save();
+  
+            weightAnalyticsCounter++;
+          }
+        }
       }
     }
 
     logger.info(
-      `Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans`,
+      `Updated ${protocolCounter} protocols, ${checkInCounter} checkIns, ${weekDisplayCounter} weekDisplays, and ${exercisePlanCounter} exercisePlans, and ${weightAnalyticsCounter} weightAnalytics.`,
       { service: "dbSchedule" }
     );
 

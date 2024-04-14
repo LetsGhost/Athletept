@@ -1,4 +1,4 @@
-import TemplateUtils from "../app/utils/templateUtils";
+import TemplateUtils from "../../app/utils/templateUtils";
 
 const mockCheckIn = {
   _id: {

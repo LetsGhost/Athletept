@@ -19,16 +19,11 @@ export interface change{
     boolean: boolean;
 }
 
-export interface weight {
-    weight: number;
-}
-
 export interface checkIn {
     currentGrowth: currentGrowth;
     problems: problems;
     regeneration: regeneration;
     change: change;
-    weight: weight;
 }
 
 export interface checkInDocument extends Document {
@@ -59,16 +54,11 @@ const changeSchema = new Schema<change>({
     boolean: {type: Boolean, default: false},
 })
 
-const weightSchema = new Schema<weight>({
-    weight: {type: Number, default: 0},
-})
-
 const checkInSchema = new Schema<checkIn>({
     currentGrowth: currentGrowthSchema,
     problems: problemsSchema,
     regeneration: regenerationSchema,
     change: changeSchema,
-    weight: weightSchema,
 })
 
 const checkInDocumentSchema = new Schema<checkInDocument>({

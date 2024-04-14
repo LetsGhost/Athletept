@@ -1,4 +1,4 @@
-import { createExercisePlan, createWarmup } from '../app/utils/exercisePlanUtils';
+import { createExercisePlan, createWarmup } from '../../app/utils/exercisePlanUtils';
 
 
 describe('ExercisPlanService', () => {

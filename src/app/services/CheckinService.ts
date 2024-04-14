@@ -36,9 +36,6 @@ class CheckInService {
                 const problems = checkIn.problems
                 const regeneration = checkIn.regeneration
                 const change = checkIn.change
-                const weight = checkIn.weight
-
-                await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
 
                 const newCheckIn = new CheckInModel({
                     checkIn: {
@@ -46,7 +43,6 @@ class CheckInService {
                         problems: problems,
                         regeneration: regeneration,
                         change: change,
-                        weight: weight,
                     },
                     checkInStatus: true,
                 })
@@ -66,9 +62,6 @@ class CheckInService {
             const problems = checkIn.problems
             const regeneration = checkIn.regeneration
             const change = checkIn.change
-            const weight = checkIn.weight
-
-            await WeightAnalyticsService.updateWeightAnalytics(userId, weight.weight, user?.userInfo?.currentWeight)
 
             const newCheckIn = new CheckInModel({
                 checkIn: {
@@ -76,7 +69,6 @@ class CheckInService {
                     problems: problems,
                     regeneration: regeneration,
                     change: change,
-                    weight: weight,
                 },
                 checkInStatus: true,
             })

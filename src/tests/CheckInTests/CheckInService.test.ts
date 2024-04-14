@@ -1,7 +1,8 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import MessageService from '../app/services/MessageService';
-import UserService from '../app/services/UserService';
+import UserService from '../../app/services/UserService';
+
+import CheckInService from '../../app/services/CheckInService';
 
 let mongod: any;
 let NewUserId: string;
@@ -50,29 +51,35 @@ afterAll(async () => {
 
 describe('MessageService', () => {
   describe('createMessage', () => {
-    it('should return success: true', async () => {
+    it('create a empty check-in, should return with default values', async () => {
       // Arrange
-      const message = 'Hello, world!';
-      const userId = NewUserId;
+      const checkIn = {
+        "currentGrowth": {
+            "answer": "",
+            "answer2": ""
+        },
+        "problems": {
+            "answer": "",
+            "boolean": true
+        },
+        "regeneration": {
+            "answer": ""
+        },
+        "change": {
+            "answer": "",
+            "boolean": true
+        },
+        "weight": {
+            "weight": 0
+        },
+        checkInStatus: true
+      }
 
       // Act
-      const result = await MessageService.createMessage(message, userId);
+      const result = await CheckInService.createCheckIn(NewUserId, checkIn);
 
       // Assert
       expect(result.success).toBe(true);
     });
-  });
-  describe("createMessage with userId = null", () => {
-    it("should return success: false", async () => {
-      // Arrange
-      const message = "Hello, world!";
-      const userId = "null";
-
-      // Act
-      const result = await MessageService.createMessage(message, userId);
-
-      // Assert
-      expect(result.success).toBe(false);
-    })
   });
 });

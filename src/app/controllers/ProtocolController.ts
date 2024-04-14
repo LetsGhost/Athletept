@@ -1,25 +1,20 @@
 import {Request, Response} from "express";
 import protocolService from "../services/ProtocolService.js";
 import logger from "../../config/winstonLogger.js";
+import ExerciseAnalyticsService from "../services/ExerciseAnalyticsService.js";
 
 class ProtocolController{
     async createProtocol(req: Request, res: Response) {
         try {
-            const { userId, protocol, comment } = req.body;
+            const { userId } = req.params;
 
-            const result = await protocolService.createProtocol(userId, protocol, comment);
+            const { success, code, message, newProtocol } = await protocolService.createProtocol(userId, req.body);
 
-            if (result && 'success' in result) {
-                const { success, code, message, newProtocol } = result;
+            await ExerciseAnalyticsService.updateExerciseAnalytics(userId).then((response) => {
+                if(!response.success) logger.error('Error updating ExerciseAnalytics:', response, {service: 'ProtocolService.createProtocol'});
+            });
 
-                if(success){
-                    logger.info('Protocol created', {service: 'ProtocolController.createProtocol'});
-                }
-
-                return res.status(code).json({ success, message, newProtocol });
-            } else {
-                throw new Error('Unexpected response from protocolService.createProtocol');
-            }
+            res.status(code).json({ success, message, newProtocol });
         } catch (error) {
             logger.error('Error creating protocol:', error, {service: 'ProtocolController.createProtocol'});
             res.status(500).json({ success: false, message: "Internal Server error" });

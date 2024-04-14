@@ -14,6 +14,7 @@ import checkInController from "../controllers/CheckInController.js";
 import weekDisplayController from '../controllers/WeekDisplayController.js';
 import weightAnalyticsController from '../controllers/WeightAnalyticsController.js';
 import trainingDurationController from '../controllers/TrainingDurationController.js';
+import exerciseAnalyticsController from '../controllers/ExerciseAnalyticsController.js';
 
 // Import routes
 const router = express.Router();
@@ -23,29 +24,35 @@ if(process.env.ENV === "production"){
 }
 
 // Exercise Plan
-router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
+router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan )
 
 // User
-router.get("/getUser/:userId", userController.getUserById) // Is Documented
+router.get("/getUser/:userId", userController.getUserById)
 router.patch("/updatePassword/:userId", userController.updatePassword)
 
 // Message
-router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) // Is Documented
+router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser)
 router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
-router.post("/createProtocol", protocolController.createProtocol) // Is Documented
-router.post("/createBlankProtocol/:userId", protocolController.createBlankProtocol) // Is Documented
+router.post("/createProtocol/:userId", protocolController.createProtocol)
+router.post("/createBlankProtocol/:userId", protocolController.createBlankProtocol)
 
 // Check-in
-router.post("/createCheckIn/:userId", checkInController.createCheckIn) // Is Documented
+router.post("/createCheckIn/:userId", checkInController.createCheckIn)
 router.get("/getCheckInStatus/:userId", checkInController.getCheckInStatus)
 
 // Week Display
-router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay) // Is Documented
+router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
 
-// Week Analytics
+// Weight Analytics
+router.patch("/updateBodyWeightArray/:userId", weightAnalyticsController.updateBodyWeightArray)
 router.get("/getWeightAnalytics/:userId", weightAnalyticsController.getWeightAnalytics)
+router.patch("/deleteWeight/:userId/:index", weightAnalyticsController.deleteWeight)
+
+// Exercise Analytics
+router.get("/getTopExercises/:userId", exerciseAnalyticsController.getTopExercises)
+router.get("/getExerciseRanking/:userId", exerciseAnalyticsController.getExerciseRanking) 
 
 // Training Duration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) 

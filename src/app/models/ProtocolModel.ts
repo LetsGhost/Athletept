@@ -2,8 +2,8 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export interface ProtocolExercise {
     Exercises: string;
-    Weight: string;
-    Repetitions: string;
+    Weight: number[];
+    Repetitions: number[];
 }
 
 export interface Comment{
@@ -27,8 +27,8 @@ export interface ProtocolExercisePlanModel extends Model<ProtocolExercisePlanDoc
 
 const protocolExerciseSchema = new Schema<ProtocolExercise>({
     Exercises: String,
-    Weight: String,
-    Repetitions: String
+    Weight: [Number],
+    Repetitions: [Number]
 });
 
 const commentSchema = new Schema<Comment>({
