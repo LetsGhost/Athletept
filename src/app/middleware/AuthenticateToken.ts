@@ -6,7 +6,7 @@ import getClientIp from '../utils/ipUtils.js';
 class AuthenticateToken{
     authenticateToken(req: Request, res: Response, next: NextFunction) {
         try {
-            const token = req.cookies.token; // Assuming you set the token as 'token' cookie
+            const token = req.cookies.token;
 
             if (!token) {
                 logger.warn('User tried to access user Endpoints without an Token: ' + " at " + req.path + " " + getClientIp(req), {service: 'AuthenticateRole.authenticateToken'});
