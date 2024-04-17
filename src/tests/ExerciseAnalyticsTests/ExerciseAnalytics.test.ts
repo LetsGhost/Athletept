@@ -138,13 +138,15 @@ describe('ExerciseAnalytics', () => {
       expect(success).toBe(true);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
       expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(5);
+      expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].lastWeights[0]).toBe(70);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Bankdrücken");
     });
     it('Should update ExerciseAnalytics and Flys now should be the top exercise', async () => {
-      await ProtocolService.createProtocol(NewUserId, mockProtocol2);
       const result = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
+      await ProtocolService.createProtocol(NewUserId, mockProtocol2);
       const { success, code, exerciseAnalytics } = await ExerciseAnalyticsService.updateExerciseAnalytics(NewUserId);
 
+      console.log(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises);
       expect(success).toBe(true);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
       expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(6);
