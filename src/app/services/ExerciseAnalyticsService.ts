@@ -76,6 +76,7 @@ class ExerciseAnalyticsService {
 
       let exercises = exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises || [];
 
+
       if (!exercises) {
         return {
           success: false,
@@ -88,10 +89,12 @@ class ExerciseAnalyticsService {
       if (exercises.length === 0) {
         // If exercises array is empty, create new exercise entries based on the protocol
         for(let protocolExercise of lastDay.exercises){
+          let avg = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
+
           exercises.push({
             name: protocolExercise.Exercises,
-            topWeight: Math.max(...protocolExercise.Weight),
-            lastWeights: protocolExercise.Weight.slice(-16),
+            topWeight: avg,
+            lastWeights: avg > 0 ? [avg] : protocolExercise.Weight.slice(-16),
             date: new Date()
           });
         }
@@ -99,12 +102,15 @@ class ExerciseAnalyticsService {
         // Check if an exercise does not exists in the exercises array
         for(let protocolExercise of lastDay.exercises){
           let exerciseIndex = exercises.findIndex(e => e.name === protocolExercise.Exercises);
+
           // If the exercise does not exist in the array create it
           if (exerciseIndex === -1) {
+            let avg = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
+
             exercises.push({
               name: protocolExercise.Exercises,
-              topWeight: Math.max(...protocolExercise.Weight),
-              lastWeights: protocolExercise.Weight.slice(-16),
+              topWeight: avg,
+              lastWeights: avg > 0 ? [avg] : protocolExercise.Weight.slice(-16),
               date: new Date()
             });
           }
@@ -118,29 +124,20 @@ class ExerciseAnalyticsService {
           // If a corresponding exercise was found in the protocol's exercise plan
           if (protocolExercise) {
 
-            // Iterate over each exercise in the exercises array
-            for(let exercise of exercises){
-              // Find the corresponding exercise in the protocol's exercise plan
-              const protocolExercise = lastDay.exercises.find(e => e.Exercises === exercise.name);
+            // If there are more than one weights in the array
+            if (protocolExercise.Weight.length > 1) {
+              let avgWeight = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
 
-              // If a corresponding exercise was found in the protocol's exercise plan
-              if (protocolExercise) {
+              // If the average weight is greater than the exercise's topWeight
+              if (avgWeight > exercise.topWeight) {
+                exercise.topWeight = avgWeight;
+              }
 
-                // If there are more than one weights in the array
-                if (protocolExercise.Weight.length > 1) {
-                  let avgWeight = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
+              // Always push avgWeight into lastWeights
+              exercise.lastWeights.push(avgWeight);
 
-                  // If the average weight is greater than the exercise's topWeight
-                  if (avgWeight > exercise.topWeight) {
-
-                    exercise.topWeight = avgWeight;
-                    exercise.lastWeights.push(avgWeight);
-
-                    if (exercise.lastWeights.length > 16) {
-                      exercise.lastWeights.shift();
-                    }
-                  }
-                }
+              if (exercise.lastWeights.length > 16) {
+                exercise.lastWeights.shift();
               }
             }
           }
