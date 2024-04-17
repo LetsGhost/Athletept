@@ -96,13 +96,39 @@ class ExerciseAnalyticsService {
           });
         }
       } else {
+        // Check if an exercise does not exists in the exercises array
+        for(let protocolExercise of lastDay.exercises){
+          let exerciseIndex = exercises.findIndex(e => e.name === protocolExercise.Exercises);
+          // If the exercise does not exist in the array create it
+          if (exerciseIndex === -1) {
+            exercises.push({
+              name: protocolExercise.Exercises,
+              topWeight: Math.max(...protocolExercise.Weight),
+              lastWeights: protocolExercise.Weight.slice(-16),
+              date: new Date()
+            });
+          }
+        }
+
         // Iterate over each exercise in the exercises array
         for(let exercise of exercises){
           // Find the corresponding exercise in the protocol's exercise plan
           const protocolExercise = lastDay.exercises.find(e => e.Exercises === exercise.name);
-
           // If a corresponding exercise was found in the protocol's exercise plan
           if (protocolExercise) {
+            
+            // Check if the exercise exists in the exercises array
+            let exerciseIndex = exercises.findIndex(e => e.name === exercise.name);
+            // If the exercise does not exist in the array create it
+            if (exerciseIndex === -1) {
+              exercises.push({
+                name: protocolExercise.Exercises,
+                topWeight: Math.max(...protocolExercise.Weight),
+                lastWeights: protocolExercise.Weight.slice(-16),
+                date: new Date()
+              });
+            }
+
             // Iterate over each weight in the protocol exercise's Weight array
             for(let weight of protocolExercise.Weight){
               // If the current weight is greater than the exercise's topWeight
@@ -118,15 +144,6 @@ class ExerciseAnalyticsService {
                 }
               }
             }
-          }
-          else{
-            // If no corresponding exercise was found create a new entry
-            exercises.push({
-              name: exercise.name,
-              topWeight: Math.max(...exercise.lastWeights),
-              lastWeights: exercise.lastWeights,
-              date: new Date()
-            });
           }
         }
       }
