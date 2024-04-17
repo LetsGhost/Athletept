@@ -97,6 +97,11 @@ const mockProtocol2 = {
       "Exercises": "Squats",
       "Weight": [50, 60, 70],
       "Repetitions": [10, 8, 6]
+    },
+    {
+      "Exercises": "Pecflys",
+      "Weight": [50, 60, 70],
+      "Repetitions": [10, 8, 6]
     }
   ],
   "comment": {
@@ -142,14 +147,17 @@ describe('ExerciseAnalytics', () => {
 
       expect(success).toBe(true);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises).toHaveLength(4);
-      expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(5);
+      expect(exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises).toHaveLength(6);
       expect(exerciseAnalytics?.exerciseAnalytics.topExercises.exercises[0].name).toBe("Flys");
+
+      const containsPecflys = exerciseAnalytics?.exerciseAnalytics.exerciseRanking.exercises.some(exercise => exercise.name === 'Pecflys');
+      expect(containsPecflys).toBe(true);
     });
     it("Should return only the elements that are in the page and limit", async () => {
       const { success, code, exerciseRanking } = await ExerciseAnalyticsService.getExerciseRanking(NewUserId);
 
       expect(success).toBe(true);
-      expect(exerciseRanking?.exercises).toHaveLength(5);	
+      expect(exerciseRanking?.exercises).toHaveLength(6);	
     });
   });
 });
