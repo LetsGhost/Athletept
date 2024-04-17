@@ -119,6 +119,15 @@ class ExerciseAnalyticsService {
               }
             }
           }
+          else{
+            // If no corresponding exercise was found create a new entry
+            exercises.push({
+              name: exercise.name,
+              topWeight: Math.max(...exercise.lastWeights),
+              lastWeights: exercise.lastWeights,
+              date: new Date()
+            });
+          }
         }
       }
 
