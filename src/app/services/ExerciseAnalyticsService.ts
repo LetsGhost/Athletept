@@ -90,11 +90,12 @@ class ExerciseAnalyticsService {
         // If exercises array is empty, create new exercise entries based on the protocol
         for(let protocolExercise of lastDay.exercises){
           let avg = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
+          let roundedNum = Number(avg.toFixed(2));
 
           exercises.push({
             name: protocolExercise.Exercises,
-            topWeight: avg,
-            lastWeights: avg > 0 ? [avg] : protocolExercise.Weight.slice(-16),
+            topWeight: roundedNum,
+            lastWeights: roundedNum > 0 ? [roundedNum] : protocolExercise.Weight.slice(-16),
             date: new Date()
           });
         }
@@ -106,11 +107,12 @@ class ExerciseAnalyticsService {
           // If the exercise does not exist in the array create it
           if (exerciseIndex === -1) {
             let avg = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
+            let roundedNum = Number(avg.toFixed(2));
 
             exercises.push({
               name: protocolExercise.Exercises,
-              topWeight: avg,
-              lastWeights: avg > 0 ? [avg] : protocolExercise.Weight.slice(-16),
+              topWeight: roundedNum,
+              lastWeights: roundedNum > 0 ? [roundedNum] : protocolExercise.Weight.slice(-16),
               date: new Date()
             });
           }
@@ -127,14 +129,15 @@ class ExerciseAnalyticsService {
             // If there are more than one weights in the array
             if (protocolExercise.Weight.length > 1) {
               let avgWeight = protocolExercise.Weight.reduce((a, b) => a + b, 0) / protocolExercise.Weight.length;
+              let roundedNum = Number(avgWeight.toFixed(2));
 
               // If the average weight is greater than the exercise's topWeight
               if (avgWeight > exercise.topWeight) {
-                exercise.topWeight = avgWeight;
+                exercise.topWeight = roundedNum;
               }
 
               // Always push avgWeight into lastWeights
-              exercise.lastWeights.push(avgWeight);
+              exercise.lastWeights.push(roundedNum);
 
               if (exercise.lastWeights.length > 16) {
                 exercise.lastWeights.shift();
