@@ -83,10 +83,85 @@ class AuthService {
             return {
                 success: true,
                 code: 200,
-                userId: user?._id
             };
         } catch (error) {
             logger.error(`Internal server error: ${error}`, {service: 'AuthService.getUserFromToken'});
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
+        }
+    }
+
+    async authToken(token: string, userIdParams: string, path: string){
+        try{
+            const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
+
+            if(!decodedToken){
+                logger.warn(`User tried to access user Endpoints with an invalid Token: ${path}`, {service: 'AuthService.authToken'});
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Unauthorized'
+                }
+            }
+
+            if(decodedToken.userRole != "admin"){
+                if(decodedToken.userId != userIdParams){
+                    logger.warn(`User tried to access user Endpoints with an invalid UserId: ${path}`, {service: 'AuthService.authToken'});
+                    return {
+                        success: false,
+                        code: 401,
+                        message: 'Unauthorized userIds are not matching'
+                    }
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                message: 'Authorized'
+            }
+        } catch(error){
+            logger.error(`Internal server error: ${error}`, {service: 'AuthService.authToken'});
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
+        }
+    }
+
+    async authRole(token: string, path: string){
+        try{
+            const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
+
+            if(!decodedToken){
+                logger.warn(`User tried to access user Endpoints with an invalid Token: ${path}`, {service: 'AuthService.authRole'});
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Unauthorized'
+                }
+            }
+
+            if(decodedToken.userRole != "admin"){
+                logger.warn(`User tried to access admin Endpoints with an invalid Role: ${path}`, {service: 'AuthService.authRole'});
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Unauthorized userRole is not matching'
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                message: 'Authorized'
+            }
+        } catch(error){
+            logger.error(`Internal server error: ${error}`, {service: 'AuthService.authRole'});
             return {
                 success: false,
                 code: 500,
