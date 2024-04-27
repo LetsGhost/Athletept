@@ -3,21 +3,30 @@ import { Request, Response, NextFunction } from 'express';
 import logger from '../../config/winstonLogger.js';
 import getClientIp from '../utils/ipUtils.js';
 
+import AuthService from '../services/AuthService.js';
+
 class AuthenticateToken{
-    authenticateToken(req: Request, res: Response, next: NextFunction) {
+    async authenticateToken(req: Request, res: Response, next: NextFunction) {
         try {
             const token = req.cookies.token;
 
             if (!token) {
-                logger.warn('User tried to access user Endpoints without an Token: ' + " at " + req.path + " " + getClientIp(req), {service: 'AuthenticateRole.authenticateToken'});
+                logger.warn('User tried to access user Endpoints without an Token: ' + " at " + req.path + " " + getClientIp(req), {service: 'AuthenticateToken.authenticateToken'});
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
-            const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as { userId: string, userRole: string };
+            await AuthService.authToken(token, req.params.userId, req.path).then(({success, code, message}) => {
+                if(!success){
+                    return res.status(code).json({success: false, message: message});
+                }
+            });
 
-            if(!decodedToken) {
-                logger.warn('User tried to access user Endpoints with an invalid Token: ' + " at " + req.path + " " + getClientIp(req), {service: 'AuthenticateRole.authenticateToken'});
-                return res.status(401).json({success: false, message: 'Unauthorized' });
+            if(req.path.startsWith("/admin")){
+                await AuthService.authRole(token, req.path).then(({success, code, message}) => {
+                    if(!success){
+                        return res.status(code).json({success: false, message: message});
+                    }
+                });
             }
 
             next();
