@@ -67,25 +67,6 @@ class AuthController {
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
-
-    async getUserFromToken(req: Request, res: Response) {
-        try {
-            const token = req.cookies.token;
-
-            const { success, code, message, userId } = await authService.getUserFromToken(token);
-
-            if(success){
-                logger.info('User retrieved from token: '+ userId, {service: 'AuthController.getUserFromToken'});
-            }
-
-            logger.info('User retrieved from token', {service: 'AuthController.getUserFromToken', userId: userId});
-
-            return res.status(code).json({ success, message, userId: userId });
-        } catch (error) {
-            logger.error('Internal server error'+ error, {service: 'AuthController.getUserFromToken'});
-            return res.status(500).json({success: false, message: 'Internal Server error' });
-        }
-    }
 }
 
 export default new AuthController();
