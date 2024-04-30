@@ -21,14 +21,6 @@ class AuthenticateToken{
                 }
             });
 
-            if(req.path.startsWith("/admin")){
-                await AuthService.authRole(token, req.path).then(({success, code, message}) => {
-                    if(!success){
-                        return res.status(code).json({success: false, message: message});
-                    }
-                });
-            }
-
             next();
         } catch (error) {
             logger.error('Error authenticating token:', error, {service: 'AuthenticateToken.authenticateToken'});
