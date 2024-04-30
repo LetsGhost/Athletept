@@ -15,6 +15,11 @@ class AuthController {
             const { success, code, message, token, userId, role } = await authService.loginUser(email, password, alwaysLogedIn);
 
             if (alwaysLogedIn){
+
+                if(process.env.ENV === "dev"){
+                    res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: false, path: "/"});
+                }
+
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true, path: "/", domain: "backend.athletept.de"});
 
                 if(success){
@@ -34,6 +39,10 @@ class AuthController {
                 }
 
                 return res.status(code).json({ success, message, userId: userId, role: role });
+            }
+
+            if(process.env.ENV === "production"){
+                res.cookie('token', token, { httpOnly: true, maxAge: 18000000, sameSite: 'none', secure: false, path: "/"});
             }
 
             res.cookie('token', token, { 
