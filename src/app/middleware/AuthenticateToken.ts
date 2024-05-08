@@ -15,11 +15,16 @@ class AuthenticateToken{
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
-            await AuthService.authToken(token, req.params.userId, req.path).then(({success, code, message}) => {
+            await AuthService.authToken(token, req.params.userId, req.path).then(({success, code, message, role, userId}) => {
                 if(!success){
                     return res.status(code).json({success: false, message: message});
                 }
+
+                req.body.userId = userId
+                req.body.role = role;
             });
+
+            
 
             next();
         } catch (error) {
