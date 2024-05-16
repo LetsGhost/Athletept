@@ -53,7 +53,7 @@
     "mongoose": "^8.2.4",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.3",
-    "puppeteer-core": "^22.7.0",
+    "puppeteer-core": "^22.8.2",
     "winston": "^3.11.0"
   }
 }
