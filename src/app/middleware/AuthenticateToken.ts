@@ -15,13 +15,14 @@ class AuthenticateToken{
                 return res.status(401).json({success: false, message: 'Unauthorized' });
             }
 
-            await AuthService.authToken(token, req.params.userId, req.path).then(({success, code, message}) => {
+            await AuthService.authToken(token, req.path).then(({success, code, message}) => {
                 if(!success){
+                    logger.warn('User tried to access user Endpoints with an invalid userId: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateToken.authenticateToken'});
                     return res.status(code).json({success: false, message: message});
+                } else {
+                    next();
                 }
             });
-
-            next();
         } catch (error) {
             logger.error('Error authenticating token:', error, {service: 'AuthenticateToken.authenticateToken'});
             return res.status(401).json({ message: 'Invalid token' });
