@@ -4,8 +4,9 @@ import logger from "../../config/winstonLogger.js";
 import WeekDisplayModel from "../models/WeekDisplayModel.js";
 import { createExercisePlan, createWarmup } from "../utils/exercisePlanUtils.js";
 
-class ExercisePlanService {
+import mongoose from "mongoose";
 
+class ExercisePlanService {
     async createExercisePlanFromExcel(userId: string, exerciseFile: any, warmupFile: any) {
         try {
             
@@ -35,7 +36,7 @@ class ExercisePlanService {
 
                 // Create and save the exercise plan using the ExercisePlan model
                 const createdExercisePlan = await ExercisePlanModel.create(exercisePlanDocument);
-                user.exercisePlan = createdExercisePlan._id;
+                user.exercisePlan = createdExercisePlan._id as mongoose.Schema.Types.ObjectId;  
                 await user.save();
 
                 // Reset the trainingDone array
@@ -87,7 +88,7 @@ class ExercisePlanService {
 
                 // Create and save the exercise plan using the ExercisePlan model
                 const createdExercisePlan = await ExercisePlanModel.create(exercisePlanDocument);
-                user.exercisePlan = createdExercisePlan._id;
+                user.exercisePlan = createdExercisePlan._id as mongoose.Schema.Types.ObjectId;
                 await user.save();
 
                 return {

@@ -4,6 +4,8 @@ import WeightAnalyticsService from "./WeightAnalyticsService.js";
 import logger from "../../config/winstonLogger.js";
 import templateUtils from "../utils/templateUtils.js";
 
+import mongoose from "mongoose";
+
 class CheckInService {
     async createCheckIn(userId: string, checkIn: any){
         try{
@@ -46,9 +48,10 @@ class CheckInService {
                     },
                     checkInStatus: true,
                 })
+
                 await newCheckIn.save()
 
-                user.checkIn = newCheckIn._id
+                user.checkIn = newCheckIn._id as mongoose.Schema.Types.ObjectId
                 await user.save()
 
                 return {
@@ -74,7 +77,7 @@ class CheckInService {
             })
             await newCheckIn.save()
 
-            user.checkIn = newCheckIn._id
+            user.checkIn = newCheckIn._id as mongoose.Schema.Types.ObjectId
             await user.save()
 
             return {
