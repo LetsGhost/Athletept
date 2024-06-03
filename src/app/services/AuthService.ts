@@ -94,12 +94,11 @@ class AuthService {
         }
     }
 
-    async authToken(token: string, userIdParams: string, path: string){
+    async authToken(token: string, path: string){
         try{
             const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
 
             if(!decodedToken){
-                logger.warn(`User tried to access user Endpoints with an invalid Token: ${path}`, {service: 'AuthService.authToken'});
                 return {
                     success: false,
                     code: 401,
@@ -108,13 +107,21 @@ class AuthService {
             }
 
             if(decodedToken.userRole != "admin"){
-                if(decodedToken.userId != userIdParams){
-                    logger.warn(`User tried to access user Endpoints with an invalid UserId: ${path}`, {service: 'AuthService.authToken'});
+
+                const slicedPath = path.split('/').slice(-1)[0];
+
+                if(decodedToken.userId != slicedPath){
                     return {
                         success: false,
                         code: 401,
                         message: 'Unauthorized userIds are not matching'
                     }
+                }
+
+                return {
+                    success: true,
+                    code: 200,
+                    message: 'Authorized'
                 }
             }
 
@@ -138,7 +145,6 @@ class AuthService {
             const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
 
             if(!decodedToken){
-                logger.warn(`User tried to access user Endpoints with an invalid Token: ${path}`, {service: 'AuthService.authRole'});
                 return {
                     success: false,
                     code: 401,
@@ -147,7 +153,6 @@ class AuthService {
             }
 
             if(decodedToken.userRole != "admin"){
-                logger.warn(`User tried to access admin Endpoints with an invalid Role: ${path}`, {service: 'AuthService.authRole'});
                 return {
                     success: false,
                     code: 401,
