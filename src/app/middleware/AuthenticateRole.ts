@@ -23,10 +23,10 @@ class AuthenticateRole {
                 if(!success){
                     logger.warn('User tried to access admin Endpoints with an invalid Role: ' + getClientIp(req) + " at " + req.path, {service: 'AuthenticateRole.authenticateRole'});
                     return res.status(code).json({success: false, message: message});
+                } else {
+                    next();
                 }
             });
-
-            next();
         } catch (error) {
             logger.error('Error authenticating role:', error, {service: 'AuthenticateRole.authenticateRole'});
             return res.status(401).json({success: false, message: 'Unauthorized' });
