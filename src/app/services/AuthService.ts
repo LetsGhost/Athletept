@@ -128,6 +128,8 @@ class AuthService {
             return {
                 success: true,
                 code: 200,
+                role: decodedToken.userRole,
+                userId: decodedToken.userId,
                 message: 'Authorized'
             }
         } catch(error){
