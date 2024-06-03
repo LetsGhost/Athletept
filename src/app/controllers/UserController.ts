@@ -43,10 +43,10 @@ class UserController{
                 logger.info('User deleted: ' + userId + " " + deleteCount + " total documents", {service: 'UserController.deleteUser'});
             }
 
-            res.status(code).json({ success, message });
+            return res.status(code).json({ success, message });
         } catch (error) {
             logger.error('Error deleting user:', error, {service: 'UserController.deleteUser'});
-            res.status(500).json({ success: false, message: "Internal Server error" });
+            return res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
 
