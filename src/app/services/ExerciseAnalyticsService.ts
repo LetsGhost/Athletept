@@ -3,6 +3,8 @@ import UserModel from '../models/UserModel.js';
 import { ProtocolExercisePlanDocument } from '../models/ProtocolModel.js';
 import ExerciseAnalyticsModel, { exerciseAnalyticsDocument } from '../models/ExerciseAnalyticsModel.js';
 
+import mongoose from 'mongoose';
+
 class ExerciseAnalyticsService {
   async createExerciseAnalytics(userId: string) {
     try{
@@ -24,7 +26,7 @@ class ExerciseAnalyticsService {
         }
       });
 
-      user.exerciseAnalytics = exerciseAnalytics._id;
+      user.exerciseAnalytics = exerciseAnalytics._id as mongoose.Schema.Types.ObjectId;
       user.save();
 
       return {

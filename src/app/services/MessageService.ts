@@ -1,7 +1,8 @@
 import MessageModel from "../models/MessagModel.js";
 import UserModel from "../models/UserModel.js";
-import mongoose from "mongoose";
 import logger from "../../config/winstonLogger.js";
+
+import mongoose from "mongoose";
 
 class MessageService{
     async createMessage( message: string, userId: string) {
@@ -24,7 +25,7 @@ class MessageService{
                 }
             }
 
-            user?.messages.push(newMessage._id);
+            user?.messages.push(newMessage._id as mongoose.Schema.Types.ObjectId);
             await user?.save();
 
             return {

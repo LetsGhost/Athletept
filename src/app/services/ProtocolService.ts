@@ -5,6 +5,8 @@ import WeekDisplayModel from "../models/WeekDisplayModel.js";
 import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
 
+import mongoose from "mongoose";
+
 class ProtocolService{
     async createProtocol (userId: string, protocol: ProtocolExerciseDay) {
         try {
@@ -59,7 +61,7 @@ class ProtocolService{
 
                 // Create and save the exercise plan using the ExercisePlan model
                 const createdExercisePlan = await ProtocolExercisePlanModel.create(protocolExercisePlanDocument);
-                user.protocolExercisePlan = createdExercisePlan._id;
+                user.protocolExercisePlan = createdExercisePlan._id as mongoose.Schema.Types.ObjectId;
 
                 await user.save();
 
@@ -184,7 +186,7 @@ class ProtocolService{
 
                 // Create and save the exercise plan using the ExercisePlan model
                 const createdExercisePlan = await ProtocolExercisePlanModel.create(protocolExercisePlanDocument);
-                user.protocolExercisePlan = createdExercisePlan._id;
+                user.protocolExercisePlan = createdExercisePlan._id as mongoose.Schema.Types.ObjectId;
 
                 await user.save();
 

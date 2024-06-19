@@ -2,6 +2,8 @@ import WeekDisplayModel from '../models/WeekDisplayModel.js';
 import UserModel from '../models/UserModel.js';
 import logger from '../../config/winstonLogger.js';
 
+import mongoose from 'mongoose';
+
 class WeekDisplayService {
     async createWeekDisplay(userId: string, trainingsWeek: Array<string>) {
         try{
@@ -15,7 +17,7 @@ class WeekDisplayService {
                 const weekDisplay = await trainingsWeekDisplay.save();
 
                 const createdWeekDisplay = await WeekDisplayModel.create(weekDisplay);
-                user.weekDisplay = createdWeekDisplay._id;
+                user.weekDisplay = createdWeekDisplay._id as mongoose.Schema.Types.ObjectId;
                 await user.save();
                 
                 return {

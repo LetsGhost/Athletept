@@ -15,6 +15,11 @@ class AuthController {
             const { success, code, message, token, userId, role } = await authService.loginUser(email, password, alwaysLogedIn);
 
             if (alwaysLogedIn){
+
+                if(process.env.ENV === "dev"){
+                    res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: false, path: "/"});
+                }
+
                 res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true, path: "/", domain: "backend.athletept.de"});
 
                 if(success){
@@ -34,6 +39,10 @@ class AuthController {
                 }
 
                 return res.status(code).json({ success, message, userId: userId, role: role });
+            }
+
+            if(process.env.ENV === "production"){
+                res.cookie('token', token, { httpOnly: true, maxAge: 18000000, sameSite: 'none', secure: false, path: "/"});
             }
 
             res.cookie('token', token, { 
@@ -65,25 +74,6 @@ class AuthController {
         } catch (error) {
             logger.error('Internal server error' + error, {service: 'AuthController.login'});
             res.status(500).json({ success: false, message: 'Internal server error' });
-        }
-    }
-
-    async getUserFromToken(req: Request, res: Response) {
-        try {
-            const token = req.cookies.token;
-
-            const { success, code, message, userId } = await authService.getUserFromToken(token);
-
-            if(success){
-                logger.info('User retrieved from token: '+ userId, {service: 'AuthController.getUserFromToken'});
-            }
-
-            logger.info('User retrieved from token', {service: 'AuthController.getUserFromToken', userId: userId});
-
-            return res.status(code).json({ success, message, userId: userId });
-        } catch (error) {
-            logger.error('Internal server error'+ error, {service: 'AuthController.getUserFromToken'});
-            return res.status(500).json({success: false, message: 'Internal Server error' });
         }
     }
 }

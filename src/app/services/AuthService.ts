@@ -83,10 +83,92 @@ class AuthService {
             return {
                 success: true,
                 code: 200,
-                userId: user?._id
             };
         } catch (error) {
             logger.error(`Internal server error: ${error}`, {service: 'AuthService.getUserFromToken'});
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
+        }
+    }
+
+    async authToken(token: string, path: string){
+        try{
+            const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
+
+            if(!decodedToken){
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Unauthorized'
+                }
+            }
+
+            if(decodedToken.userRole != "admin"){
+
+                const slicedPath = path.split('/').slice(-1)[0];
+
+                if(decodedToken.userId != slicedPath){
+                    return {
+                        success: false,
+                        code: 401,
+                        message: 'Unauthorized userIds are not matching'
+                    }
+                }
+
+                return {
+                    success: true,
+                    code: 200,
+                    message: 'Authorized'
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                role: decodedToken.userRole,
+                userId: decodedToken.userId,
+                message: 'Authorized'
+            }
+        } catch(error){
+            logger.error(`Internal server error: ${error}`, {service: 'AuthService.authToken'});
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error'
+            }
+        }
+    }
+
+    async authRole(token: string, path: string){
+        try{
+            const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
+
+            if(!decodedToken){
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Unauthorized'
+                }
+            }
+
+            if(decodedToken.userRole != "admin"){
+                return {
+                    success: false,
+                    code: 401,
+                    message: 'Unauthorized userRole is not matching'
+                }
+            }
+
+            return {
+                success: true,
+                code: 200,
+                message: 'Authorized'
+            }
+        } catch(error){
+            logger.error(`Internal server error: ${error}`, {service: 'AuthService.authRole'});
             return {
                 success: false,
                 code: 500,

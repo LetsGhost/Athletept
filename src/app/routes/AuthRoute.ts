@@ -10,6 +10,5 @@ import rateLimiter from '../middleware/Limiter.js';
 const router = express.Router();
 
 router.post('/login',rateLimiter ,auhtController.login); // Is Documented
-router.get('/getUserFromToken', auhtController.getUserFromToken); // Is Documented
 
 export default router;

@@ -2,6 +2,8 @@ import TrainingDurationModel, { Trainingduration } from '../models/Trainingdurat
 import UserModel from '../models/UserModel.js';
 import logger from '../../config/winstonLogger.js';
 
+import mongoose from 'mongoose';
+
 class TrainingdurationService{
 
     async createTrainingduration(userId: string, trainingduration: Trainingduration){
@@ -22,7 +24,7 @@ class TrainingdurationService{
 
             await newTrainingduration.save()
 
-            user.trainingduration = newTrainingduration._id
+            user.trainingduration = newTrainingduration._id as mongoose.Schema.Types.ObjectId;
             await user.save()
 
             return {

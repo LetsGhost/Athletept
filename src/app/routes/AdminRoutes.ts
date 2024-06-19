@@ -24,7 +24,6 @@ import adminController from '../controllers/AdminController.js';
 const router = express.Router();
 
 if(process.env.ENV === "production"){
-    router.use(authenticateToken.authenticateToken);
     router.use(authenticateRole.authenticateRole);
 }
 
