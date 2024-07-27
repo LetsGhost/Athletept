@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,webstorm,visualstudiocode,visualstudio,dotenv,expressionengine,typings
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,webstorm,visualstudiocode,visualstudio,dotenv,expressionengine,typings
 
-.tar
+*.tar
 
 ### dotenv ###
 .env
