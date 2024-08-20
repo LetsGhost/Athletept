@@ -106,6 +106,16 @@ class AuthService {
 
     async authToken(token: string, path: string){
         try{
+            // If TOKEN_SECRET is not set, the user will not be able to login
+            if(!process.env.TOKEN_SECRET){
+                logger.error('No token secret found', {service: 'AuthService.authToken'});
+                return {
+                    success: false,
+                    code: 500,
+                    message: 'Internal server error'
+                }
+            }
+
             const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
 
             if(!decodedToken){
