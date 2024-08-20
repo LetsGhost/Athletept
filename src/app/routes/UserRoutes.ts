@@ -4,6 +4,7 @@ dotenv.config();
 
 // Import Middlewares
 import authenticateToken from "../middleware/AuthenticateToken.js";
+import asyncMiddleware from '../middleware/asynchroneMiddleware.js';
 
 // Import Controllers
 import exercisePlanController from "../controllers/ExercisePlanController.js";
@@ -20,14 +21,14 @@ import exerciseAnalyticsController from '../controllers/ExerciseAnalyticsControl
 const router = express.Router();
 
 if(process.env.ENV === "production"){
-    router.use(authenticateToken.authenticateToken);
+    router.use(asyncMiddleware(authenticateToken.authenticateToken));
 }
 
 // Exercise Plan
-router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan )
+router.get("/getExercisePlan/:userId", asyncMiddleware(exercisePlanController.getExercisePlan) )
 
 // User
-router.get("/getUser/:userId", userController.getUserById)
+router.get("/getUser/:userId", asyncMiddleware(userController.getUserById))
 router.patch("/updatePassword/:userId", userController.updatePassword)
 
 // Message
@@ -36,7 +37,7 @@ router.get("/getMessageById/:messageId", messageController.getMessageById)
 
 // Protocol
 router.post("/createProtocol/:userId", protocolController.createProtocol)
-router.post("/createBlankProtocol/:userId", protocolController.createBlankProtocol)
+router.post("/createBlankProtocol/:userId", asyncMiddleware(protocolController.createBlankProtocol))
 
 // Check-in
 router.post("/createCheckIn/:userId", checkInController.createCheckIn)
@@ -46,9 +47,9 @@ router.get("/getCheckInStatus/:userId", checkInController.getCheckInStatus)
 router.get("/getWeekDisplay/:userId", weekDisplayController.getWeekDisplay)
 
 // Weight Analytics
-router.patch("/updateBodyWeightArray/:userId", weightAnalyticsController.updateBodyWeightArray)
-router.get("/getWeightAnalytics/:userId", weightAnalyticsController.getWeightAnalytics)
-router.patch("/deleteWeight/:userId/:index", weightAnalyticsController.deleteWeight)
+router.patch("/updateBodyWeightArray/:userId", asyncMiddleware(weightAnalyticsController.updateBodyWeightArray))
+router.get("/getWeightAnalytics/:userId", asyncMiddleware(weightAnalyticsController.getWeightAnalytics))
+router.patch("/deleteWeight/:userId/:index", asyncMiddleware(weightAnalyticsController.deleteWeight))
 
 // Exercise Analytics
 router.get("/getTopExercises/:userId", exerciseAnalyticsController.getTopExercises)

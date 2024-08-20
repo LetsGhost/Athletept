@@ -9,6 +9,7 @@ import { upload } from '../../config/multerConfig.js';
 // Disable authentication for now
 import authenticateRole from "../middleware/AuthenticateRole.js";
 import authenticateToken from "../middleware/AuthenticateToken.js";
+import asyncMiddleware from '../middleware/asynchroneMiddleware.js';
 
 // Import Controllers
 import userController from "../controllers/UserController.js";
@@ -24,13 +25,13 @@ import adminController from '../controllers/AdminController.js';
 const router = express.Router();
 
 if(process.env.ENV === "production"){
-    router.use(authenticateRole.authenticateRole);
+    router.use(asyncMiddleware(authenticateRole.authenticateRole));
 }
 
 // User
-router.post('/register', userController.registerUser); // Is Documented
-router.get("/getUser/:userId", userController.getUserById) // Is Documented
-router.delete("/deleteUser/:userId", userController.deleteUser) // Is Documented
+router.post('/register', asyncMiddleware(userController.registerUser)); // Is Documented
+router.get("/getUser/:userId", asyncMiddleware(userController.getUserById)) // Is Documented
+router.delete("/deleteUser/:userId", asyncMiddleware(userController.deleteUser)) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
 router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) // Is Documented
@@ -38,10 +39,10 @@ router.get("/getAdmins", userController.getAdmins)
 router.patch("/updateUserInfo/:userId", userController.updateUserInfo)
 
 // Exercise plan
-router.get("/getExercisePlan/:userId", exercisePlanController.getExercisePlan ) // Is Documented
-router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), exercisePlanController.createExercisePlan) // Is Documented
-router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}]), exercisePlanController.createExercisePlanOnly) // Is Documented
-router.post("/createWarmupOnly/:userId", upload.fields([{name: "warmupFile", maxCount: 1}]), exercisePlanController.createWarmupOnly)
+router.get("/getExercisePlan/:userId", asyncMiddleware(exercisePlanController.getExercisePlan) ) // Is Documented
+router.post("/createExercisePlan/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}, {name: "warmupFile", maxCount: 1}]), asyncMiddleware(exercisePlanController.createExercisePlan)) // Is Documented
+router.post("/createExercisePlanOnly/:userId", upload.fields([{name: "exerciseFile", maxCount: 1}]), asyncMiddleware(exercisePlanController.createExercisePlanOnly)) // Is Documented
+router.post("/createWarmupOnly/:userId", upload.fields([{name: "warmupFile", maxCount: 1}]), asyncMiddleware(exercisePlanController.createWarmupOnly))
 
 // Message
 router.post("/createMessage/:userId", messageController.createMessage) // Is Documented
@@ -49,7 +50,7 @@ router.get("/getAllMessages/:userId", messageController.getAllMessagesFromUser) 
 router.delete("/deleteMessageById/:messageId", messageController.deleteMessageById) // Is Documented
 
 // Protocol
-router.get("/getProtocol/:userId", protocolController.getProtocol) // Is Documented
+router.get("/getProtocol/:userId", asyncMiddleware(protocolController.getProtocol)) // Is Documented
 router.get("/downloadProtocol/:userId", protocolController.downloadProtocol)
 
 // WeekDisplay
