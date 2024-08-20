@@ -20,7 +20,7 @@ class AuthController {
                     res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: false, path: "/"});
                 }
 
-                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true, path: "/", domain: "backend.athletept.de"});
+                res.cookie('token', token, { httpOnly: true, maxAge: 2592000000, sameSite: 'none', secure: true, path: "/", domain: "backend.athlete-pt.de"});
 
                 if(success){
                     logger.info('User logged in: ' + getClientIp(req), {service: 'AuthController.login', userId: userId, role: role});
@@ -51,7 +51,7 @@ class AuthController {
                 sameSite: 'none', 
                 secure: true, 
                 path: "/", 
-                domain: "backend.athletept.de" 
+                domain: "backend.athlete-pt.de" 
             });
 
             if(success){
