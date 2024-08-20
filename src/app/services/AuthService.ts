@@ -116,7 +116,7 @@ class AuthService {
                 }
             }
 
-            const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
+            const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET!) as {userId: string, userRole: string};
 
             if(!decodedToken){
                 return {
