@@ -31,6 +31,16 @@ class AuthService {
                 }
             }
 
+            // IF TOKEN_SECRET is not set, the user will not be able to login
+            if(!process.env.TOKEN_SECRET){
+                logger.error('No token secret found', {service: 'AuthService.loginUser'});
+                return {
+                    success: false,
+                    code: 500,
+                    message: 'Internal server error'
+                }
+            }
+
             // If the user set alwaysLogedIn to true, the token will be valid for 30 days
             if(alwaysLogedIn){
                 const token = jwt.sign({userId: user._id, userRole: userRole.role}, process.env.TOKEN_SECRET!, {expiresIn: '30d'});
