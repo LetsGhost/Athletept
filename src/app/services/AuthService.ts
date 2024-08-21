@@ -106,7 +106,8 @@ class AuthService {
 
     async authToken(token: string, path: string){
         try{
-            console.log(process.env.TOKEN_SECRET);
+            console.log("executed")
+            console.log(token)
             // If TOKEN_SECRET is not set, the user will not be able to login
             if(!process.env.TOKEN_SECRET){
                 logger.error('No token secret found', {service: 'AuthService.authToken'});
