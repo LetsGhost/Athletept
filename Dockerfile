@@ -7,9 +7,9 @@ WORKDIR /home/node/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install Node.js dependencies
-RUN npm install && \
-    npm cache clean --force
+RUN npm install -g npm@10.8.2
+
+RUN /bin/sh -c "npm install && npm cache clean --force && /bin/sh"
 
 RUN npm run build --verbose
 
