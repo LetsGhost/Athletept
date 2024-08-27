@@ -11,7 +11,8 @@ COPY package*.json ./
 RUN npm install && \
     npm cache clean --force
 
-RUN npm run build
+RUN npm run build --verbose
+
 
 # Copy the rest of the application code
 COPY . .
