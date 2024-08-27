@@ -14,7 +14,7 @@ RUN npm install && \
 # Copy the rest of the application code
 COPY . .
 
-RUN tsc
+RUN npm run build
 
 # Start your Express app
 CMD ["npm", "start"]
