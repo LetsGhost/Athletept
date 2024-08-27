@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #007bff;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Check-In Details</h1>
+    </header>
+
+    <section>
+        <% const UserCheckIn = checkIn.checkIn %>
+        <h2>Check-In Status: <%= UserCheckIn.checkInStatus %></h2>
+        <h3>Current Growth: <%= UserCheckIn.currentGrowth.answer %></h3>
+        <h3>Current Growth: <%= UserCheckIn.currentGrowth.answer2 %></h3>
+        <h3>Problems: <%= UserCheckIn.problems.answer %></h3>
+        <h3>Regeneration: <%= UserCheckIn.regeneration.answer %></h3>
+        <h3>Change: <%= UserCheckIn.change.answer %></h3>
+    </section>
+
+    <footer>
+        &copy; 2023 AthletePT
+        <p>This is a internal Document please do not share with anyone!</p>
+    </footer>
+</body>
+</html>

@@ -118,7 +118,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+
 
 # Gatsby files
 .cache/
@@ -698,7 +698,6 @@ FodyWeavers.xsd
 #Custom
 
 uploads/
-dist/
 
 docker-compose.yml
 
