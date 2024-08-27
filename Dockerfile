@@ -9,10 +9,11 @@ COPY package*.json ./
 
 RUN npm install -g npm@10.8.2
 
-RUN /bin/sh -c "npm install && npm cache clean --force && /bin/sh"
+RUN npm install
 
-RUN npm run build --verbose
+RUN npm install tsc -g
 
+RUN npm run build
 
 # Copy the rest of the application code
 COPY . .
