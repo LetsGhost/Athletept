@@ -165,7 +165,8 @@ class AuthService {
 
     async authRole(token: string, path: string){
         try{
-            const decodedToken = jwt.verify(token, process.env.Token_SECRET!) as {userId: string, userRole: string};
+            const keyString = process.env.TOKEN_SECRET!;
+            const decodedToken = jwt.verify(token, keyString) as {userId: string, userRole: string};
 
             if(!decodedToken){
                 return {
