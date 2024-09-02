@@ -697,6 +697,9 @@ FodyWeavers.xsd
 
 #Custom
 
+dist
+dist/*
+
 uploads/
 
 docker-compose.yml
