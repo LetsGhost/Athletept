@@ -88,9 +88,8 @@ class UserService{
         }
     }
 
+    // Needs to be tested!
     async deleteUserById(userId: string) {
-        let deleteCount = 0; // Initialize counter
-    
         try{
             const user = await UserModel.findById(userId);
     
@@ -101,41 +100,24 @@ class UserService{
                     message: "User not found!"
                 }
             }
-    
-            // Delete all data from this user
-            if(user?.exercisePlan){
-                await ExercisePlanModel.findByIdAndDelete(user.exercisePlan);
-                deleteCount++; // Increment counter
-            }
-            if(user?.protocolExercisePlan){
-                await ProtocolExercisePlanModel.findByIdAndDelete(user.protocolExercisePlan);
-                deleteCount++; // Increment counter
-            }
-            if(user?.messages){
-                for(const messageId of user.messages ){
-                    await MessageModel.findByIdAndDelete(messageId);
-                    deleteCount++; // Increment counter
+
+            // Logic to delete the user
+            const result = await UserModel.findOneAndDelete({ _id: userId });
+
+            if(!result){
+                logger.error('Error deleting user:', {service: 'UserService.deleteUserById'});
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Error deleting user!"
                 }
             }
-            if (user?.trainingduration){
-                await TrainingDurationModel.findByIdAndDelete(user.trainingduration);
-                deleteCount++; // Increment counter
-            }
-            if(user?.checkIn){
-                await CheckInModel.findByIdAndDelete(user.checkIn);
-                deleteCount++; // Increment counter
-            }
-            if(user?.weekDisplay){
-                await WeekDisplayModel.findByIdAndDelete(user.weekDisplay);
-                deleteCount++; // Increment counter
-            }
     
+            logger.info('User deleted successfully ' + user.email, {service: 'UserService.deleteUserById'});
             // Return the response along with the deleteCount
             return {
                 success: true,
-                code: 200,
-                message: "User and associated data deleted successfully!",
-                deleteCount: deleteCount
+                code: 200
             }
         } catch(error) {
             return {

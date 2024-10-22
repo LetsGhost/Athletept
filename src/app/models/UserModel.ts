@@ -1,5 +1,15 @@
-import mongoose, { Schema, model, Document, Types } from 'mongoose';
+import mongoose, { Schema, model, Document, Types, CallbackError } from 'mongoose';
 import bcrypt from 'bcrypt';
+
+// Models for deletion
+import CheckInModel from './CheckInModel';
+import ExerciseAnalyticsModel from './ExerciseAnalyticsModel';
+import WeightAnalyticsModel from './WeightAnalyticsModel';
+import MessageModel from './MessagModel';
+import WeekDisplayModel from './WeekDisplayModel';
+import TrainingDurationModel from './TrainingdurationModel';
+import ExercisePlanModel from './ExercisePlanModel';
+import ProtocolExercisePlanModel from './ProtocolModel';
 
 export interface User extends Document {
     _id: any;
@@ -104,6 +114,51 @@ userSchema.pre<User>('save', async function (next) {
 userSchema.methods.comparePassword = async function (candidatePassword: string) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
+
+// Delete all related documents when a user is deleted
+userSchema.pre('findOneAndDelete', async function (next) {
+    const user = this.getQuery() as unknown as User;
+
+    try {
+        // Delete referenced objects
+        if (user.checkIn && user.oldCheckIn) {
+            await CheckInModel.findByIdAndDelete(user.checkIn);
+
+            for (const checkInId of user.oldCheckIn) {
+                await CheckInModel.findByIdAndDelete(checkInId);
+            }
+        }
+        if (user.exerciseAnalytics) {
+            await ExerciseAnalyticsModel.findByIdAndDelete(user.exerciseAnalytics);
+        }
+        if (user.weightAnalytics) {
+            await WeightAnalyticsModel.findByIdAndDelete(user.weightAnalytics);
+        }
+        if (user.messages && user.messages.length > 0) {
+            await MessageModel.deleteMany({ _id: { $in: user.messages } });
+        }
+        if(user.weekDisplay){
+            await WeekDisplayModel.findByIdAndDelete(user.weekDisplay);
+        }
+        if(user.trainingduration){
+            await TrainingDurationModel.findByIdAndDelete(user.trainingduration);
+        }
+        if(user.exercisePlan){
+            await ExercisePlanModel.findByIdAndDelete(user.exercisePlan);
+        }
+        if(user.protocolExercisePlan && user.oldProtocol){
+            await ProtocolExercisePlanModel.findByIdAndDelete(user.protocolExercisePlan);
+
+            for (const protocolId of user.oldProtocol) {
+                await ProtocolExercisePlanModel.findByIdAndDelete(protocolId);
+            }
+        }
+
+        next();
+    } catch (error) {
+        next(error as CallbackError);
+    }
+});
 
 const UserModel = model<User>('User', userSchema);
 
