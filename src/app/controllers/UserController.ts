@@ -104,25 +104,6 @@ class UserController{
         }
     }
 
-    async downLoadUserInfo(req: Request, res: Response) {
-        try{
-            const { userId } = req.params;
-
-            const {success, code, message, pdfBuffer, user} = await userService.downloadUserData(userId);
-
-            if(success){
-                logger.info('User info downloaded: ' + userId, {service: 'UserController.downLoadUserInfo'});
-            }
-
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', `attachment; filename=${user?.userInfo.name}-${new Date()}.pdf`);
-            res.status(code).send(pdfBuffer);
-        } catch (error) {
-            logger.error('Error downloading user info:', error, {service: 'UserController.downLoadUserInfo'});
-            res.status(500).json({ success: false, message: "Internal Server error" });
-        }
-    }
-
     async getAdmins(req: Request, res: Response) {
         try{
             const {success, code, message, admins} = await userService.getAdmins();

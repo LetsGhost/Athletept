@@ -256,38 +256,6 @@ class UserService{
 
     }
 
-    async downloadUserData(userId: string) {
-        try{
-            const user = await UserModel.findById(userId);
-
-            if(!user){
-                return {
-                    success: false,
-                    code: 404,
-                    message: "User not found!"
-                }
-            }
-
-            const templatePath = "userInfo.ejs";
-            const html = templateUtils.renderTemplateWithData(templatePath, user);
-            const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
-
-            return {
-                success: true,
-                code: 200,
-                pdfBuffer,
-                user
-            }
-        } catch(error){
-            logger.error('Error downloading user data:', error, {service: 'UserService.downloadUserData'});
-            return {
-                success: false,
-                code: 500,
-                message: "Internal Server error"
-            }
-        }
-    }
-
     async getAdmins() {
         try{
             const admins = await UserModel.find({role: 'admin'});
