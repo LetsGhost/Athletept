@@ -16,6 +16,7 @@ docker-compose.example.yml
 node_modules
 LICENSE
 .gitignore
+jest.config.cjs
 jest.config.js
 Dockerfile
 .dockerignore
@@ -36,3 +37,4 @@ __tests__
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+src/tests/
