@@ -113,11 +113,11 @@ class UserService{
                 }
             }
     
-            logger.info('User deleted successfully ' + user.email, {service: 'UserService.deleteUserById'});
             // Return the response along with the deleteCount
             return {
                 success: true,
-                code: 200
+                code: 200,
+                email: user.email
             }
         } catch(error) {
             return {
