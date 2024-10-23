@@ -34,7 +34,6 @@ router.get("/getUser/:userId", asyncMiddleware(userController.getUserById)) // I
 router.delete("/deleteUser/:userId", asyncMiddleware(userController.deleteUser)) // Is Documented
 router.get("/getAllUsers", userController.getAllUsers) // Is Documented
 router.post("/createAdmin", userController.createAdmin) 
-router.get("/downloadUserInfo/:userId", userController.downLoadUserInfo) // Is Documented
 router.get("/getAdmins", userController.getAdmins) 
 router.patch("/updateUserInfo/:userId", userController.updateUserInfo)
 
@@ -51,7 +50,6 @@ router.delete("/deleteMessageById/:messageId", messageController.deleteMessageBy
 
 // Protocol
 router.get("/getProtocol/:userId", asyncMiddleware(protocolController.getProtocol)) // Is Documented
-router.get("/downloadProtocol/:userId", protocolController.downloadProtocol)
 
 // WeekDisplay
 router.post("/createWeekDisplay/:userId", weekDisplayController.createWeekDisplay) // Is Documented
@@ -60,7 +58,6 @@ router.patch("/updateWeekDisplay/:userId", weekDisplayController.updateWeekDispl
 
 // CheckIn
 router.get("/getCheckIn/:userId", checkInController.getCheckIn) // Is Documented
-router.get("/downloadCheckIn/:userId", checkInController.downloadCheckIn) // Is Documented
 
 // TrainingDuration
 router.get("/getTrainingDuration/:userId", trainingDurationController.getTrainingDuration) // Is Documented
