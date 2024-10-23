@@ -45,6 +45,11 @@ beforeEach(async () => {
     userId = user._id.toString();
 });
 
+afterEach(async () => {
+    jest.clearAllMocks();
+    await UserModel.deleteMany({});
+})
+
 // Close the in-memory server
 afterAll(async () => {
     await mongoose.connection.close();
