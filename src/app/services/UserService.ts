@@ -1,16 +1,8 @@
-import templateUtils from '../utils/templateUtils.js';
 import { Types } from 'mongoose';
 import logger from '../../config/winstonLogger.js';
 
 // Models
-import ExercisePlanModel from "../models/ExercisePlanModel.js";
-import MessageModel from "../models/MessagModel.js";
-import ProtocolExercisePlanModel from "../models/ProtocolModel.js";
-import TrainingDurationModel from "../models/TrainingdurationModel.js";
-import WeekDisplayModel from '../models/WeekDisplayModel.js';
-import CheckInModel from "../models/CheckInModel.js";
 import UserModel from '../models/UserModel.js';
-import WeightAnalyticsModel from '../models/WeightAnalyticsModel.js';
 
 interface RegistrationData {
     email: string;

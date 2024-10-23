@@ -1,8 +1,6 @@
 import CheckInModel, { checkInDocument } from "../models/CheckInModel.js"
 import UserModel from "../models/UserModel.js";
-import WeightAnalyticsService from "./WeightAnalyticsService.js";
 import logger from "../../config/winstonLogger.js";
-import templateUtils from "../utils/templateUtils.js";
 
 import mongoose from "mongoose";
 

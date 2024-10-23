@@ -2,7 +2,6 @@ import UserModel from "../models/UserModel.js";
 import ProtocolExercisePlanModel, { ProtocolExerciseDay } from "../models/ProtocolModel.js";
 import ExercisePlanModel from "../models/ExercisePlanModel.js";
 import WeekDisplayModel from "../models/WeekDisplayModel.js";
-import templateUtils from "../utils/templateUtils.js";
 import logger from "../../config/winstonLogger.js";
 
 import mongoose from "mongoose";
