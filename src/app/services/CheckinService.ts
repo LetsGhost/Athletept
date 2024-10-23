@@ -136,48 +136,6 @@ class CheckInService {
         }
     }
 
-    async downloadCheckIn(userId: string){
-        try{
-            const user = await UserModel.findById(userId)
-
-            if(!user){
-                return {
-                    success: false,
-                    code: 404,
-                    message: "User not found"
-                }
-            }
-
-            const userCheckIn = await UserModel.findById(userId).populate('checkIn');
-            if(!userCheckIn?.checkIn){
-                logger.error('Check-in not found', {service: 'CheckInService.downloadCheckIn'});
-                return {
-                    success: false,
-                    code: 404,
-                    message: "Check-in not found"
-                }
-            }
-
-            const templatePath = "checkIn.ejs";
-            const html = templateUtils.renderTemplateWithData(templatePath, { checkIn: userCheckIn?.checkIn });
-            const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
-
-            return {
-                success: true,
-                code: 200,
-                pdfBuffer,
-                userInfo: user
-            }
-        } catch(err){
-            logger.error(`Internal server error: ${err}`, {service: 'CheckInService.downloadCheckIn'});
-            return {
-                success: false,
-                code: 500,
-                message: "Internal Server error"
-            }
-        }
-    }
-
     async getCheckInStatus(userId: string){
         try{
             const user = await UserModel.findById(userId)

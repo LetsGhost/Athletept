@@ -16,7 +16,7 @@ class CheckInController {
             res.status(code).json({success, message, checkIn})
         } catch(err){
             logger.error('Error creating check-in:', err, {service: 'CheckInController.createCheckIn'});
-            res.status(500).json({cuccess: false, message: "Internal server error"})
+            res.status(500).json({success: false, message: "Internal server error"})
         }
     }
 
@@ -29,26 +29,7 @@ class CheckInController {
             res.status(code).json({success, message, checkIn})
         } catch(err){
             logger.error('Error getting check-in:', err, {service: 'CheckInController.getCheckIn'});
-            res.status(500).json({cuccess: false, message: "Internal server error"})
-        }
-    }
-
-    async downloadCheckIn(req: Request, res: Response){
-        try{
-            const {userId} = req.params
-
-            const {success, code, message, pdfBuffer, userInfo} = await CheckInService.downloadCheckIn(userId)
-
-            if(success){
-                logger.info('Check-in downloaded', {service: 'CheckInController.downloadCheckIn'});
-            }
-
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', `attachment; filename=${userInfo?.userInfo.name}-Protokol-${new Date()}.pdf`);
-            res.status(code).send(pdfBuffer);
-        } catch(err){
-            logger.error('Error downloading check-in:', err, {service: 'CheckInController.downloadCheckIn'});
-            res.status(500).json({cuccess: false, message: "Internal server error"})
+            res.status(500).json({success: false, message: "Internal server error"})
         }
     }
 
@@ -61,7 +42,7 @@ class CheckInController {
             res.status(code).json({success, message, checkInStatus})
         } catch(err){
             logger.error('Error getting check-in status:', err, {service: 'CheckInController.getCheckInStatus'});
-            res.status(500).json({cuccess: false, message: "Internal server error"})
+            res.status(500).json({success: false, message: "Internal server error"})
         }
     }
 }
