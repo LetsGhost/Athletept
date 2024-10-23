@@ -66,26 +66,6 @@ class ProtocolController{
             res.status(500).json({ success: false, message: "Internal Server error" });
         }
     }
-
-    async downloadProtocol(req: Request, res: Response) {
-        try{
-            const { userId } = req.params;
-
-            const {success, code, message, pdfBuffer, userInfo} = await protocolService.downloadProtocol(userId);
-
-            if(success){
-                logger.info('Protocol downloaded', {service: 'ProtocolController.downloadProtocol'});
-            }
-            
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', `attachment; filename=${userInfo?.userInfo.name}-Protokol-${new Date()}.pdf`);
-            res.status(code).send(pdfBuffer);
-        }
-        catch(error){
-            logger.error('Error downloading protocol:', error, {service: 'ProtocolController.downloadProtocol'});
-            res.status(500).json({ success: false, message: "Internal Server error" });
-        }
-    }
 }
 
 export default new ProtocolController();

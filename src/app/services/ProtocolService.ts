@@ -214,39 +214,6 @@ class ProtocolService{
             };
         }
     }
-
-    async downloadProtocol (userId: string) {
-        try{
-            // Get the protocol
-            const user = await UserModel.findById(userId).populate('protocolExercisePlan');
-            const userInfo = await UserModel.findById(userId).populate('exercisePlan');
-
-            if (!user) {
-                return {
-                    success: false,
-                    code: 500,
-                }
-            }
-            
-            const templatePath = "protocol.ejs";
-            const html = templateUtils.renderTemplateWithData(templatePath, { protocolExercisePlan: user?.protocolExercisePlan });
-            const pdfBuffer = await templateUtils.generatePdfFromTemplate(html);
-
-            return {
-                success: true,
-                code: 200,
-                pdfBuffer,
-                userInfo
-            }
-        } catch(error) {
-            logger.error('Error downloading ProtocolExercisePlan:', error, {service: 'ProtocolService.downloadProtocol'});
-            return {
-                success: false,
-                code: 500,
-                message: 'Internal server error',
-            };
-        }
-    }
 }
 
 export default new ProtocolService();
