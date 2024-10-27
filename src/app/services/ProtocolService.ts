@@ -213,6 +213,38 @@ class ProtocolService{
             };
         }
     }
+
+    async getOldProtocol (userId: string, number: number){
+        try {
+            const user = await UserModel.findById(userId)
+            if(!user){
+                return {
+                    success: false,
+                    code: 404,
+                    message: 'User not found',
+                }
+            }
+
+            const oldProtocolIds = user.oldProtocol.slice(0, number);
+            const oldProtocols = await ProtocolExercisePlanModel.find({_id: {$in: oldProtocolIds}});
+
+            console.log(oldProtocols);
+            console.log(oldProtocolIds);
+
+            return {
+                success: true,
+                code: 200,
+                oldProtocols: oldProtocols,
+            }
+        } catch (error) {
+            logger.error('Error getting ProtocolExercisePlan:', error, {service: 'ProtocolService.getOldProtocol'});
+            return {
+                success: false,
+                code: 500,
+                message: 'Internal server error',
+            };
+        }
+    }
 }
 
 export default new ProtocolService();
