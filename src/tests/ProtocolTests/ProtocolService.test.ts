@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import UserService from '../../app/services/UserService';
 import ProtocolService from '../../app/services/ProtocolService';
 import { ProtocolExerciseDay } from '../../app/models/ProtocolModel';
-import dbSchedule from '../../app/utils/dbSchedule';
+import UserModel from '../../app/models/UserModel';
 
 let mongoServer: MongoMemoryServer;
 let NewUserId: string;
@@ -70,7 +70,19 @@ describe('Protocol', () => {
   describe('createProtocol', () => {
     it('Should create a protocol', async () => {
       const { success, code, message, newProtocol } = await ProtocolService.createProtocol(NewUserId, mockProtocol);
-      console.log(newProtocol)
+
+      const user = await UserService.getUserById(NewUserId);
+
+      user.user?.oldProtocol.push(user.user?.protocolExercisePlan.toString());
+
+      // Remove the protocolExercisePlan field from the user document
+      await UserModel.updateOne(
+        { _id: user.user?._id },
+        { $unset: { protocolExercisePlan: 1 } }
+      );
+
+      await user.user?.save();
+
       expect(success).toBe(true);
       expect(code).toBe(201);
       expect(newProtocol?.exerciseDays).toHaveLength(1);
@@ -128,11 +140,49 @@ describe('Protocol', () => {
             };
 
             // Create protocols for the user
+            const user = await UserService.getUserById(NewUserId);
+
             await ProtocolService.createProtocol(NewUserId, protocol1);
+
+            if (user.user?.protocolExercisePlan) {
+              user.user.oldProtocol.push(user.user.protocolExercisePlan.toString());
+            }
+
+            // Remove the protocolExercisePlan field from the user document
+            await UserModel.updateOne(
+              { _id: user.user?._id },
+              { $unset: { protocolExercisePlan: 1 } }
+            );
+
+            await user.user?.save();
+
             await ProtocolService.createProtocol(NewUserId, protocol2);
+
+            if (user.user?.protocolExercisePlan) {
+              user.user.oldProtocol.push(user.user.protocolExercisePlan.toString());
+            }
+
+            // Remove the protocolExercisePlan field from the user document
+            await UserModel.updateOne(
+              { _id: user.user?._id },
+              { $unset: { protocolExercisePlan: 1 } }
+            );
+
+            await user.user?.save();
+
             await ProtocolService.createProtocol(NewUserId, protocol3);
 
-            dbSchedule();
+            if (user.user?.protocolExercisePlan) {
+              user.user.oldProtocol.push(user.user.protocolExercisePlan.toString());
+            }
+
+            // Remove the protocolExercisePlan field from the user document
+            await UserModel.updateOne(
+              { _id: user.user?._id },
+              { $unset: { protocolExercisePlan: 1 } }
+            );
+
+            await user.user?.save();
 
             // Retrieve old protocols
             const { success, code, oldProtocols } = await ProtocolService.getOldProtocol(NewUserId, 3);
